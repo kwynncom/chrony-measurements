@@ -27,7 +27,7 @@ class parse_sourcestats {
 			  self::dhmsX($ms[3]) : 1 );
 		$np = intval($ms[1]);
 
-		$ret = [ 'np'   => $np, 'np_span' => $ss ];
+		$ret = [ 'np'   => $np, 'np_span_s' => $ss ];
 		$this->np = $ret;
     }
     

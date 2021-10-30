@@ -1,6 +1,7 @@
 <?php
 
 require_once('/opt/kwynn/kwutils.php');
+require_once('sourcestats.php');
 
 class chrony_log_parse {
     
@@ -10,15 +11,17 @@ class chrony_log_parse {
     
     public $an10 = [];
     
-    private function __construct() {
+    private function __construct($npss) {
+		$this->npss = $npss;
+		$this->linea = false;		
 		$this->load10();
 		$this->do10();
 		$this->do20();
 		$this->an10['maxe'] = $this->maxe;
     }
     
-    public static function get() {
-		$o = new self();
+    public static function get($npss) {
+		$o = new self($npss);
 		return $o->linea;
     }
     
@@ -76,7 +79,7 @@ class chrony_log_parse {
     }
     
     private function load10() {
-		
+
 		foreach(self::files as $f) {
 		
 			$fsn = substr($f, 0, 1);
@@ -97,7 +100,12 @@ class chrony_log_parse {
 				if (strpos($l, '='   ) !== false) continue; // header =====
 				if (strpos($l, 'Date') !== false) continue; // header labels
 				$a = preg_split('/\s+/', $l);
-				$this->linea[$a[0] . ' ' . $a[1]][$fsn] = $a;
+				$dhu = $a[0] . ' ' . $a[1];
+				$ts  = strtotime($dhu . ' UTC');
+				$now = time();
+				$pd  = $now - $this->npss;
+				if ($ts < $pd) continue;
+				$this->linea[$dhu][$fsn] = $a;
 				if (++$lii >= self::tailn) break;
 			}
 		}
