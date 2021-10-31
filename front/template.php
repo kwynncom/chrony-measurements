@@ -17,8 +17,8 @@
 </table>
 
 <table>
-	<tr><td class='n30'><?php echo($d['laoff']);  ?></td><td>ms</td><td>offset - last</td></tr>
-	<tr><td class='n30'><?php echo($d['estoff']); ?></td><td>ms</td><td>offset - estimated (<?php echo($d['estoffa']['direction']); ?>)</td></tr>
+	<tr><td class='n30'><?php echo($d['laoff']);  ?></td><td>ms</td><td>offset - last poll</td></tr>
+	<tr><td class='n30'><?php echo($d['estoff']); ?></td><td>ms</td><td>offset - current est, running <?php echo($d['estoffa']['direction']); ?></td></tr>
 </table>
 	
 <table>
@@ -31,13 +31,11 @@
 	<tr><td class='n30'><?php echo($d['rfr']); ?></td><td>ppm</td><td>residual frequency</td></tr>
 </table>
 	
-	
-	
 </div>
 
-<div id='sourcerefD'>
-	<a href='https://github.com/kwynncom/chrony-measurements'>source code</a>
-</div>
+<div><a href='https://kwynn.com/t/9/12/sync/'>clock</a></div>
+	
+<div id='sourcerefD'><a href='https://github.com/kwynncom/chrony-measurements'>source code</a></div>
 	
 <?php unset($d, $KW_G_TIMEA); ?>
 </body>
