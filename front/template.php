@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>chrony readings</title>
-<link rel="stylesheet" href="chinfo.css">
+<link rel="stylesheet" href="front/chinfo.css">
 </head>
 <body>
 <?php $dat = $KW_G_TIMEA; ?>
