@@ -7,6 +7,7 @@ class chrony_readouts_formatting {
 		
 		$ret = $a;
 		foreach ($a as $k => $v) {
+			if ($k === 'np')	    $ret[$k] = self::minf($v, false);
 			if ($k === 'np_span_s') $ret['np_span_min'] = self::minf($v);
 			if ($k === 'lastPollS') $ret['lpmin']		= self::minf($v);
 			if ($k === 'rdi')		$ret[$k]       = self::ifabovems($v);
@@ -20,8 +21,9 @@ class chrony_readouts_formatting {
 		return $ret;
 	}
 
-	public static function minf($vin) {
-		$v = $vin / 60;
+	public static function minf($vin, $divide = true) {
+		$v = $vin;
+		if ($divide) $v /= 60;
 		return sprintf('%0.1f', $v);
 	}	
 	

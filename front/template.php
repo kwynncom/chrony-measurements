@@ -11,6 +11,7 @@
 
 <div>
 <table>
+	<tr><td class='n30'><?php echo($d['np']			); ?></td><td>(count)</td><td>active polls</td></tr>
 	<tr><td class='n30'><?php echo($d['np_span_min']); ?></td><td>minutes</td><td>poll span</td></tr>
 	<tr><td class='n30'><?php echo($d['lpmin']); ?>		 </td><td>minutes</td><td>last poll</td></tr>
 </table>
