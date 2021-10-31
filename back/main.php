@@ -11,15 +11,27 @@ class chrony_analysis {
 		
 	private function getI() { return $this->ret; }
 	private function __construct() {
+		$this->ret = [];
 		$this->do10();
 		$this->do20();
 		$this->do30();
 		$this->do40();
 		$this->do50();
+		$this->do60();
+	}
+	
+	private function do60() {
+		$maxe = $this->ret['rdi'] + 
+				$this->ret['rde'] / 2.0 + 
+				abs($this->ret['laoff']) + 
+				abs($this->ret['estoffa']['float']);
+		
+		$this->ret['maxe'] = $maxe;
+		
 	}
 	
 	private function do50() {
-		$this->ret = $this->ssa;
+		$this->ret = array_merge($this->ret, $this->ssa);
 	}
 	
 	private function do40() {
@@ -36,21 +48,29 @@ class chrony_analysis {
 		$a = $this->cha;
 		kwas(isset($a['detailed_array']['Ref time (UTC)']['s_ago'    ]), 'ref time s_ago ne');
 		kwas(isset($a['detailed_array']['Ref time (UTC)']['UNIX Epoch']), 'ref time UE ne');
-		kwas(isset($a['detailed_array']['Ref time (UTC)']['hours_ago']), 'ref time hrs ne');
-		$phr =	   $a['detailed_array']['Ref time (UTC)']['hours_ago'];
+		kwas(isset(  $a['detailed_array']['Ref time (UTC)']['hours_ago']), 'ref time hrs ne');
+		$lastPollS = $a['detailed_array']['Ref time (UTC)']['s_ago'];
 		kwas(isset($a['detailed_array']['RMS offset']), 'RMS O ne');	
-		$rms =	   $a['detailed_array']['RMS offset'];
+		// $rms =	   $a['detailed_array']['RMS offset'];
 		kwas(isset($a['detailed_array']['Residual freq']), 'RMS O ne');
 		$rfr =     $a['detailed_array']['Residual freq'];
 		kwas(isset($a['detailed_array']['Root dispersion']), 'RMS O ne');
 		$rdi =     $a['detailed_array']['Root dispersion'];
-
+		$laoff  =  $a['detailed_array']['Last offset'];
+		$rde =		$a['detailed_array']['Root delay'];
+		
+		$estoffa =     $a['detailed_array']['System time'];
+		
+		unset($a);
+		
+		$this->ret = array_merge($this->ret, get_defined_vars());
+		
 		return;		
 	}
 	
 	private function do10() {
 		require_once(getChronyParserPath());
-		$this->cha = chrony_parse::get(1);
+		$this->cha = chrony_parse::get();
 	}
 }
 
