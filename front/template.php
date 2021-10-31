@@ -31,12 +31,14 @@
 	<tr><td class='n30'><?php echo($d['rfr']); ?></td><td>ppm</td><td>residual frequency</td></tr>
 </table>
 	
+	<div>at <?php echo($d['asof']); ?></div>
+	
 </div>
-
+	<div class='foot10'>
 <div><a href='https://kwynn.com/t/9/12/sync/'>clock</a></div>
 	
 <div id='sourcerefD'><a href='https://github.com/kwynncom/chrony-measurements'>source code</a></div>
-	
+	</div>
 <?php unset($d, $KW_G_TIMEA); ?>
 </body>
 </html>
