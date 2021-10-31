@@ -19,7 +19,7 @@ class chrony_readouts_formatting {
 	
 	public static function ifabove($vin) {
 		$v = $vin * 1000;
-		if ($v < 8) $ret = sprintf('%0.2f', $v) . ' ms';
+		if ($v < 8) $ret = sprintf('%0.2f', $v);
 		else		$ret = intval(round($v));
 		$ret .= ' ms';
 		return $ret;
