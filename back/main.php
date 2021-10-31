@@ -6,13 +6,20 @@ require_once('logs.php');
 class chrony_analysis {
 	public static function get() {
 		$o = new self();
+		return $o->getI();
 	}
-	
+		
+	private function getI() { return $this->ret; }
 	private function __construct() {
 		$this->do10();
 		$this->do20();
 		$this->do30();
 		$this->do40();
+		$this->do50();
+	}
+	
+	private function do50() {
+		$this->ret = $this->ssa;
 	}
 	
 	private function do40() {
