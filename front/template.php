@@ -12,8 +12,9 @@
 	<div><?php echo($dat['np']); ?> polls in use spanning <?php echo($dat['np_span_min']); ?> minutes; 
 		last poll was <?php echo($dat['lpmin']); ?> minutes ago
 	</div>
-	<div>root dispersion:   <?php echo($dat['rdius']); ?> &micro;s ; 
-		residual frequency: <?php echo($dat['rfr']  ); ?> ppm ;
+	<div>root dispersion:   <?php echo($dat['rdi']); ?> ; 
+		root delay:   <?php echo($dat['rde']); ?> ; 
+		residual frequency: <?php echo($dat['rfr']  ); ?>  ;
 		estimated offset:   <?php echo($dat['estoff']); ?> ;
 		last offset:		<?php echo($dat['laoff' ]); ?>
 	</div>
