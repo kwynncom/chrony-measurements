@@ -1,1 +1,5 @@
-body { font-family: sans-serif; }
+body   { font-family: sans-serif; }
+.n30   { font-family: monospace ; font-size: 120%; text-align: right; width: 9.3ex; }
+table  { margin-bottom: 1.0ex; }
+#sourcerefD { margin-top: 2ex; }
+.b10 { font-weight: bold; }

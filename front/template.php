@@ -7,25 +7,38 @@
 <link rel="stylesheet" href="front/chinfo.css">
 </head>
 <body>
-<?php $dat = $KW_G_TIMEA; ?>
+<?php $d = $KW_G_TIMEA; ?>
+
 <div>
-	<div><?php echo($dat['np']); ?> polls in use spanning <?php echo($dat['np_span_min']); ?> minutes; 
-		last poll was <?php echo($dat['lpmin']); ?> minutes ago
-	</div>
-	<div>root dispersion:   <?php echo($dat['rdi']); ?> ; 
-		root delay:   <?php echo($dat['rde']); ?> ; 
-		residual frequency: <?php echo($dat['rfr']  ); ?>  ;
-		estimated offset:   <?php echo($dat['estoff']); ?> ;
-		last offset:		<?php echo($dat['laoff' ]); ?>
-	</div>
-	<div>max possible (but very unlikely) error: <?php echo($dat['maxe' ]); ?>
-		
-	</div>
+<table>
+	<tr><td class='n30'><?php echo($d['np_span_min']); ?></td><td>minutes</td><td>poll span</td></tr>
+	<tr><td class='n30'><?php echo($d['lpmin']); ?>		 </td><td>minutes</td><td>last poll</td></tr>
+</table>
+
+<table>
+	<tr><td class='n30'><?php echo($d['laoff']);  ?></td><td>ms</td><td>offset - last</td></tr>
+	<tr><td class='n30'><?php echo($d['estoff']); ?></td><td>ms</td><td>offset - estimated (<?php echo($d['estoffa']['direction']); ?>)</td></tr>
+</table>
+	
+<table>
+	<tr><td class='n30 b10'><?php echo($d['rdi' ]); ?></td><td>ms</td><td>root dispersion</td></tr>
+	<tr><td class='n30'><?php echo($d['rde' ]); ?></td><td>ms</td><td>root delay</td></tr>
+	<tr><td class='n30'><?php echo($d['maxe']); ?></td><td>ms</td><td>max error</td></tr>
+</table>
+
+<table>
+	<tr><td class='n30'><?php echo($d['rfr']); ?></td><td>ppm</td><td>residual frequency</td></tr>
+</table>
 	
 	
 	
 </div>
-<?php unset($dat, $KW_G_TIMEA); ?>
+
+<div id='sourcerefD'>
+	<a href='https://github.com/kwynncom/chrony-measurements'>source code</a>
+</div>
+	
+<?php unset($d, $KW_G_TIMEA); ?>
 </body>
 </html>
 
