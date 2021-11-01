@@ -13,7 +13,7 @@ class chrony_readouts_formatting {
 			if ($k === 'rdi')		$ret[$k]       = self::ifabovems($v);
 			if ($k === 'rde')		$ret[$k]       = self::ifabovems($v);
 			if ($k === 'estoffa') 	$ret['estoff'] = sprintf('%0.6f', $v['float'] * $offf);
-			if ($k === 'laoffnist') $ret[$k]	   = sprintf('%0.6f', $v);
+			if ($k === 'laoffnist') $ret[$k]	   = $v !== false ? sprintf('%0.6f', $v) : ''; 
 			if ($k === 'laoff')     $ret[$k]	   = sprintf('%0.6f', $v * $offf);
 			if ($k === 'maxe')      $ret[$k]  = self::ifabovems($v);
 			if ($k === 'rfr')       $ret[$k]  = sprintf('%0.3f', $v);		

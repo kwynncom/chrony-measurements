@@ -77,10 +77,10 @@ class callSNTP extends callSNTPConfig {
 	}
 	
 	private function setCmd() {
-		if (!isAWS()) {
+		if (FALSE && !isAWS()) { // assuming it's in the PATH
 			$locpp = self::locPath;
 			$locp = $locpp . self::file;
-			kwas(is_readable($locp));
+			kwas(is_readable($locp), "$locp unreadable");
 			$this->cmd = self::loccmd . ' ' . $locp . ' ' . $this->ip;
 			return;
 		}

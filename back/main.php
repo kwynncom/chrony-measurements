@@ -24,7 +24,8 @@ class chrony_analysis {
 	
 	private function do70() {
 		$n = nist_backoff_calls::get();
-		$this->ret['laoffnist'] = $n['dsms'];
+		$this->ret['laoffnist'] = isset($n['dsms']) ? 
+										$n['dsms'] : false;
 		return;
 	}
 	
