@@ -21,28 +21,33 @@ class nist_servers extends dao_generic_2 {
 	const mind  = 4;
 	const maxs  = 1200;
 	
-	protected function __construct($superOnly = false) {
+	protected function __construct($limitedCon = false) {
 		
 		parent::__construct(self::dbName, __FILE__);
 		
-		if ($superOnly) return; // if only want access to the database, but not to make a request
+		if ($limitedCon) return; // for children who only want to init the database, or otherwise limited functions
 		
 		$this->locko = new sem_lock(__FILE__);
 		$this->locko->lock();
 		$this->regIP = false;
 		$this->boo = new backoff(self::backe, self::mind, self::maxs);
 		$this->creTabs(['s' => 'servers', 'u' => 'use']);
-		$this->devReset();
 		$this->clean();
+		$this->devReset();
 		$this->insertSrvs();
 		$this->set();
 		$this->locko->unlock();
 	}
 	
-	private function clean() {
-		$res = $this->ucoll->deleteMany(['susp' => ['$lt' => time() - 3600]]);
+	protected function clean() {
+		$sq = ['$lt' => time() - 3600];
+		if  (isset($this->ucoll)) 
+		   $ures = $this->ucoll->deleteMany(['susp' => $sq]);
+		if  (isset($this->ocoll)) 
+		   $ores = $this->ocoll->deleteMany(['U'    => $sq]);
+		return;
 	}
-	
+
 	private function devReset() {
 		if (isAWS()) return;
 		if (strtotime('2021-10-28 02:50') < time()) return;

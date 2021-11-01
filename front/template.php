@@ -18,6 +18,7 @@
 
 <table>
 	<tr><td class='n30'><?php echo($d['laoff']);  ?></td><td>ms</td><td>offset - last poll</td></tr>
+	<tr><td class='n30'><?php echo($d['laoffnist']);  ?></td><td>ms</td><td>offset - NIST</td></tr>
 	<tr><td class='n30'><?php echo($d['estoff']); ?></td><td>ms</td><td>offset - current est, running <?php echo($d['estoffa']['direction']); ?></td></tr>
 </table>
 	
