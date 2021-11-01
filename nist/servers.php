@@ -21,12 +21,16 @@ class nist_servers extends dao_generic_2 {
 	const mind  = 4;
 	const maxs  = 1200;
 	
-	private function __construct() {
+	protected function __construct($superOnly = false) {
+		
+		parent::__construct(self::dbName, __FILE__);
+		
+		if ($superOnly) return; // if only want access to the database, but not to make a request
+		
 		$this->locko = new sem_lock(__FILE__);
 		$this->locko->lock();
 		$this->regIP = false;
 		$this->boo = new backoff(self::backe, self::mind, self::maxs);
-		parent::__construct(self::dbName, __FILE__);
 		$this->creTabs(['s' => 'servers', 'u' => 'use']);
 		$this->devReset();
 		$this->clean();

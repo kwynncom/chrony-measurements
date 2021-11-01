@@ -6,7 +6,7 @@ require_once('validIP.php');
 
 class callSNTP extends callSNTPConfig {
 
-	const simShell = 0;
+	const simShell = false;
 	const rescnt   = 4;
 	
 	private function simShell() {
@@ -16,10 +16,13 @@ class callSNTP extends callSNTPConfig {
 		$r[1] = $t + intval(round(self::toleranceNS * 0.999));
 		$r[2] = $r[1];
 		$r[3] = $t;
-		return json_encode($r);
+		$this->ores['raw'] = $r;
+		$j = json_encode($r);
+		return $j;
 	}
 	
-	private function __construct() {
+	private function __construct($ip) {
+		$this->ipinraw = $ip;
 		$this->init();
 		$this->doit();
 		$this->calcs();
@@ -44,6 +47,7 @@ class callSNTP extends callSNTPConfig {
 		$or['in']  = self::fms($a[3] - $a[2]);
 		
 		$or['r'] = date('r');
+		$or['U'] = time();
 		
 		$this->ores = $or;
 	}
@@ -65,9 +69,12 @@ class callSNTP extends callSNTPConfig {
 		global $argv;
 		global $argc;
 		
-		kwas($argc >= 2, 'need an IP argument');
-		$ip = $argv[1];
-		$this->ip = validIPOrDie($ip);
+		if ($this->ipinraw && validIPOrDie($this->ipinraw)) $this->ip = $this->ipinraw;
+		else { 
+			kwas($argc >= 2, 'need an IP argument');
+			$ip = $argv[1];
+			$this->ip = validIPOrDie($ip);
+		}
 	}
 	
 	private function setCmd() {
@@ -107,14 +114,13 @@ class callSNTP extends callSNTPConfig {
 	
 	public function getRes() { return $this->ores; }
 	
-	public static function get() {
-		$o = new self();
+	public static function getReal($ip = false) {
+		$o = new self($ip);
 		return $o->getRes();
 	}
 
 }
-if (didCLICallMe(__FILE__)) {
-	$d = callSNTP::get();
+if (didCLICallMe(__FILE__)) { $d = callSNTP::getReal();
 	print_r($d);
 	// var_dump($d);
 	unset($d);

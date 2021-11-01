@@ -2,6 +2,7 @@
 
 require_once('config.php');
 require_once('logs.php');
+require_once('nist/callSNTPReg.php');
 
 class chrony_analysis {
 	public static function get() {
@@ -18,6 +19,12 @@ class chrony_analysis {
 		$this->do40();
 		$this->do50();
 		$this->do60();
+		$this->do70();
+	}
+	
+	private function do70() {
+		$this->ret['nist'] = nist_backoff_calls::get();
+		return;
 	}
 	
 	private function do60() {
