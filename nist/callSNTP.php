@@ -38,8 +38,7 @@ class callSNTP extends callSNTPConfig {
 		$avgs = self::toms($avgns - $min);
 		$or['relmss'][2] = $avgs;
 		for($i=2; $i <= 3; $i++) $or['relmss'][$i + 1] = self::toms($a[$i] - $min);
-		$avgsns = ($a[2] + $a[1]) >> 1;
-		$d = $avgns - $avgsns;
+		$d = self::d($a);
 		$or['dsns'] = $d;
 		$or['ds'  ] = $d / M_BILLION;
 		$or['dsms'] = $d / M_MILLION;
@@ -50,6 +49,11 @@ class callSNTP extends callSNTPConfig {
 		$or['U'] = time();
 		
 		$this->ores = $or;
+	}
+	
+	public static function d($T) { // getting the sign right per RFC 4330 page 13 - https://datatracker.ietf.org/doc/html/rfc4330
+		$t = ((($T[1] - $T[0]) + ($T[2] - $T[3]))) >> 1;
+		return $t;
 	}
 	
 	public static function toms($ns) { return $ns / M_MILLION; }
