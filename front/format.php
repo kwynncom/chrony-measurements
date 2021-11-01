@@ -26,7 +26,7 @@ class chrony_readouts_formatting {
 	public static function minf($vin, $divide = true) {
 		$v = $vin;
 		if ($divide) $v /= 60;
-		if ($v > 9.95) return $v . '&nbsp;&nbsp;';
+		if ($v > 9.95) return intval(round($v)) . '&nbsp;&nbsp;';
 		return sprintf('%0.1f', $v);
 	}	
 	
