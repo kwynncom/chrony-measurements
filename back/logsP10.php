@@ -16,14 +16,19 @@ class chrony_log_parse_p10 extends chrony_log_parse {
 	public function getI() { return $this->p10a; }
 	
 	private function p10() {
+		$fp = false;
 		$ba = $this->linea;
 		foreach($ba as $hudnotz => $a) {
 			$hudtz =   $hudnotz . ' UTC';
-			if (isset($a['m'][11])) $r[$hudtz]['poff'] = floatval($a['m'][11]);
+			if (isset($a['m'][11])) {
+				$t = $r[$hudtz]['poff'] = floatval($a['m'][11]);
+				if ($fp === false) $fp = $t;
+			}
 			if (isset($a['t'][ 4])) $r[$hudtz]['fcor'] =		  $a['t'][ 4];			
 		}
 		
-		$this->p10a = $r;
+		$this->p10a['logs']  = $r;
+		$this->p10a['lpoll'] = floatval($fp);
 	}
 	
 }

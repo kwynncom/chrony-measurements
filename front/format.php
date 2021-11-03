@@ -13,13 +13,14 @@ class chrony_readouts_formatting {
 			if ($k === 'rde')		$ret[$k]       = self::ifabovems($v);
 			if ($k === 'estoffa') 	$ret['estoff'] = self::msf10($v['float']);
 			if ($k === 'laoffnist') $ret[$k]	   = $v !== false ? self::msf10($v, 1) : ''; 
-			if ($k === 'laoff')     $ret[$k]	   = sprintf('%0.6f', $v);
 			if ($k === 'maxe')      $ret[$k]  = self::ifabovems($v);
 			if ($k === 'rfr')       $ret[$k]  = sprintf('%0.3f', $v);		
 		}
 		
 		$now = time();
 		$ret['asof'] = date('g:i:a D m/d', $now) . ' (' . date('s', $now) . 's) ' . date('P', $now);
+		
+		$ret['lpoll'] = $lpoll = self::msf10($a['logs']['lpoll']);
 		
 		return $ret;
 	}

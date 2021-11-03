@@ -16,11 +16,11 @@
 <table>
 	<tr><td class='n30'><?php echo($d['np']			); ?></td><td>(count)</td><td>active polls</td></tr>
 	<tr><td class='n30'><?php echo($d['np_span_min']); ?></td><td>minutes</td><td>poll span</td></tr>
-	<tr><td class='n30'><?php echo($d['lpmin']); ?>		 </td><td>minutes</td><td>last poll</td></tr>
+	<tr><td class='n30'><?php echo($d['lpmin']); ?>		 </td><td>minutes</td><td>since last poll</td></tr>
 </table>
 
 <table>
-	<tr><td class='n30'><?php echo($d['laoff']);  ?></td><td>ms</td><td>offset - last poll</td></tr>
+	<tr><td class='n30'><?php echo($d['lpoll']);  ?></td><td>ms</td><td>offset - last poll</td></tr>
 	<tr><td class='n30'><?php echo($d['laoffnist']);  ?></td><td>ms</td><td>offset - NIST</td></tr>
 	<tr><td class='n30'><?php echo($d['estoff']); ?></td><td>ms</td><td>offset - current est, running <?php echo($d['estoffa']['direction']); ?></td></tr>
 </table>
@@ -42,7 +42,7 @@
 		<tr><th>min<br/>ago</th><th class='poll'>poll<br/>off</th><th class='frcor'>frcor</th></tr>
 	</thead
 	<tbody id='histb10'>
-		<?php echo(kwChmHistRows($d['logs'])); ?>
+		<?php echo(kwChmHistRows($d['logs']['logs'])); ?>
 	</tbody>
 </table>
 	

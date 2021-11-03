@@ -32,7 +32,7 @@ class chrony_analysis {
 	private function do60() {
 		$maxe = $this->ret['rdi'] + 
 				$this->ret['rde'] / 2.0 + 
-				abs($this->ret['laoff']) + 
+				abs($this->ret['logs']['lpoll']) + 
 				abs($this->ret['estoffa']['float']);
 		
 		$this->ret['maxe'] = $maxe;
@@ -52,7 +52,6 @@ class chrony_analysis {
 		$lastPollS = $a['Ref time (UTC)']['s_ago'];
 		$rfr	   = $a['Residual freq'];
 		$rdi	   = $a['Root dispersion'];
-		$laoff     = $a['Last offset'];
 		$rde	   = $a['Root delay'];
 		$estoffa   = $a['System time'];
 		unset($a);
