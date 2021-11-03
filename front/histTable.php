@@ -12,7 +12,7 @@ function kwChmHistRows($bain) {
 		if (!isset($f) && !isset($o)) continue;
 		
 		$ht .= '<tr>';
-		$ht .= '<td>';
+		$ht .= '<td class="mago20">';
 		$ts  = strtotime($hud);
 		$ht .= chrony_readouts_formatting::minf($now - $ts); unset($ts);
 		$ht .= '</td>';
