@@ -6,7 +6,7 @@ class chrony_readouts_formatting {
 		
 		$ret = $a;
 		foreach ($a as $k => $v) {
-			if ($k === 'np')	    $ret[$k] = $v . '&nbsp;&nbsp;';
+			if ($k === 'np')	    $ret[$k] = $v;
 			if ($k === 'np_span_s') $ret['np_span_min'] = self::minf($v);
 			if ($k === 'lastPollS') $ret['lpmin']		= self::minf($v);
 			if ($k === 'rdi')		$ret[$k]       = self::ifabovems($v);
@@ -32,8 +32,7 @@ class chrony_readouts_formatting {
 	public static function minf($vin, $divide = true) {
 		$v = $vin;
 		if ($divide) $v /= 60;
-		if ($v > 9.95) return intval(round($v)) . '&nbsp;&nbsp;';
-		return sprintf('%0.1f', $v);
+		return intval(round($v));
 	}	
 	
 	public static function ifabovems($vin) {

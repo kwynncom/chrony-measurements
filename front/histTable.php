@@ -14,7 +14,7 @@ function kwChmHistRows($bain) {
 		$ht .= '<tr>';
 		$ht .= '<td class="mago20">';
 		$ts  = strtotime($hud);
-		$ht .= chrony_readouts_formatting::minf($now - $ts); unset($ts);
+		$ht .= chrony_readouts_formatting::minf($now - $ts, true, false); unset($ts);
 		$ht .= '</td>';
 		$ht .= '<td class="n40">';
 		if (isset($o)) $ht .= chrony_readouts_formatting::msf10($o);
