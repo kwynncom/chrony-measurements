@@ -1,7 +1,7 @@
 <?php
 
 require_once('config.php');
-require_once('logs.php');
+require_once('logsP10.php');
 require_once('nist/callSNTPReg.php');
 
 class chrony_analysis {
@@ -44,7 +44,7 @@ class chrony_analysis {
 	}
 	
 	private function do40() {
-		$this->lpa = chrony_log_parse::get($this->ssa['np_span_s']);
+		$this->lpa = chrony_log_parse_p10::get($this->ssa['np_span_s']);
 		return;
 	}
 		

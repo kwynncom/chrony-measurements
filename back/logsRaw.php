@@ -11,7 +11,7 @@ class chrony_log_parse {
     
     public $an10 = [];
     
-    private function __construct($npss) {
+    protected function __construct($npss) {
 		$this->npss = $npss;
 		$this->linea = false;		
 		$this->load10();
@@ -97,6 +97,7 @@ class chrony_log_parse {
 			$lii = 0;
 			foreach($la as $l) {
 				if (!$l) continue; // the blank string following the last line
+				if ($fsn === 'm' && $a[7] !== '1111') continue; // score fails
 				if (strpos($l, '='   ) !== false) continue; // header =====
 				if (strpos($l, 'Date') !== false) continue; // header labels
 				$a = preg_split('/\s+/', $l);

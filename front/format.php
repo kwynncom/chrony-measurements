@@ -19,7 +19,8 @@ class chrony_readouts_formatting {
 			if ($k === 'rfr')       $ret[$k]  = sprintf('%0.3f', $v);		
 		}
 		
-		$ret['asof'] = date('g:ia D m/d');
+		$now = time();
+		$ret['asof'] = date('g:i:a D m/d', $now) . ' (' . date('s', $now) . 's) ' . date('P', $now);
 		
 		return $ret;
 	}
