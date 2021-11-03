@@ -43,38 +43,20 @@ class chrony_analysis {
 		$this->ret = array_merge($this->ret, $this->ssa);
 	}
 	
-	private function do40() {
-		$this->lpa = chrony_log_parse_p10::get($this->ssa['np_span_s']);
-		return;
-	}
+	private function do40() { $this->ret['logs'] = chrony_log_parse_p10::get($this->ssa['np_span_s']);	}
 		
-	private function do30() {
-		$this->ssa = parse_sourcestats::get();
-		return;
-	}
+	private function do30() { $this->ssa = parse_sourcestats::get(); }
 	
 	private function do20() {
-		$a = $this->cha;
-		kwas(isset($a['detailed_array']['Ref time (UTC)']['s_ago'    ]), 'ref time s_ago ne');
-		kwas(isset($a['detailed_array']['Ref time (UTC)']['UNIX Epoch']), 'ref time UE ne');
-		kwas(isset(  $a['detailed_array']['Ref time (UTC)']['hours_ago']), 'ref time hrs ne');
-		$lastPollS = $a['detailed_array']['Ref time (UTC)']['s_ago'];
-		kwas(isset($a['detailed_array']['RMS offset']), 'RMS O ne');	
-		// $rms =	   $a['detailed_array']['RMS offset'];
-		kwas(isset($a['detailed_array']['Residual freq']), 'RMS O ne');
-		$rfr =     $a['detailed_array']['Residual freq'];
-		kwas(isset($a['detailed_array']['Root dispersion']), 'RMS O ne');
-		$rdi =     $a['detailed_array']['Root dispersion'];
-		$laoff  =  $a['detailed_array']['Last offset'];
-		$rde =		$a['detailed_array']['Root delay'];
-		
-		$estoffa =     $a['detailed_array']['System time'];
-		
+		$a = $this->cha['detailed_array'];
+		$lastPollS = $a['Ref time (UTC)']['s_ago'];
+		$rfr	   = $a['Residual freq'];
+		$rdi	   = $a['Root dispersion'];
+		$laoff     = $a['Last offset'];
+		$rde	   = $a['Root delay'];
+		$estoffa   = $a['System time'];
 		unset($a);
-		
 		$this->ret = array_merge($this->ret, get_defined_vars());
-		
-		return;		
 	}
 	
 	private function do10() {

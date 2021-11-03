@@ -1,7 +1,15 @@
 body   { font-family: sans-serif; }
-.n30   { font-family: monospace ; font-size: 120%; text-align: right; width: 9.3ex; }
+.n30   { width:  9.3ex; text-align: right; font-size: 120%; font-family: monospace}
+.n40   { width: 10.8ex; text-align: right;  font-size: 100%; }
+.fcor  { width:  7.5ex; text-align: right;  }
+
 table  { margin-bottom: 1.0ex; }
 #sourcerefD { margin-top: 2ex; }
 .b10 { font-weight: bold; }
 .foot10 { margin-top: 2ex; }
 th { font-weight: normal; }
+.mono { font-family: monospace; }
+.htab10 { padding-top: 2ex; }
+
+th.poll  { text-align: center; padding-left: 3ex; }
+th.frcor { text-align: right; }

@@ -7,7 +7,10 @@
 <link rel="stylesheet" href="front/chinfo.css">
 </head>
 <body>
-<?php $d = $KW_G_TIMEA; ?>
+<?php 
+	require_once('histTable.php');
+	$d = $KW_G_TIMEA; unset($KW_G_TIMEA); 
+?>
 
 <div> <!-- dat - tables and such -->
 <table>
@@ -34,12 +37,12 @@
 	
 <div>at <?php echo($d['asof']); ?></div>
 
-<table>
+<table class='mono htab10'>
 	<thead>
-		<tr><th>min<br/>ago</th><th>poll<br/>off</th><th>frcor</th></tr>
+		<tr><th>min<br/>ago</th><th class='poll'>poll<br/>off</th><th class='frcor'>frcor</th></tr>
 	</thead
 	<tbody id='histb10'>
-		<?php echo(''); ?>
+		<?php echo(kwChmHistRows($d['logs'])); ?>
 	</tbody>
 </table>
 	
@@ -50,7 +53,7 @@
 	
 <div id='sourcerefD'><a href='https://github.com/kwynncom/chrony-measurements'>source code</a></div>
 	</div>
-<?php unset($d, $KW_G_TIMEA); ?>
+<?php unset($d); ?>
 </body>
 </html>
 

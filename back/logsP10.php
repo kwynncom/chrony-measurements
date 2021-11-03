@@ -10,11 +10,20 @@ class chrony_log_parse_p10 extends chrony_log_parse {
 	
 	public static function get($npss) {
 		$o = new self($npss);
-		return $o->linea;
+		return $o->getI();
     }
 	
+	public function getI() { return $this->p10a; }
+	
 	private function p10() {
-		$a = $this->linea;
+		$ba = $this->linea;
+		foreach($ba as $hudnotz => $a) {
+			$hudtz =   $hudnotz . ' UTC';
+			if (isset($a['m'][11])) $r[$hudtz]['poff'] = floatval($a['m'][11]);
+			if (isset($a['t'][ 4])) $r[$hudtz]['fcor'] =		  $a['t'][ 4];			
+		}
+		
+		$this->p10a = $r;
 	}
 	
 }

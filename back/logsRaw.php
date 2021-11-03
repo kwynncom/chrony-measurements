@@ -5,7 +5,7 @@ require_once('sourcestats.php');
 
 class chrony_log_parse {
     
-    const tailn = 6;
+    const tailn = 8;
 	const path  = '/var/log/chrony/';
 	const files = ['tracking.log', 'statistics.log', 'measurements.log'];
     
@@ -97,10 +97,15 @@ class chrony_log_parse {
 			$lii = 0;
 			foreach($la as $l) {
 				if (!$l) continue; // the blank string following the last line
-				if ($fsn === 'm' && $a[7] !== '1111') continue; // score fails
 				if (strpos($l, '='   ) !== false) continue; // header =====
 				if (strpos($l, 'Date') !== false) continue; // header labels
 				$a = preg_split('/\s+/', $l);
+				
+				if ($fsn === 'm') {
+					kwynn();
+					if ($a[7] !== '1111') continue; // score fails
+				}
+				
 				$dhu = $a[0] . ' ' . $a[1];
 				$ts  = strtotime($dhu . ' UTC');
 				$now = time();

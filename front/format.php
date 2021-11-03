@@ -1,9 +1,8 @@
 <?php
 
 class chrony_readouts_formatting {
+	
 	public static function get($a) {
-		
-		$offf = 1000;
 		
 		$ret = $a;
 		foreach ($a as $k => $v) {
@@ -12,9 +11,9 @@ class chrony_readouts_formatting {
 			if ($k === 'lastPollS') $ret['lpmin']		= self::minf($v);
 			if ($k === 'rdi')		$ret[$k]       = self::ifabovems($v);
 			if ($k === 'rde')		$ret[$k]       = self::ifabovems($v);
-			if ($k === 'estoffa') 	$ret['estoff'] = sprintf('%0.6f', $v['float'] * $offf);
-			if ($k === 'laoffnist') $ret[$k]	   = $v !== false ? sprintf('%0.6f', $v) : ''; 
-			if ($k === 'laoff')     $ret[$k]	   = sprintf('%0.6f', $v * $offf);
+			if ($k === 'estoffa') 	$ret['estoff'] = self::msf10($v['float']);
+			if ($k === 'laoffnist') $ret[$k]	   = $v !== false ? self::msf10($v, 1) : ''; 
+			if ($k === 'laoff')     $ret[$k]	   = sprintf('%0.6f', $v);
 			if ($k === 'maxe')      $ret[$k]  = self::ifabovems($v);
 			if ($k === 'rfr')       $ret[$k]  = sprintf('%0.3f', $v);		
 		}
@@ -23,6 +22,11 @@ class chrony_readouts_formatting {
 		$ret['asof'] = date('g:i:a D m/d', $now) . ' (' . date('s', $now) . 's) ' . date('P', $now);
 		
 		return $ret;
+	}
+	
+	public static function msf10($v, $mby = 1000) {
+		return sprintf('%0.6f', $v * $mby);
+
 	}
 
 	public static function minf($vin, $divide = true) {
