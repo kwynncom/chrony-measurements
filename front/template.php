@@ -5,37 +5,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>chrony readings</title>
 <link rel="stylesheet" href="front/chinfo.css">
+<script src='front/js/utils.js'></script>
+<script src='front/js/win_onload.js'></script>
 </head>
-<body>
-<?php 
-	require_once('histTable.php');
-	$d = $KW_G_TIMEA; unset($KW_G_TIMEA); 
-?>
+<body> <!-- for future reference: refresh, reload &#128472; -->
+<?php  require_once('histTable.php');
+		$KW_G_TDS_ORDER = ['np', 'np_span_min', 'lpmin', 'lpoll', 'laoffnist', 'estoff', 'rdi', 'rde', 'maxe', 'rfr']; ?>
+<script>
+<?php	echo("\t" . 'var KW_G_CHM_INIT  = ' . json_encode($KW_G_TIMEA    ) . ';' . "\n" ); unset($KW_G_TIMEA);
+		echo("\t" . 'var KW_G_CHM_ORDER = ' . json_encode($KW_G_TDS_ORDER) . ';' . "\n" ); unset($KW_G_TDS_ORDER); ?>
+</script>
+
+
 
 <div> <!-- dat - tables and such -->
 <table>
-	<tr><td class='n30'><?php echo($d['np']			); ?></td><td>(count)</td><td>active polls</td></tr>
-	<tr><td class='n30'><?php echo($d['np_span_min']); ?></td><td>minutes</td><td>poll span</td></tr>
-	<tr><td class='n30'><?php echo($d['lpmin']); ?>		 </td><td>minutes</td><td>since last poll</td></tr>
+	<tr><td class='n30'></td><td></td><td>active polls</td></tr>
+	<tr><td class='n30'></td><td>minutes</td><td>poll span</td></tr>
+	<tr><td class='n30'></td><td>minutes</td><td>since last poll</td></tr>
+</table>
+<table>
+	<tr><td class='n30'></td><td>ms</td><td>offset - last poll</td></tr>
+	<tr><td class='n30'></td><td>ms</td><td>offset - NIST</td></tr>
+	<tr><td class='n30'></td><td>ms</td><td>offset - current est</td></tr>
 </table>
 
 <table>
-	<tr><td class='n30'><?php echo($d['lpoll']);  ?></td><td>ms</td><td>offset - last poll</td></tr>
-	<tr><td class='n30'><?php echo($d['laoffnist']);  ?></td><td>ms</td><td>offset - NIST</td></tr>
-	<tr><td class='n30'><?php echo($d['estoff']); ?></td><td>ms</td><td>offset - current est, running <?php echo($d['estoffa']['direction']); ?></td></tr>
+	<tr><td class='n30 b10'></td><td>ms</td><td>root dispersion</td></tr>
+	<tr><td class='n30'></td><td>ms</td><td>root delay</td></tr>
+	<tr><td class='n30'></td><td>ms</td><td>max error</td></tr>
+</table>
+<table>
+	<tr><td class='n30'><td>ppm</td><td>residual frequency</td></tr>
 </table>
 	
-<table>
-	<tr><td class='n30 b10'><?php echo($d['rdi' ]); ?></td><td>ms</td><td>root dispersion</td></tr>
-	<tr><td class='n30'><?php echo($d['rde' ]); ?></td><td>ms</td><td>root delay</td></tr>
-	<tr><td class='n30'><?php echo($d['maxe']); ?></td><td>ms</td><td>max error</td></tr>
-</table>
-
-<table>
-	<tr><td class='n30'><?php echo($d['rfr']); ?></td><td>ppm</td><td>residual frequency</td></tr>
-</table>
-	
-<div>at <?php echo($d['asof']); ?></div>
+	<div>at <span id='asof' /></div>
 
 <table class='mono htab10'>
 	<thead>
@@ -53,7 +57,7 @@
 	
 <div id='sourcerefD'><a href='https://github.com/kwynncom/chrony-measurements'>source code</a></div>
 	</div>
-<?php unset($d); ?>
+<?php unset($d, $KW_G_TIMEA); ?>
 </body>
 </html>
 

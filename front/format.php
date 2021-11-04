@@ -18,7 +18,7 @@ class chrony_readouts_formatting {
 		}
 		
 		$now = time();
-		$ret['asof'] = date('g:i:a D m/d', $now) . ' (' . date('s', $now) . 's) ' . date('P', $now);
+		$ret['asof'] = date('g:ia D m/d', $now) . ' (' . date('s', $now) . 's) ' . date('P', $now);
 		
 		$ret['lpoll'] = $lpoll = self::msf10($a['logs']['lpoll']);
 		
