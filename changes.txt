@@ -1,3 +1,0 @@
-2021/10/30 2:30pm EDT - minutes after creating the repo
-
-I am removing a lot of the detail from the sourcestats parser.  It's overkill.

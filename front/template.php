@@ -12,7 +12,7 @@
 <?php  require_once('histTable.php');
 		$KW_G_TDS_ORDER = ['np', 'np_span_min', 'lpmin', 'lpoll', 'laoffnist', 'estoff', 'rdi', 'rde', 'maxe', 'rfr']; ?>
 <script>
-<?php	echo("\t" . 'var KW_G_CHM_INIT  = ' . json_encode($KW_G_TIMEA    ) . ';' . "\n" ); unset($KW_G_TIMEA);
+<?php	echo("\t" . 'var KW_G_CHM_INIT  = ' . json_encode($KW_G_TIMEA    ) . ';' . "\n" ); // still need GV for logs way below
 		echo("\t" . 'var KW_G_CHM_ORDER = ' . json_encode($KW_G_TDS_ORDER) . ';' . "\n" ); unset($KW_G_TDS_ORDER); ?>
 </script>
 
@@ -46,18 +46,16 @@
 		<tr><th>min<br/>ago</th><th class='poll'>poll<br/>off</th><th class='frcor'>frcor</th></tr>
 	</thead
 	<tbody id='histb10'>
-		<?php echo(kwChmHistRows($d['logs']['logs'])); ?>
+		<?php echo(kwChmHistRows($KW_G_TIMEA['logs']['logs'])); unset($KW_G_TIMEA); ?>
 	</tbody>
 </table>
-	
-	
 </div>  <!-- dat - tables and such -->
+
 <div class='foot10'>
-<div><a href='https://kwynn.com/t/9/12/sync/'>clock</a></div>
-	
-<div id='sourcerefD'><a href='https://github.com/kwynncom/chrony-measurements'>source code</a></div>
-	</div>
-<?php unset($d, $KW_G_TIMEA); ?>
+	<div><a href='https://kwynn.com/t/9/12/sync/'>clock</a></div>
+	<div id='sourcerefD'><a href='https://github.com/kwynncom/chrony-measurements'>source code</a></div>
+</div> <!-- foot -->
+
 </body>
 </html>
 
