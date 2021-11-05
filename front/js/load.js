@@ -22,6 +22,7 @@ function reload_btn_onclick() {
 		const lht = rj.logs.htrf;
 		const e = byid('histb10');
 		e.innerHTML = lht;
+		byid('histNIST').innerHTML = rj.nistallHT;
 	}
 	xm.send();
 	

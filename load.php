@@ -10,6 +10,7 @@ function sendJSON() {
 	
 	$a = getTemplateINITGV();
 	$a['logs']['htrf'] = kwChmHistRows($a['logs']['logs']);
+	$a['nistallHT']    = kwChmNISTRows($a['nistall']); 
 	
 	header('Content-Type: application/json');
 	echo(json_encode($a));
