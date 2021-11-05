@@ -1,4 +1,4 @@
-function byid(id) { return document.getElementById(id); }
+function byid(id) { const e = document.getElementById(id); return e; }
 function kwas(v, msg) {
 	if (!v) {
 		if (!msg) msg = 'unknown message';

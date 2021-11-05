@@ -6,6 +6,7 @@
 <title>chrony readings</title>
 <link rel="stylesheet" href="front/chinfo.css">
 <script src='front/js/utils.js'></script>
+<script src='front/js/load.js'></script>
 <script src='front/js/win_onload.js'></script>
 </head>
 <body> <!-- for future reference: refresh, reload &#128472; -->
@@ -30,11 +31,19 @@
 	<tr><td class='n30'></td><td>ms</td><td>offset - current est</td></tr>
 </table>
 
-<table>
-	<tr><td class='n30 b10'></td><td>ms</td><td>root dispersion</td></tr>
+	<div class='btngp20'>
+	<div class='b20'>
+<table class='b20'>
+	<tr><td class='n30 b10'></td><td>ms</td><td>root disp</td></tr>
 	<tr><td class='n30'></td><td>ms</td><td>root delay</td></tr>
 	<tr><td class='n30'></td><td>ms</td><td>max error</td></tr>
 </table>
+	</div>
+	<div class='b20 btnp20'>
+		<button class='btn10' onclick='reload_btn_onclick();'>&#128472;</button>
+	</div>
+	</div>
+		
 <table>
 	<tr><td class='n30'><td>ppm</td><td>residual frequency</td></tr>
 </table>
@@ -44,10 +53,8 @@
 <table class='mono htab10'>
 	<thead>
 		<tr><th>min<br/>ago</th><th class='poll'>poll<br/>off</th><th class='frcor'>frcor</th></tr>
-	</thead
-	<tbody id='histb10'>
-		<?php echo(kwChmHistRows($KW_G_TIMEA['logs']['logs'])); unset($KW_G_TIMEA); ?>
-	</tbody>
+	</thead>
+	<tbody id='histb10'><?php echo(kwChmHistRows($KW_G_TIMEA['logs']['logs'])); unset($KW_G_TIMEA); ?></tbody>
 </table>
 </div>  <!-- dat - tables and such -->
 
