@@ -2,9 +2,12 @@
 
 require_once('config.php');
 require_once('logsP10.php');
-require_once('nist/callSNTPReg.php');
+require_once(__DIR__ . '/../nist/callSNTPReg.php');
 
 class chrony_analysis {
+	
+	const nistnlim = 9;
+	
 	public static function get() {
 		$o = new self();
 		return $o->getI();
@@ -23,10 +26,19 @@ class chrony_analysis {
 	}
 	
 	private function do70() {
-		$n = nist_backoff_calls::get();
-		$this->ret['laoffnist'] = isset($n['dsms']) ? 
-										$n['dsms'] : false;
+		$nr = nist_backoff_calls::get(self::nistnlim);
+		$this->ret['laoffnist'] = self::get1NIST($nr);
+		$this->ret['nistall']   = $nr;
 		return;
+	}
+	
+	public static function get1NIST($n) {
+		if (isset($n   ['dsms']))
+		   return $n   ['dsms'];
+		if (isset($n[0]['dsms']))
+		   return $n[0]['dsms'];
+		
+		return false;
 	}
 	
 	private function do60() {

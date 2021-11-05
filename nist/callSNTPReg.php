@@ -4,33 +4,29 @@ require_once('servers.php');
 require_once('callSNTP.php');
 
 class nist_backoff_calls extends nist_servers {
-	public static function get() {
+	public static function get($limitN = 1) {
 		$ip = nist_servers::regGet();
 		$sres = false;
-		if ($ip) $sres = callSNTP::getReal($ip); // 2 lines after REGget
+		if ($ip) $sres = callSNTP::getNISTActual($ip); // 2 lines after REGget
 		$o = new self($sres);
-		return $o->getR();
+		return $o->getdb($limitN);
 	}
-	
-	public function getR() { return $this->oret; }
 	
 	private function __construct($rin) {
 		parent::__construct(true);
 		$this->creTabs(['o' => 'offsets']);
 		$this->clean();
-		if ($rin) {
-			$this->save($rin);
-			$this->oret = $rin;
-		} else 
-			$this->oret = $this->getdb();
+		if ($rin) $this->save($rin);
 	}
 	
 	private function save($rin) {
 		$res = $this->ocoll->insertOne($rin);
 	}
 	
-	private function getdb() {
-		$res = $this->ocoll->findOne([], ['sort' => ['U' => -1]]);
+	public function getdb($limitn = 1) {
+		$res = $this->ocoll->find([], ['sort' => ['U' => -1], 'limit' => $limitn]);
+		if (!$res) return $res;
+		if ($limitn === 1) return $res[0];
 		return $res;
 	}
 	

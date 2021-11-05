@@ -30,10 +30,15 @@ class chrony_readouts_formatting {
 
 	}
 
-	public static function minf($vin, $divide = true) {
+	public static function minf($vin, $divide = true, $fmt = false, $spifgt = PHP_FLOAT_MAX) {
 		$v = $vin;
 		if ($divide) $v /= 60;
-		return intval(round($v));
+		$rounded = intval(round($v));
+		if (!$fmt)    return $rounded;
+		if ($v < $spifgt && $fmt) return sprintf($fmt, $v);
+		return $rounded . '&nbsp;' . '&nbsp;' . '&nbsp;';
+		
+		
 	}	
 	
 	public static function ifabovems($vin) {

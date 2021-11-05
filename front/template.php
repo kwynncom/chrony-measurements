@@ -50,12 +50,23 @@
 	
 	<div>at <span id='asof' /></div>
 
-<table class='mono htab10'>
+<div class='histP'> <!-- hist tables -->
+<table class='mono htab10 hist'>
+	<caption>chrony server</caption>
 	<thead>
-		<tr><th>min<br/>ago</th><th class='poll'>poll<br/>off</th><th class='frcor'>frcor</th></tr>
+		<tr><th>min</th><th class='poll'>off</th><th class='frcor'>frcor</th></tr>
 	</thead>
-	<tbody id='histb10'><?php echo(kwChmHistRows($KW_G_TIMEA['logs']['logs'])); unset($KW_G_TIMEA); ?></tbody>
+	<tbody id='histb10'><?php echo(kwChmHistRows($KW_G_TIMEA['logs']['logs'])); ; ?></tbody>
 </table>
+
+<table class='mono htab10 hist'>
+	<caption>NIST</caption>
+	<thead>
+		<tr><th>min</th><th class='poll'>off</th></tr>
+	</thead>
+	<tbody id='histNIST'><?php echo(kwChmNISTRows($KW_G_TIMEA['nistall'])); unset($KW_G_TIMEA); ?></tbody>
+</table>
+</div> <!-- hist tables -->
 </div>  <!-- dat - tables and such -->
 
 <div class='foot10'>

@@ -1,7 +1,7 @@
 <?php
 
 require_once('/opt/kwynn/kwutils.php');
-require_once('config.php');
+require_once(__DIR__ . '/' . 'config.php');
 require_once('validIP.php');
 
 class callSNTP extends callSNTPConfig {
@@ -113,13 +113,13 @@ class callSNTP extends callSNTPConfig {
 	
 	public function getRes() { return $this->ores; }
 	
-	public static function getReal($ip = false) {
+	public static function getNISTActual($ip = false) {
 		$o = new self($ip);
 		return $o->getRes();
 	}
 
 }
-if (didCLICallMe(__FILE__)) { $d = callSNTP::getReal();
+if (didCLICallMe(__FILE__)) { $d = callSNTP::getNISTActual();
 	print_r($d);
 	// var_dump($d);
 	unset($d);

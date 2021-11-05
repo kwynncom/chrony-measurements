@@ -1,4 +1,28 @@
 <?php
+function kwChmNISTRows($bain) {
+	$now = time();
+	$ht = '';
+	foreach($bain as $hud => $a) {
+		if (isset($a['dsms']))
+			$o =  $a['dsms'];
+		
+		if (!isset($o)) continue;
+		
+		$ht .= '<tr>';
+		$ht .= '<td class="mago20">';
+		$ht .= chrony_readouts_formatting::minf($now - $a['U'], true, '%0.2f', 9.999); unset($ts);
+		$ht .= '</td>';
+		$ht .= '<td class="n40">';
+		if (isset($o)) $ht .= sprintf('%0.6f', $o);
+		$ht .= '</td>';
+		$ht .= '</tr>';
+		
+		unset($o);
+		continue;
+	}
+	
+	return $ht;
+}
 
 function kwChmHistRows($bain) {
 	$now = time();
