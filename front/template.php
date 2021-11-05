@@ -9,7 +9,7 @@
 <script src='front/js/load.js'></script>
 <script src='front/js/win_onload.js'></script>
 </head>
-<body> <!-- for future reference: refresh, reload &#128472; -->
+<body>
 <?php  require_once('histTable.php');
 		$KW_G_TDS_ORDER = ['np', 'np_span_min', 'lpmin', 'lpoll', 'laoffnist', 'estoff', 'rdi', 'rde', 'maxe', 'rfr']; ?>
 <script>
@@ -40,7 +40,7 @@
 </table>
 	</div>
 	<div class='b20 btnp20'>
-		<button class='btn10' onclick='reload_btn_onclick();'>&#128472;</button>
+		<button class='btn10' onclick='reload_btn_onclick();'>&#8635;</button>
 	</div>
 	</div>
 		
