@@ -48,7 +48,7 @@
 	<tr><td class='n30'><td>ppm</td><td>residual frequency</td></tr>
 </table>
 	
-	<div>at <span id='asof' /></div>
+	<div class='asofP'>at <span id='asof' /></div>
 
 <div class='histP'> <!-- hist tables -->
 <table class='mono htab10 hist'>
@@ -59,7 +59,7 @@
 	<tbody id='histb10'><?php echo(kwChmHistRows($KW_G_TIMEA['logs']['logs'])); ; ?></tbody>
 </table>
 
-<table class='mono htab10 hist'>
+<table class='mono htab10 hist' id='nisthist'>
 	<caption>NIST</caption>
 	<thead>
 		<tr><th>min</th><th class='poll'>off</th></tr>
@@ -70,8 +70,8 @@
 </div>  <!-- dat - tables and such -->
 
 <div class='foot10'>
-	<div><a href='https://kwynn.com/t/9/12/sync/'>clock</a></div>
-	<div id='sourcerefD'><a href='https://github.com/kwynncom/chrony-measurements'>source code</a></div>
+	<div><a href='https://kwynn.com/t/9/12/sync/'>clock</a>
+		<span id='sourcerefD'><a href='https://github.com/kwynncom/chrony-measurements'>source code</a></span></div>
 </div> <!-- foot -->
 
 </body>

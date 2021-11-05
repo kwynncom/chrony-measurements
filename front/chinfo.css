@@ -1,4 +1,6 @@
-table.hist { display: inline-block; }
+.asofP { margin-bottom: 1.1ex; }
+#nisthist { margin-left: 1.2ex; }
+table.hist { display: inline-block; border: 1px solid black; padding-right: 0.8ex; padding-top: 0.8ex; }
 caption { font-weight: bold; }
 
 .b20 { display: inline-block; }
@@ -12,9 +14,9 @@ body   { font-family: sans-serif; }
 .fcor  { width:  7.8ex; text-align: right;  }
 
 table  { margin-bottom: 1.0ex; }
-#sourcerefD { margin-top: 2ex; }
+#sourcerefD { padding-left: 2ex;  }
 .b10 { font-weight: bold; }
-.foot10 { margin-top: 2ex; }
+.foot10 { margin-top: 1.2ex; }
 th { font-weight: normal; }
 .mono { font-family: monospace; }
 .htab10 { padding-top: 2ex; }

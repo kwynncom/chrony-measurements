@@ -10,7 +10,7 @@ function kwChmNISTRows($bain) {
 		
 		$ht .= '<tr>';
 		$ht .= '<td class="mago20">';
-		$ht .= chrony_readouts_formatting::minf($now - $a['U'], true, '%0.2f', 9.999); unset($ts);
+		$ht .= chrony_readouts_formatting::minf($now - $a['U'], true, 1, 9.999); unset($ts);
 		$ht .= '</td>';
 		$ht .= '<td class="n40">';
 		if (isset($o)) $ht .= sprintf('%0.6f', $o);
