@@ -52,7 +52,7 @@
 
 <div class='histP'> <!-- hist tables -->
 <table class='mono htab10 hist'>
-	<caption>chrony server</caption>
+	<caption>NTP server</caption>
 	<thead>
 		<tr><th>min</th><th class='poll'>off</th><th class='frcor'>frcor</th></tr>
 	</thead>
