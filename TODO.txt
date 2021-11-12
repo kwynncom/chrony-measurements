@@ -1,0 +1,6 @@
+2021/11/12
+
+Needs better / extant error handling upon chrony startup.  I have some handling when PHP errors are set to show, but this probably needs friendly 
+user-level messages.
+
+
