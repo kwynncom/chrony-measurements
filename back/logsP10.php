@@ -32,7 +32,7 @@ class chrony_log_parse_p10 extends chrony_log_parse {
 		}
 		
 		$this->p10a['logs']  = $r;
-		$this->p10a['lpoll'] = floatval($fp);
+		if ($fp !== false) $this->p10a['lpoll'] = floatval($fp);
 	}
 	
 }

@@ -20,7 +20,7 @@ class chrony_readouts_formatting {
 		$now = time();
 		$ret['asof'] = date('g:ia D m/d', $now) . ' (' . date('s', $now) . 's) ' . date('P', $now);
 		
-		if (!isset(   $a['logs']['lpoll'])) $lpoll = 10;
+		if (!isset(   $a['logs']['lpoll'])) $lpoll = false;
 		else $lpoll = $a['logs']['lpoll'];
 		
 		$lpoll = self::msf10($lpoll);

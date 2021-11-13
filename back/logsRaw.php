@@ -7,7 +7,7 @@ class chrony_log_parse {
     
     const tailn = 8;
 	const path  = '/var/log/chrony/';
-	const files = ['tracking.log', 'statistics.log', 'measurements.log'];
+	const files = ['tracking.log', /* 'statistics.log', */ 'measurements.log'];
     
     public $an10 = [];
     
