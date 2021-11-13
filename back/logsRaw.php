@@ -85,6 +85,8 @@ class chrony_log_parse {
     }
     
     private function load10() {
+		
+		$thea = [];	
 
 		foreach(self::files as $f) {
 		
@@ -101,6 +103,7 @@ class chrony_log_parse {
 			$ret = [];
 			$la = explode("\n", $t); 
 			$lii = 0;
+		
 			foreach($la as $l) {
 				if (!$l) continue; // the blank string following the last line
 				if (strpos($l, '='   ) !== false) continue; // header =====
@@ -117,12 +120,27 @@ class chrony_log_parse {
 				$now = time();
 				$pd  = $now - $this->npss;
 				if ($ts < $pd) continue;
-				$this->linea[$dhu][$fsn] = $a;
+				$ta[$dhu][$fsn] = $a;
+				$thea[] = $ta; unset($ta);
+
 				if (++$lii >= self::tailn) break;
 			}
 		}
+		
+		usort($thea, ['self', 'sort']);
+		
+		foreach($thea as $i => $a) {
+			$rea[key($a)] = current($a);
+		}
+		
+		
+		$this->linea = $rea;
+		
 		return;
     }
+	
+	private static function sort($a, $b) { return -(strtotime(key($a)) - strtotime(key($b))); }
+	
 }
 
 if (didCLICallMe(__FILE__)) print_r(chrony_log_parse::get());

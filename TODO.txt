@@ -1,5 +1,11 @@
 2021/11/12
 
+23:12pm
+
+averages rather than last, network time (both ways)
+
+the sorting as below is done.
+
 8:32pm 
 
 NEW TODO - the logs containing tracking versus measurement need to be sorted by time.  This doesn't become a problem until 
