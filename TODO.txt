@@ -1,6 +1,10 @@
 2021/11/12
 
-23:12pm
+23:12pm - 23:41
+
+I can't show the two directions with the NTP stuff, only NIST.
+Combine NIST with other table to show both directions
+add the asymmetry score from statistics
 
 averages rather than last, network time (both ways)
 
