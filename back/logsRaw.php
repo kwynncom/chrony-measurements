@@ -17,6 +17,7 @@ class chrony_log_parse {
 		$this->load10();
 		$this->do10();
 		$this->do20();
+		if (!isset($this->maxe)) return;
 		$this->an10['maxe'] = $this->maxe;
     }
     
@@ -26,6 +27,9 @@ class chrony_log_parse {
     }
     
     private function do20() {
+		
+	if (!isset($this->lpa10)) return;
+		
 	$a = $this->lpa10;
 	$fi = 0;
 	$n = count($a);
@@ -57,7 +61,9 @@ class chrony_log_parse {
     private function do10() {
 	$ret = [];
 	$maxe = false;
-	foreach($this->linea as $ts => $snas)
+	
+	if (!is_array($this->linea)) return;
+	foreach(      $this->linea as $ts => $snas)
 	{
 		if (!isset($snas['t'])) continue;
 		$l =	   $snas['t'];

@@ -12,7 +12,7 @@ class chrony_readouts_formatting {
 			if ($k === 'rdi')		$ret[$k]       = self::ifabovems($v);
 			if ($k === 'rde')		$ret[$k]       = self::ifabovems($v);
 			if ($k === 'estoffa') 	$ret['estoff'] = self::msf10($v['float']);
-			if ($k === 'laoffnist') $ret[$k]	   = $v !== false ? self::msf10($v, 1) : ''; 
+			if ($k === 'laoffnist') $ret[$k]	   = self::msf10($v, 1); 
 			if ($k === 'maxe')      $ret[$k]  = self::ifabovems($v);
 			if ($k === 'rfr')       $ret[$k]  = sprintf('%0.3f', $v);		
 		}
@@ -20,12 +20,21 @@ class chrony_readouts_formatting {
 		$now = time();
 		$ret['asof'] = date('g:ia D m/d', $now) . ' (' . date('s', $now) . 's) ' . date('P', $now);
 		
-		$ret['lpoll'] = $lpoll = self::msf10($a['logs']['lpoll']);
+		if (!isset(   $a['logs']['lpoll'])) $lpoll = 10;
+		else $lpoll = $a['logs']['lpoll'];
+		
+		$lpoll = self::msf10($lpoll);
+		
+		$ret['lpoll'] = $lpoll;
+		
+		if (!isset($ret['logs']['logs']))
+				   $ret['logs']['logs'] = [];
 		
 		return $ret;
 	}
 	
 	public static function msf10($v, $mby = 1000) {
+		if ($v === false) return '';
 		return sprintf('%0.6f', $v * $mby);
 
 	}

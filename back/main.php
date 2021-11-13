@@ -42,10 +42,13 @@ class chrony_analysis {
 	}
 	
 	private function do60() {
-		$maxe = $this->ret['rdi'] + 
-				$this->ret['rde'] / 2.0 + 
-				abs($this->ret['logs']['lpoll']) + 
-				abs($this->ret['estoffa']['float']);
+		
+		if (isset($this->ret['rdi']))
+			$maxe = $this->ret['rdi'] + 
+					$this->ret['rde'] / 2.0 + 
+					abs($this->ret['logs']['lpoll']) + 
+					abs($this->ret['estoffa']['float']);
+		else $maxe = 10000;
 		
 		$this->ret['maxe'] = $maxe;
 		
@@ -55,11 +58,21 @@ class chrony_analysis {
 		$this->ret = array_merge($this->ret, $this->ssa);
 	}
 	
-	private function do40() { $this->ret['logs'] = chrony_log_parse_p10::get($this->ssa['np_span_s']);	}
+	private function do40() { 
+		if (!isset($this->ssa['np_span_s'])) $ss = PHP_INT_MIN;
+		else $ss = $this->ssa['np_span_s'];
+		$this->ret['logs'] = [];
+		$res = chrony_log_parse_p10::get($ss);	
+		if (is_array($res)) $this->ret['logs'] = $res;
+	}
 		
-	private function do30() { $this->ssa = parse_sourcestats::get(); }
+	private function do30() { 
+		$this->ssa = [];
+		try { $this->ssa = parse_sourcestats::get();  } catch(Exception $ex) { }
+	}
 	
 	private function do20() {
+		if (!$this->cha) return;
 		$a = $this->cha['detailed_array'];
 		$lastPollS = $a['Ref time (UTC)']['s_ago'];
 		$rfr	   = $a['Residual freq'];
@@ -72,7 +85,10 @@ class chrony_analysis {
 	
 	private function do10() {
 		require_once(getChronyParserPath());
+		$this->cha = [];
+		try {
 		$this->cha = chrony_parse::get();
+		} catch(Exception $ex) { }
 	}
 }
 

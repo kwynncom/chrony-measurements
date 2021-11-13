@@ -13,11 +13,15 @@ class chrony_log_parse_p10 extends chrony_log_parse {
 		return $o->getI();
     }
 	
-	public function getI() { return $this->p10a; }
+	public function getI() { 
+		if (!isset($this->p10a)) return [];
+		return     $this->p10a; 
+	}
 	
 	private function p10() {
 		$fp = false;
 		$ba = $this->linea;
+		if (!is_array($ba)) return;
 		foreach($ba as $hudnotz => $a) {
 			$hudtz =   $hudnotz . ' UTC';
 			if (isset($a['m'][11])) {
