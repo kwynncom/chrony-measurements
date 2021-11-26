@@ -43,7 +43,7 @@ class chrony_analysis {
 	
 	private function do60() {
 		
-		if (isset($this->ret['rdi']))
+		if (isset(  $this->ret['rdi']) && isset($this->ret['logs']['lpoll']))
 			$maxe = $this->ret['rdi'] + 
 					$this->ret['rde'] / 2.0 + 
 					abs($this->ret['logs']['lpoll']) + 

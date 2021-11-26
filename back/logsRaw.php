@@ -128,14 +128,8 @@ class chrony_log_parse {
 		}
 		
 		usort($thea, ['self', 'sort']);
-		
-		foreach($thea as $i => $a) {
-			$rea[key($a)] = current($a);
-		}
-		
-		
-		$this->linea = $rea;
-		
+		foreach($thea as $i => $a) $rea[key($a)] = current($a);
+		if (isset($rea)) $this->linea = $rea;
 		return;
     }
 	
