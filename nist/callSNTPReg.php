@@ -4,10 +4,17 @@ require_once('servers.php');
 require_once('callSNTP.php');
 
 class nist_backoff_calls extends nist_servers {
+	
+	private static function testMode() {
+		if ((time() < strtotime('2021-12-01 18:55')) && !isAWS()) return TRUE;
+		return FALSE;
+	}
+	
 	public static function get($limitN = 1) {
-		$ip = nist_servers::regGet();
+		$ip = false;
+		if (!self::testMode()) $ip = nist_servers::regGet();
 		$sres = false;
-		if (0 && $ip) $sres = callSNTP::getNISTActual($ip); // turning off for now // 2 lines after REGget
+		if ($ip) $sres = callSNTP::getNISTActual($ip); // turning off for now // 2 lines after REGget
 		$o = new self($sres);
 		return $o->getdb($limitN);
 	}

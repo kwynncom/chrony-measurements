@@ -99,7 +99,7 @@ class chrony_log_parse {
 			$cmd .= self::path . $f;
 			$cmd .= ' | tac';
 
-			$t = shell_exec($cmd); kwas($t && is_string($t) && strlen($t) > 30, 'chrony tracking file load fail shell');
+			$t = shell_exec($cmd); kwas($t && is_string($t) && strlen($t) > 30, 'chrony tracking file load fail shell'); unset($cmd);
 			$ret = [];
 			$la = explode("\n", $t); 
 			$lii = 0;
@@ -120,7 +120,7 @@ class chrony_log_parse {
 				$now = time();
 				$pd  = $now - $this->npss;
 				if ($ts < $pd) continue;
-				$ta[$dhu][$fsn] = $a;
+				$ta[$dhu][$fsn] = $a; unset($a);
 				$thea[] = $ta; unset($ta);
 
 				if (++$lii >= self::tailn) break;
@@ -128,13 +128,13 @@ class chrony_log_parse {
 		}
 		
 		usort($thea, ['self', 'sort']);
-		foreach($thea as $i => $a) {
-			$k = key($a);
-			$a20 = current($a);
-			$k20 = key($a20);
-			$v   = $a20[$k20];
-			$rea[$k][$k20] = $v;
-		}
+		
+		/* The following turns $thea[0]['2021...']['t'] into $rea['2021']['t'].  Off hand, I can't think of a way to do it directly and still use usort.  I need 
+			 indexes for usort. */
+		foreach($thea as $iIgnore => $hudia) // human date indexed array
+		foreach($hudia as $hud => $ltya) // human date => log type array ['t'] or ['m'] 
+		foreach($ltya as $lty  => $fvsa) // log type => final values array
+			$rea[$hud][$lty] = $fvsa;
 		if (isset($rea)) $this->linea = $rea;
 		return;
     }
