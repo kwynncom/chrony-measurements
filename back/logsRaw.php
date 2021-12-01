@@ -86,29 +86,29 @@ class chrony_log_parse {
     
     private function load10() {
 		
+		$now = time();
 		$thea = [];	
 
-		foreach(self::files as $f) {
+		foreach(self::files as $file) {
 		
-			$fsn = substr($f, 0, 1);
+			$fsn = substr($file, 0, 1);
 			
 			$cmd  = '';
 			$cmd .= 'tail -n ';
 			$cmd .= self::tailn + 3; // account for headers
 			$cmd .=  ' ';
-			$cmd .= self::path . $f;
+			$cmd .= self::path . $file; unset($file);
 			$cmd .= ' | tac';
 
 			$t = shell_exec($cmd); kwas($t && is_string($t) && strlen($t) > 30, 'chrony tracking file load fail shell'); unset($cmd);
-			$ret = [];
-			$la = explode("\n", $t); 
+			$la = explode("\n", $t); unset($t);
 			$lii = 0;
 		
 			foreach($la as $l) {
 				if (!$l) continue; // the blank string following the last line
 				if (strpos($l, '='   ) !== false) continue; // header =====
 				if (strpos($l, 'Date') !== false) continue; // header labels
-				$a = preg_split('/\s+/', $l);
+				$a = preg_split('/\s+/', $l); unset($l);
 				
 				if ($fsn === 'm') {
 					kwynn();
@@ -117,27 +117,28 @@ class chrony_log_parse {
 				
 				$dhu = $a[0] . ' ' . $a[1];
 				$ts  = strtotime($dhu . ' UTC');
-				$now = time();
 				$pd  = $now - $this->npss;
-				if ($ts < $pd) continue;
-				$ta[$dhu][$fsn] = $a; unset($a);
+				if ($ts < $pd) continue; unset($pd, $ts);
+				$ta[$dhu][$fsn] = $a; unset($a, $dhu);
 				$thea[] = $ta; unset($ta);
 
 				if (++$lii >= self::tailn) break;
-			}
-		}
+			} unset($la, $lii);
+		} unset($now, $fsn);
 		
-		usort($thea, ['self', 'sort']);
-		
-		/* The following turns $thea[0]['2021...']['t'] into $rea['2021']['t'].  Off hand, I can't think of a way to do it directly and still use usort.  I need 
-			 indexes for usort. */
-		foreach($thea as $iIgnore => $hudia) // human date indexed array
+		$this->setHuA($thea);
+    }
+	
+	private function setHuA($ain) { /* This turns $thea[0]['2021...']['t'] into $rea['2021']['t'].  Off hand, I can't think of a way to do it directly and still use 
+									   usort.  I need  indexes for usort. */	
+		usort($ain, ['self', 'sort']);
+		foreach($ain as $iIgnore => $hudia) // human date indexed array
 		foreach($hudia as $hud => $ltya) // human date => log type array ['t'] or ['m'] 
 		foreach($ltya as $lty  => $fvsa) // log type => final values array
 			$rea[$hud][$lty] = $fvsa;
-		if (isset($rea)) $this->linea = $rea;
-		return;
-    }
+		unset($thea, $iIgnore, $hudia, $hud, $ltya, $lty, $fvsa, $ain);
+		if (isset($rea)) $this->linea = $rea;		
+	}
 	
 	private static function sort($a, $b) { return -(strtotime(key($a)) - strtotime(key($b))); }
 	
