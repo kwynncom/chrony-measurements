@@ -7,7 +7,7 @@ class nist_backoff_calls extends nist_servers {
 	public static function get($limitN = 1) {
 		$ip = nist_servers::regGet();
 		$sres = false;
-		if ($ip) $sres = callSNTP::getNISTActual($ip); // 2 lines after REGget
+		if (0 && $ip) $sres = callSNTP::getNISTActual($ip); // turning off for now // 2 lines after REGget
 		$o = new self($sres);
 		return $o->getdb($limitN);
 	}
