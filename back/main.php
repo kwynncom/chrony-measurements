@@ -59,7 +59,8 @@ class chrony_analysis {
 	}
 	
 	private function do40() { 
-		if (!isset($this->ssa['np_span_s'])) $ss = PHP_INT_MIN;
+		if (!isset($this->ssa['np_span_s']) 
+				|| !is_numeric($this->ssa['np_span_s'])) $ss = false;
 		else $ss = $this->ssa['np_span_s'];
 		$this->ret['logs'] = [];
 		$res = chrony_log_parse_p10::get($ss);	
@@ -74,6 +75,7 @@ class chrony_analysis {
 	private function do20() {
 		if (!$this->cha) return;
 		$a = $this->cha['detailed_array'];
+		if (!isset(  $a['Ref time (UTC)']['s_ago'])) return;
 		$lastPollS = $a['Ref time (UTC)']['s_ago'];
 		$rfr	   = $a['Residual freq'];
 		$rdi	   = $a['Root dispersion'];

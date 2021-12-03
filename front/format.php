@@ -41,6 +41,9 @@ class chrony_readouts_formatting {
 
 	public static function minf($vin, $divide = true, $digr = false, $spifgt = PHP_FLOAT_MAX) {
 		$v = $vin;
+		
+		if (!is_numeric($v)) return '-';
+		
 		if ($divide) $v /= 60;
 		$rounded = intval(round($v));
 		if (!is_integer($digr))    return $rounded;

@@ -106,6 +106,9 @@ class chrony_log_parse {
 		
 			foreach($la as $l) {
 				if (!$l) continue; // the blank string following the last line
+				
+				if (!is_numeric($this->npss)) return;
+				
 				if (strpos($l, '='   ) !== false) continue; // header =====
 				if (strpos($l, 'Date') !== false) continue; // header labels
 				$a = preg_split('/\s+/', $l); unset($l);
