@@ -71,7 +71,7 @@
 
 <div class='foot10'>
 	<div><a href='https://kwynn.com/t/9/12/sync/'>clock</a>
-		<span id='sourcerefD'><a href='https://github.com/kwynncom/chrony-measurements'>source code</a></span></div>
+		<span id='sourcerefD'><a href='/t/9/12/sync/more.html'>more info</a></span></div>
 </div> <!-- foot -->
 
 </body>
