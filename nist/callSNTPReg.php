@@ -6,7 +6,6 @@ require_once('callSNTP.php');
 class nist_backoff_calls extends nist_servers {
 	
 	private static function testMode() {
-		if ((time() < strtotime('2021-12-01 18:15')) && !isAWS()) return TRUE;
 		return FALSE;
 	}
 	

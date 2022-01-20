@@ -10,8 +10,9 @@ class callSNTP extends callSNTPConfig {
 	const rescnt   = 4;
 	
 	private function simShell() {
-		if (isAWS()) return false;
-		if (!self::simShell) return false;
+		return false;
+		/* 
+		 * if (!self::simShell) return false;
 		$t = $r[0] = nanotime();
 		$r[1] = $t + intval(round(self::toleranceNS * 0.999));
 		$r[2] = $r[1];
@@ -19,6 +20,8 @@ class callSNTP extends callSNTPConfig {
 		$this->ores['raw'] = $r;
 		$j = json_encode($r);
 		return $j;
+		 * 
+		 */
 	}
 	
 	private function __construct($ip) {
@@ -77,7 +80,7 @@ class callSNTP extends callSNTPConfig {
 	}
 	
 	private function setCmd() {
-		if (FALSE && !isAWS()) { // assuming it's in the PATH
+		if (FALSE /*&& !is*** AWS() */) { // assuming it's in the PATH
 			$locpp = self::locPath;
 			$locp = $locpp . self::file;
 			kwas(is_readable($locp), "$locp unreadable");

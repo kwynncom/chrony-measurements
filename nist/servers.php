@@ -49,9 +49,9 @@ class nist_servers extends dao_generic_2 {
 	}
 
 	private function devReset() {
-		if (isAWS()) return;
-		if (strtotime('2021-10-28 02:50') < time()) return;
-		$this->scoll->drop();
+		return;
+		// if (strtotime('2021-10-28 02:50') < time()) return;
+		// $this->scoll->drop();
 	}
 	
 	private function insertSrvs() {
