@@ -92,7 +92,7 @@ class nist_servers extends dao_generic_2 {
 		$q  = ['susp' => ['$gt' => $gifnoa]];
 		$dbr  = $this->ucoll->findOne($q, ['sort' => ['susp' => -1]]);
 		if ($dbr) {
-			$this->goodatr = date('r', $dbr['susp'] + $ws);			
+			$this->goodatr = date('r', roint($dbr['susp'] + $ws));			
 			return false;
 		}
 		return TRUE;

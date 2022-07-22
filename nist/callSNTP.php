@@ -110,7 +110,7 @@ class callSNTP extends callSNTPConfig {
 		}
 		
 		if ($i !== self::rescnt) return;
-		$this->ores['raw'] = $a;
+		$this->ores['raw'] = $a ? $a : [];
 		return;
 	}
 	
