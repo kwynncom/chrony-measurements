@@ -62,7 +62,7 @@ class callSNTP extends callSNTPConfig {
 	public static function toms($ns) { return $ns / M_MILLION; }
 	
 	private function init() {
-		$this->ores = false;
+		$this->ores = []; // Kwynn 2022/07
 		$this->setIP();
 		$this->setCmd();
 	}
@@ -93,8 +93,10 @@ class callSNTP extends callSNTPConfig {
 	
 	private function doit() {
 		$cmd = trim($this->cmd);
-		if (!($r = $this->simShell())) $r = shell_exec($cmd);
+		if (!($r = $this->simShell())) $r = trim(shell_exec($cmd));
+		// file_put_contents('/tmp/callSNTP.txt', $r); // Kwynn 2022/07 - keep this???
 		$a = json_decode(trim($r));
+		// file_put_contents('/tmp/callSNTP.txt', print_r($a)); // Kwynn 2022/07 - keep this???
 		$this->setValid($a);
 	}
 	
@@ -110,6 +112,9 @@ class callSNTP extends callSNTPConfig {
 		}
 		
 		if ($i !== self::rescnt) return;
+		
+		// file_put_contents('/tmp/callSNTP.txt', print_r($a)); // Kwynn 2022/07 - keep this???
+		
 		$this->ores['raw'] = $a ? $a : [];
 		return;
 	}
