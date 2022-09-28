@@ -23,6 +23,7 @@ function reload_btn_onclick() {
 		const e = byid('histb10');
 		e.innerHTML = lht;
 		byid('histNIST').innerHTML = rj.nistallHT;
+		byid('NISTIPb' ).innerHTML = rj.nistHTIP;
 	}
 	xm.send();
 	

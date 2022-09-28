@@ -14,7 +14,7 @@ function kwChmNISTRowsIP($bain) {
 	$now = time();
 	$ht = '';
 	$i = 0;
-	$maxr = 3;
+	$maxr = 4;
 	
 	foreach($bain as $hud => $a) {
 		if (isset($a['ip']))
