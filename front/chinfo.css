@@ -14,6 +14,7 @@ caption { font-weight: bold; }
 body   { font-family: sans-serif; }
 .n30   { width:  9.5ex; text-align: right; font-size: 120%; font-family: monospace}
 .n40   { width: 10.5ex; text-align: right;  font-size: 100%; }
+.n50   { width: 10.5ex; text-align: left;  font-size: 100%; }
 .fcor  { width:  7.8ex; text-align: right;  }
 
 table  { margin-bottom: 1.0ex; }

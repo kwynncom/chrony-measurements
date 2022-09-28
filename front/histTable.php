@@ -1,4 +1,34 @@
 <?php
+
+function kwChmNISTRowsIP($bain) {
+	$now = time();
+	$ht = '';
+	foreach($bain as $hud => $a) {
+		if (isset($a['ip']))
+			$ip =  $a['ip'];
+		
+		if (isset($a['dsms']))
+			$o =  $a['dsms'];
+		
+		if (!isset($ip) || !isset($o)) continue;
+		
+		$ht .= '<tr>';
+		$ht .= '<td class="n50">';
+		if ($o >= 0) $ht .= '&nbsp;';
+		$ht .= sprintf('%0.4f', $o);
+		$ht .= '</td>';
+		$ht .= '<td class="n50">';
+		$ht .= $ip;
+		$ht .= '</td>';
+		$ht .= '</tr>';
+		
+		unset($o);
+		continue;
+	}
+	
+	return $ht;
+}
+
 function kwChmNISTRows($bain) {
 	$now = time();
 	$ht = '';

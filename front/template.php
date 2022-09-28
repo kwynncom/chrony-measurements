@@ -64,8 +64,17 @@
 	<thead>
 		<tr><th>min</th><th class='poll'>off</th></tr>
 	</thead>
-	<tbody id='histNIST'><?php echo(kwChmNISTRows($KW_G_TIMEA['nistall'])); unset($KW_G_TIMEA); ?></tbody>
+	<tbody id='histNIST'><?php echo(kwChmNISTRows($KW_G_TIMEA['nistall']));?></tbody>
 </table>
+	
+<table class='mono htab10 hist' id='nistipt'>
+	<caption>NIST IP</caption>
+	<thead>
+		<tr><th>off</th><th class='poll'>ip</th></tr>
+	</thead>
+	<tbody id='NISTIPb'><?php echo(kwChmNISTRowsIP($KW_G_TIMEA['nistall']));?></tbody>
+</table>
+	
 </div> <!-- hist tables -->
 </div>  <!-- dat - tables and such -->
 
