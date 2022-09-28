@@ -16,28 +16,7 @@ class callSNTP extends callSNTPConfig {
 		// $this->calcs();
 	}
 
-	private function calcs() {
-		if (!isset($this->ores['raw'])) return;
-		$or  =	   $this->ores;
-		$a   =	$or['raw'];
-		$min = $or['min'] = min($a);
-		for($i=0; $i < 2; $i++) $or['relmss'][$i] = self::toms($a[$i] - $min);
-		$avgns = (($a[3] + $a[0]) >> 1);
-		$avgs = self::toms($avgns - $min);
-		$or['relmss'][2] = $avgs;
-		for($i=2; $i <= 3; $i++) $or['relmss'][$i + 1] = self::toms($a[$i] - $min);
-		$d = self::d($a);
-		$or['dsns'] = $d;
-		$or['ds'  ] = $d / M_BILLION;
-		$or['dsms'] = $d / M_MILLION;
-		$or['outms'] = self::toms($a[1] - $a[0]);
-		$or['inms']  = self::toms($a[3] - $a[2]);
-		
-		$or['r'] = date('r');
-		$or['U'] = time();
-		
-		$this->ores = $or;
-	}
+
 	
 	public static function d($T) { 
 		$t = ((($T[1] - $T[0]) + ($T[2] - $T[3]))) >> 1;

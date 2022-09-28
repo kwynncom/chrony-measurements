@@ -26,12 +26,42 @@ class chrony_analysis {
 		$this->do70();
 	}
 	
+	public static function toms($ns) { return $ns / M_MILLION; }
+	
+	private function SNTPcalcs($ain) {
+		if (!$ain) return;
+		if (!isset($ain['t4Uns'])) return;
+		$or  =	   $ain;
+		$a   =	$or['t4Uns'];
+		$min = $or['min'] = min($a);
+		for($i=0; $i < 2; $i++) $or['relmss'][$i] = self::toms($a[$i] - $min);
+		$avgns = (($a[3] + $a[0]) >> 1);
+		$avgs = self::toms($avgns - $min);
+		$or['relmss'][2] = $avgs;
+		for($i=2; $i <= 3; $i++) $or['relmss'][$i + 1] = self::toms($a[$i] - $min);
+		$d = self::SNTPOffset($a);
+		$or['dsns'] = $d;
+		$or['ds'  ] = $d / M_BILLION;
+		$or['dsms'] = $d / M_MILLION;
+		$or['outms'] = self::toms($a[1] - $a[0]);
+		$or['inms']  = self::toms($a[3] - $a[2]);
+		return $or;
+	}
+	
+	public static function SNTPOffset($T) {
+		$t = ((($T[1] - $T[0]) + ($T[2] - $T[3]))) >> 1;
+		return $t;
+	}
+	
 	private function do65NISTPop() {
-		$nr = nist_backoff_calls::get(self::nistnlim);		
+		$nr = [];
+		$raw = nist_backoff_calls::get(self::nistnlim);
+		foreach($raw as $r) $nr[] = $this->SNTPcalcs($r);
+		return $nr;
 	}
 	
 	private function do70() {
-		$nr = nist_backoff_calls::get(self::nistnlim);
+		$nr = $this->do65NISTPop();
 		$this->ret['laoffnist'] = self::get1NIST($nr);
 		$this->ret['nistall']   = $nr;
 		return;

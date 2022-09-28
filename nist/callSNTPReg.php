@@ -15,9 +15,13 @@ class nist_backoff_calls extends dao_generic_3 {
 	const deleteAtDays = 100;
 	const deleteAtS    = DAY_S * self::deleteAtDays;
 	
-	public static function get() {
-		$o = new self();
-		return $o->getdb();
+	public static function get($lim = 1) {
+		try { 
+			$o = new self();
+			return $o->getdb($lim);
+		} catch(Exception $ex) {}
+		
+		return [];
 	}
 	
 	private function __construct() {
@@ -67,7 +71,11 @@ class nist_backoff_calls extends dao_generic_3 {
 	}
 	
 	public function getdb($limitn = 1) {
-		$res = $this->ccoll->find([], ['sort' => ['U' => -1], 'limit' => $limitn]);
+		$o = [];
+		$o['projection'] = ['_id' => 0, 'U' => 1, 'r' => 1, 'ip' => 1, 't4Uns' => 1];
+		$o['sort'] = ['U' => -1];
+		$o['limit'] = $limitn;
+		$res = $this->ccoll->find([], $o);
 		if (!$res) return $res;
 		if ($limitn === 1) return $res[0];
 		return $res;
