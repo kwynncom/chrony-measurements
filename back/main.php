@@ -22,7 +22,12 @@ class chrony_analysis {
 		$this->do40();
 		$this->do50();
 		$this->do60();
+		$this->do65NISTPop();
 		$this->do70();
+	}
+	
+	private function do65NISTPop() {
+		$nr = nist_backoff_calls::get(self::nistnlim);		
 	}
 	
 	private function do70() {

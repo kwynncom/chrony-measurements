@@ -9,7 +9,11 @@ class nist_backoff_calls extends dao_generic_3 {
 
 	const dbname = 'sntp4';
 	const resetS = 1200;
-	
+	const backe = 1.2;
+	const mind  = 4;
+	const maxs  = 1200;	
+	const deleteAtDays = 100;
+	const deleteAtS    = DAY_S * self::deleteAtDays;
 	
 	public static function get() {
 		$o = new self();
@@ -17,11 +21,45 @@ class nist_backoff_calls extends dao_generic_3 {
 	}
 	
 	private function __construct() {
-		parent::__construct(true);
-		$this->creTabs(['o' => 'calls']);
+		parent::__construct(self::dbname);
+		$this->creTabs(['c' => 'calls']);
+		$this->ccoll->createIndex(['U' => -1], ['unique' => true]);
 		$this->clean();
-		$this->quotaOrDie();
-		// if ($rin) $this->save($rin);
+		$lo = new sem_lock(__FILE__);
+		try { 
+			$lo->lock();
+			$this->quotaOrDie();
+			$this->doit();
+		} catch(Exception $ex) { }
+		
+		$lo->unlock();
+	}
+
+	private function clean() {
+		$dats = self::deleteAtS;
+		$dat = time() - $dats;
+		$this->ccoll->deleteMany(['U' => ['$lt' => time() - self::deleteAtS]]);
+	}
+	
+	private function doit() {
+		$a = [];
+		$us = $a['Uus'] = microtime(1);
+		$U	= $a['U'  ] = intval(floor($us));
+		$a['r'] = date('r', $U);
+		$this->ccoll->insertOne($a, ['kwnoup' => true]);
+		$r = callSNTP::getNISTActual();
+		if (!$r) return;
+		$this->ccoll->upsert(['U' => $U], kwam($a, $r), 1, false);
+		return;
+	}
+	
+	private function quotaOrDie() {
+		$boo = new backoff(self::backe, self::mind, self::maxs);	
+		$n10  = $this->ccoll->count();
+		$ws = $boo->next($n10); 
+		$ckr = $this->ccoll->findOne(['Uus' => ['$gte' => (microtime(1) - $ws)]]);
+		kwas(!$ckr, 'quota overflow');
+		return;
 	}
 	
 	private function save($rin) {
@@ -29,7 +67,7 @@ class nist_backoff_calls extends dao_generic_3 {
 	}
 	
 	public function getdb($limitn = 1) {
-		$res = $this->ocoll->find([], ['sort' => ['U' => -1], 'limit' => $limitn]);
+		$res = $this->ccoll->find([], ['sort' => ['U' => -1], 'limit' => $limitn]);
 		if (!$res) return $res;
 		if ($limitn === 1) return $res[0];
 		return $res;

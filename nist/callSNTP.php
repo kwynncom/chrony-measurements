@@ -13,7 +13,7 @@ class callSNTP extends callSNTPConfig {
 	private function __construct() {
 		$this->init();
 		$this->doit();
-		$this->calcs();
+		// $this->calcs();
 	}
 
 	private function calcs() {
@@ -71,7 +71,7 @@ class callSNTP extends callSNTPConfig {
 			kwas($a[1] <= $a[2], 'server time sanity check fail between in and out');
 			kwas($a[0] <  $a[3], 'server time sanity check internal out and in');
 
-			$this->ores['raw'] = $a;
+			$this->ores['t4Uns'] = $a;
 			$this->ores['ip' ] = $ip;
 		} catch(Exception $ex) { }
 		
