@@ -6,26 +6,11 @@ require_once('validIP.php');
 
 class callSNTP extends callSNTPConfig {
 
-	const simShell = false;
-	const rescnt   = 4;
-	
-	private function simShell() {
-		return false;
-		/* 
-		 * if (!self::simShell) return false;
-		$t = $r[0] = nanotime();
-		$r[1] = $t + intval(round(self::toleranceNS * 0.999));
-		$r[2] = $r[1];
-		$r[3] = $t;
-		$this->ores['raw'] = $r;
-		$j = json_encode($r);
-		return $j;
-		 * 
-		 */
-	}
-	
-	private function __construct($ip) {
-		$this->ipinraw = $ip;
+	const resnt = 4;
+	const resnl = self::resnt + 1;
+	const thecmd = 'sntp -nosleep';
+
+	private function __construct() {
 		$this->init();
 		$this->doit();
 		$this->calcs();
@@ -54,7 +39,7 @@ class callSNTP extends callSNTPConfig {
 		$this->ores = $or;
 	}
 	
-	public static function d($T) { // getting the sign right per RFC 4330 page 13 - https://datatracker.ietf.org/doc/html/rfc4330
+	public static function d($T) { 
 		$t = ((($T[1] - $T[0]) + ($T[2] - $T[3]))) >> 1;
 		return $t;
 	}
@@ -63,72 +48,44 @@ class callSNTP extends callSNTPConfig {
 	
 	private function init() {
 		$this->ores = []; // Kwynn 2022/07
-		$this->setIP();
-		$this->setCmd();
-	}
-	
-	private function setIP() {
-		global $argv;
-		global $argc;
-		
-		if ($this->ipinraw && validIPOrDie($this->ipinraw)) $this->ip = $this->ipinraw;
-		else { 
-			kwas($argc >= 2, 'need an IP argument');
-			$ip = $argv[1];
-			$this->ip = validIPOrDie($ip);
-		}
-	}
-	
-	private function setCmd() {
-		if (FALSE /*&& !is*** AWS() */) { // assuming it's in the PATH
-			$locpp = self::locPath;
-			$locp = $locpp . self::file;
-			kwas(is_readable($locp), "$locp unreadable");
-			$this->cmd = self::loccmd . ' ' . $locp . ' ' . $this->ip;
-			return;
-		}
-		
-		$this->cmd = self::file . ' ' . $this->ip;
 	}
 	
 	private function doit() {
-		$cmd = trim($this->cmd);
-		if (!($r = $this->simShell())) $r = trim(shell_exec($cmd));
-		// file_put_contents('/tmp/callSNTP.txt', $r); // Kwynn 2022/07 - keep this???
-		$a = json_decode(trim($r));
-		// file_put_contents('/tmp/callSNTP.txt', print_r($a)); // Kwynn 2022/07 - keep this???
-		$this->setValid($a);
+		$t = shell_exec(self::thecmd);
+		$this->setValid($t);
 	}
 	
-	private function setValid($a) {
-		if (!is_array($a)) return;
-		if (count($a) !== self::rescnt) return;
+	private function setValid($t) {
+		
+		try {
+			$a = explode("\n", trim($t)); unset($t); kwas(count($a) === self::resnl, 'wrong lines sntp sanity check');
+			$ip = validIPOrDie($a[4]); unset($a[4]);
+						
+			for ($i=0; $i < self::resnt; $i++) $a[$i] = intval($a[$i]);
 
-		$now = nanotime();
-		for($i=0; $i <    self::rescnt; $i++) {
-			if (!is_integer($a[$i])) return;
-			$d = abs($a[$i] - $now);
-			if ($d > self::toleranceNS) return;
-		}
+			$min = min($a);
+			$max = max($a);
+			kwas($max - $min < callSNTPConfig::toleranceNS, 'time sanity check fails - ck 1 0417');
+			$ds = abs(nanotime() - $max);
+			kwas($ds < callSNTPConfig::toleranceNS , 'time sanity check fail 2');
+			kwas($a[1] <= $a[2], 'server time sanity check fail between in and out');
+			kwas($a[0] <  $a[3], 'server time sanity check internal out and in');
+
+			$this->ores['raw'] = $a;
+			$this->ores['ip' ] = $ip;
+		} catch(Exception $ex) { }
 		
-		if ($i !== self::rescnt) return;
-		
-		// file_put_contents('/tmp/callSNTP.txt', print_r($a)); // Kwynn 2022/07 - keep this???
-		
-		$this->ores['raw'] = $a ? $a : [];
 		return;
 	}
 	
 	public function getRes() { return $this->ores; }
 	
-	public static function getNISTActual($ip = false) {
-		$o = new self($ip);
-		return $o->getRes();
+	public static function getNISTActual() {
+		$o = new self();
+		$res = $o->getRes();
+		return $res;
 	}
 
 }
-if (didCLICallMe(__FILE__)) { $d = callSNTP::getNISTActual();
-	print_r($d);
-	// var_dump($d);
-	unset($d);
-}
+
+if (didCLICallMe(__FILE__)) callSNTP::getNISTActual();

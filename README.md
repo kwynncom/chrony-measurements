@@ -29,6 +29,11 @@ perhaps I'm missing something.  I should say I don't see any harm given that I'm
 that works in about 23 hours.
 
 
+OTHER NOTES
+
+Getting the sign right per RFC 4330 page 13 - https://datatracker.ietf.org/doc/html/rfc4330 : $t = ((($T[1] - $T[0]) + ($T[2] - $T[3]))) >> 1;
+
+
 HISTORY
 
 I took the first files from: https://github.com/kwynncom/web-timeserver-nanosecond-precision

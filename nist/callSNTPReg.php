@@ -1,28 +1,27 @@
 <?php
 
-require_once('servers.php');
+require_once('/opt/kwynn/mongodb3.php');
+require_once('/opt/kwynn/lock.php');
 require_once('callSNTP.php');
+require_once('backoff.php');
 
-class nist_backoff_calls extends nist_servers {
+class nist_backoff_calls extends dao_generic_3 {
+
+	const dbname = 'sntp4';
+	const resetS = 1200;
 	
-	private static function testMode() {
-		return FALSE;
+	
+	public static function get() {
+		$o = new self();
+		return $o->getdb();
 	}
 	
-	public static function get($limitN = 1) {
-		$ip = false;
-		if (!self::testMode()) $ip = nist_servers::regGet();
-		$sres = false;
-		if ($ip) $sres = callSNTP::getNISTActual($ip); // turning off for now // 2 lines after REGget
-		$o = new self($sres);
-		return $o->getdb($limitN);
-	}
-	
-	private function __construct($rin) {
+	private function __construct() {
 		parent::__construct(true);
-		$this->creTabs(['o' => 'offsets']);
+		$this->creTabs(['o' => 'calls']);
 		$this->clean();
-		if ($rin) $this->save($rin);
+		$this->quotaOrDie();
+		// if ($rin) $this->save($rin);
 	}
 	
 	private function save($rin) {
