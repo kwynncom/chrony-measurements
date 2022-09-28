@@ -13,6 +13,9 @@ function ipdis($ip) {
 function kwChmNISTRowsIP($bain) {
 	$now = time();
 	$ht = '';
+	$i = 0;
+	$maxr = 3;
+	
 	foreach($bain as $hud => $a) {
 		if (isset($a['ip']))
 			$ip =  $a['ip'];
@@ -32,7 +35,9 @@ function kwChmNISTRowsIP($bain) {
 		$ht .= '</td>';
 		$ht .= '</tr>';
 		
-		unset($o);
+		unset($o, $ip);
+		
+		if (++$i >= $maxr) break;
 		continue;
 	}
 	
