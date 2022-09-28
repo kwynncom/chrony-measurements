@@ -1,5 +1,15 @@
 <?php
 
+function ipdis($ip) {
+	
+	$ml = 24;
+		
+	$l = strlen($ip);
+	if ($l <= $ml) return $ip;
+	return '...' . substr($ip, $l - $ml, $ml);
+	
+}
+
 function kwChmNISTRowsIP($bain) {
 	$now = time();
 	$ht = '';
@@ -13,12 +23,12 @@ function kwChmNISTRowsIP($bain) {
 		if (!isset($ip) || !isset($o)) continue;
 		
 		$ht .= '<tr>';
-		$ht .= '<td class="n50">';
+		$ht .= '<td class="n60">';
 		if ($o >= 0) $ht .= '&nbsp;';
-		$ht .= sprintf('%0.4f', $o);
+		$ht .= sprintf('%0.3f', $o);
 		$ht .= '</td>';
 		$ht .= '<td class="n50">';
-		$ht .= $ip;
+		$ht .= ipdis($ip);
 		$ht .= '</td>';
 		$ht .= '</tr>';
 		
