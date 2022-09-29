@@ -17,7 +17,7 @@ This needs my nanotime PHP extension: https://github.com/kwynncom/nano-php-exten
 And parts of my nanoseond web server: https://github.com/kwynncom/web-timeserver-nanosecond-precision
     It's expecting chronyParsed.php from that project in a specific path relationship, in this project's main.php
 Needs read permission for the files in /var/log/chrony
-Needs sntp and wrap.php from https://github.com/kwynncom/sntp-client  in the PATH (see that project's README for installation notes)
+Needs sntp from https://github.com/kwynncom/sntp-client  in the PATH (see that project's README for installation notes)
 
 
 IMPLEMENTATION NOTES

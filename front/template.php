@@ -78,6 +78,8 @@
 </div> <!-- hist tables -->
 </div>  <!-- dat - tables and such -->
 
+<div>Note: As of 2022/09/29, I am working on this, so it might break.</div>
+
 <div class='foot10'>
 	<div><a href='https://kwynn.com/t/9/12/sync/'>clock</a>
 		<span id='sourcerefD'><a href='/t/9/12/sync/more.html'>more info</a></span></div>
