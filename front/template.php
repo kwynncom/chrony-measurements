@@ -23,7 +23,7 @@
 <table>
 	<tr><td class='n30'></td><td></td><td>active polls</td></tr>
 	<tr><td class='n30'></td><td>minutes</td><td>poll span</td></tr>
-	<tr><td class='n30'></td><td>minutes</td><td>since last poll</td></tr>
+	<tr><td class='n30'></td><td>minutes</td><td>since last ref time</td></tr>
 </table>
 <table>
 	<tr><td class='n30'></td><td>ms</td><td>offset - last poll</td></tr>
@@ -77,8 +77,6 @@
 	
 </div> <!-- hist tables -->
 </div>  <!-- dat - tables and such -->
-
-<div>Note: As of 2022/09/29, I am working on this, so it might break.</div>
 
 <div class='foot10'>
 	<div><a href='https://kwynn.com/t/9/12/sync/'>clock</a>

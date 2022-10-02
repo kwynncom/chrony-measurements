@@ -59,7 +59,7 @@ class nist_backoff_calls extends dao_generic_3 {
 	
 	private function quotaOrDie() {
 		$boo = new backoff(self::backe, self::mind, self::maxs);	
-		$n10  = $this->ccoll->count();
+		$n10  = $this->ccoll->count(['U' => ['$gte' => time() - self::maxs]]);
 		$ws = $boo->next($n10); 
 		$ckr = $this->ccoll->findOne(['Uus' => ['$gte' => (microtime(1) - $ws)]]);
 		kwas(!$ckr, 'quota overflow');
