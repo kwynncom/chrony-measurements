@@ -1,3 +1,4 @@
+#! /usr/bin/php
 <?php
 
 require_once('/opt/kwynn/kwutils.php');
@@ -14,7 +15,7 @@ class chronylog_cli_filter {
 		
 		if (!trim($l)) return;
 		
-		if ($this->oi === 0) $this->outHeader();
+		if ($this->oi % 20 === 0) $this->outHeader();
 			
 		
 		echo(substr($l, 0, 20));
@@ -34,9 +35,9 @@ class chronylog_cli_filter {
 	private function outHeader() {
 		static $o = false;
 		$s = <<<CHRH
-   Date (UTC)    Time   IP 6 LP RP Score    Offset  Peer del.  Peer disp. Root del.  Root disp. Refid     MTxRx
+   Date (UTC) Time   IP 6 LP RP Score    Offset  Peer del.  Peer disp. Root del.  Root disp. Refid     MTxRx
 CHRH;
-		if ($o === false) $o = substr(trim($s), 0, 91);
+		if ($o === false) $o = substr(rtrim($s), 0, 91);
 		echo($o . "\n");
 	}
 	
@@ -44,8 +45,9 @@ CHRH;
 	
 	
 	private function init() {
-		//						-f /var/log/chrony/measurements.log
-		$this->ohan = popen('tail -n 100    /var/kwynn/chm.log', 'r');		
+		$t = 'tail -n 100    /var/kwynn/chm.log';
+		$l = 'tail -n 100 -f /var/log/chrony/measurements.log';
+		$this->ohan = popen($l, 'r');		
 		$this->oi = 0;
 
 	}
