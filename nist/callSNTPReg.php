@@ -10,18 +10,34 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	const dbname = 'sntp4';
 	const resetS = 1200;
 	const backe = 1.2;
-	const mind  = 4;
 	const maxs  = 1200;	
 	const deleteAtDays = 100;
 	const deleteAtS    = DAY_S * self::deleteAtDays;
 	
+	public static function getWait() {
+		$o = new self();
+		return $o->waitSFl();
+	}
+	
 	public static function get($lim = 1) {
 		try { 
 			$o = new self();
+			$o->doit();
 			return $o->getdb($lim);
 		} catch(Exception $ex) {}
 		
 		return [];
+	}
+	
+	public function doit() {
+		$lo = new sem_lock(__FILE__);
+		try { 
+			$lo->lock();
+			$this->quotaOrDie();
+			$this->doTheCall();
+		} catch(Exception $ex) { }
+		
+		$lo->unlock();		
 	}
 	
 	private function __construct() {
@@ -29,14 +45,6 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$this->creTabs(['c' => self::collname]);
 		$this->ccoll->createIndex(['U' => -1], ['unique' => true]);
 		$this->clean();
-		$lo = new sem_lock(__FILE__);
-		try { 
-			$lo->lock();
-			$this->quotaOrDie();
-			$this->doit();
-		} catch(Exception $ex) { }
-		
-		$lo->unlock();
 	}
 
 	private function clean() {
@@ -45,7 +53,19 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$this->ccoll->deleteMany(['U' => ['$lt' => time() - self::deleteAtS]]);
 	}
 	
-	private function doit() {
+	public function waitSfl() {
+		$boo = new backoff(self::backe, self::NISTminS, self::maxs);	
+		$n10  = $this->ccoll->count(['U' => ['$gte' => time() - self::maxs]]);
+		$ws = $boo->next($n10);
+		if ($n10 === 0) return 0;
+		$nowus = microtime(1);
+		$failifago = $nowus - $ws;
+		$ckr = $this->ccoll->findOne([], ['sort' => ['Uus' => -1]]);
+		$towait = $ckr['Uus'] - $failifago;
+		return $towait;
+	}
+	
+	private function doTheCall() {
 		$a = [];
 		$us = $a['Uus'] = microtime(1);
 		$U	= $a['U'  ] = intval(floor($us));
@@ -57,13 +77,10 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$this->ccoll->upsert(['U' => $U], kwam($a, $r), 1, false);
 		return;
 	}
-	
+
 	private function quotaOrDie() {
-		$boo = new backoff(self::backe, self::mind, self::maxs);	
-		$n10  = $this->ccoll->count(['U' => ['$gte' => time() - self::maxs]]);
-		$ws = $boo->next($n10); 
-		$ckr = $this->ccoll->findOne(['Uus' => ['$gte' => (microtime(1) - $ws)]]);
-		kwas(!$ckr, 'quota overflow');
+		$towait = $this->waitSfl();
+		kwas($towait <= 0, 'quota overflow');
 		return;
 	}
 
