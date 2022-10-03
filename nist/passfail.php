@@ -10,7 +10,7 @@ class nist_passfail extends dao_generic_3 implements callSNTPConfig {
 	const withinS = self::withinM * 60;
 	const mustn   = 3;
 	const tolerancens = M_MILLION;
-	const tolerancensTest = self::tolerancens * 60;
+	const tolerancensTest = 1000;
 	
 	private function __construct() {
 		parent::__construct(self::dbname);
@@ -56,18 +56,15 @@ class nist_passfail extends dao_generic_3 implements callSNTPConfig {
 		
 	}
 	
+	public static function isTest() {
+		if (ispkwd()) return true;
+		if (time() < strtotime('2022-10-02 23:29')) return true;
+		return false;
+	}
+	
 	public static function passfail($o) {
-		static $isk;
 		static $t = false;
-		
-		if (!isset($isk)) $isk = ispkwd();
-		if ($t === false) $t = $isk ? self::tolerancensTest : self::tolerancens;
-		
-		if ($isk) {
-			$s = number_format($o);
-			kwynn();
-		}
-		
+		if ($t === false) $t = self::isTest() ? self::tolerancensTest : self::tolerancens;
 		return abs($o) < $t;
 	}
 	
