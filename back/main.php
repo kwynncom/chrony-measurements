@@ -49,16 +49,7 @@ class chrony_analysis {
 	}
 	
 	public static function SNTPOffset($T) {
-		$d1 = $T[1] - $T[0];
-		$d2 = $T[2] - $T[3];
-		$n3 = ((($T[1] - $T[0]) + ($T[2] - $T[3])));
-		$n4 = $n3 >> 1;
-		
-		$t = ((($T[1] - $T[0]) + ($T[2] - $T[3]))) >> 1;
-		
-		file_put_contents('/tmp/s', print_r(get_defined_vars(), true), FILE_APPEND);
-		
-		return $t;
+		return ((($T[1] - $T[0]) + ($T[2] - $T[3]))) >> 1;
 	}
 	
 	private function do65NISTPop() {

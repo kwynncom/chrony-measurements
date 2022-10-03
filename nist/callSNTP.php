@@ -4,7 +4,7 @@ require_once('/opt/kwynn/kwutils.php');
 require_once(__DIR__ . '/' . 'config.php');
 require_once('validIP.php');
 
-class callSNTP extends callSNTPConfig {
+class callSNTP implements callSNTPConfig {
 
 	const resnt = 4;
 	const resnl = self::resnt + 1;

@@ -5,7 +5,7 @@ require_once('/opt/kwynn/lock.php');
 require_once('callSNTP.php');
 require_once('backoff.php');
 
-class nist_backoff_calls extends dao_generic_3 {
+class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 
 	const dbname = 'sntp4';
 	const resetS = 1200;
@@ -26,7 +26,7 @@ class nist_backoff_calls extends dao_generic_3 {
 	
 	private function __construct() {
 		parent::__construct(self::dbname);
-		$this->creTabs(['c' => 'calls']);
+		$this->creTabs(['c' => self::collname]);
 		$this->ccoll->createIndex(['U' => -1], ['unique' => true]);
 		$this->clean();
 		$lo = new sem_lock(__FILE__);
@@ -50,6 +50,7 @@ class nist_backoff_calls extends dao_generic_3 {
 		$us = $a['Uus'] = microtime(1);
 		$U	= $a['U'  ] = intval(floor($us));
 		$a['r'] = date('r', $U);
+		$a['via'] = iscli() ? 'cli' : 'www';
 		$this->ccoll->insertOne($a, ['kwnoup' => true]);
 		$r = callSNTP::getNISTActual();
 		if (!$r) return;
@@ -65,11 +66,7 @@ class nist_backoff_calls extends dao_generic_3 {
 		kwas(!$ckr, 'quota overflow');
 		return;
 	}
-	
-	private function save($rin) {
-		$res = $this->ocoll->insertOne($rin);
-	}
-	
+
 	public function getdb($limitn = 1) {
 		$o = [];
 		$o['projection'] = ['_id' => 0, 'U' => 1, 'r' => 1, 'ip' => 1, 't4Uns' => 1];
