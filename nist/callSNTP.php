@@ -7,8 +7,7 @@ require_once('validIP.php');
 class callSNTP implements callSNTPConfig {
 
 	const resnt = 4;
-	const resnl = self::resnt + 1;
-	const thecmd = 'sntp -nosleep';
+	const thecmd = 'sntpw -nosleep -json';
 
 	private function __construct() {
 		$this->init();
@@ -37,21 +36,10 @@ class callSNTP implements callSNTPConfig {
 	private function setValid($t) {
 		
 		try {
-			$a = explode("\n", trim($t)); unset($t); kwas(count($a) === self::resnl, 'wrong lines sntp sanity check');
-			$ip = validIPOrDie($a[4]); unset($a[4]);
-						
-			for ($i=0; $i < self::resnt; $i++) $a[$i] = intval($a[$i]);
-
-			$min = min($a);
-			$max = max($a);
-			kwas($max - $min < callSNTPConfig::toleranceNS, 'time sanity check fails - ck 1 0417');
-			$ds = abs(nanotime() - $max);
-			kwas($ds < callSNTPConfig::toleranceNS , 'time sanity check fail 2');
-			kwas($a[1] <= $a[2], 'server time sanity check fail between in and out');
-			kwas($a[0] <  $a[3], 'server time sanity check internal out and in');
-
-			$this->ores['t4Uns'] = $a;
-			$this->ores['ip' ] = $ip;
+			$a = json_decode($t, true);
+			if (!$a || $a['status'] !== 'OK') return;
+			$this->ores['t4Uns'] = $a['t4'];
+			$this->ores['ip' ] = $a['ip'];
 		} catch(Exception $ex) { }
 		
 		return;
