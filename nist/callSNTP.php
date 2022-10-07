@@ -7,7 +7,7 @@ require_once('validIP.php');
 class callSNTP implements callSNTPConfig {
 
 	const resnt = 4;
-	const thecmd = 'sntpw -nosleep -json';
+	const thecmd = 'sntpw -nosleep -json -d';
 
 	private function __construct() {
 		$this->init();
