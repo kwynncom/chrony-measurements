@@ -56,9 +56,11 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	}
 	
 	public function waitSfl() {
-		$w1 = $this->waitSfl20();
-		if ($w1 > 0) return $w1;
-		unset($w1);
+		if (false) {$w1 = $this->waitSfl20();
+			if ($w1 > 0) return $w1;
+			unset($w1); 
+		}
+		
 		new chronylog_cli_filter(true);
 		return $this->waitSfl20();
 		
