@@ -4,6 +4,9 @@
 require_once('/opt/kwynn/kwutils.php');
 
 class chronylog_cli_filter {
+
+	const linesn = 100;
+
 	public function __construct() {
 		$this->init();
 		while ($l = $this->get()) $this->do10($l);
@@ -17,8 +20,9 @@ class chronylog_cli_filter {
 		
 		if ($this->oi % 20 === 0) $this->outHeader();
 			
-		
-		echo(substr($l, 0, 20));
+		$hu = trim(substr($l, 0, 20));
+		echo($hu . ' ');		
+
 		$ipb = substr($l, 20);
 		preg_match('/\S+/', $ipb, $ms);
 		$ip = $ms[0];
@@ -26,10 +30,20 @@ class chronylog_cli_filter {
 		echo(substr($ip, $ipl - 3) . ' ');
 		$ones = substr($l, 35 + ($ipl <= $ipa ? 0 : $ipl - $ipa));
 		echo($ones[16]);
-		echo(substr($ones, 19, 66));
+		$restl = substr($ones, 19, 66);
+		echo($restl);
+		// $this->procIP($hu, $ip, $restl);
 		echo("\n");
 		$this->oi++;
 		return;
+	}
+	
+	private function procIP($hu, $ip, $restl) {
+				
+		$offs = substr($restl, 12, 10);
+		$offfl = floatval($offs);
+		
+		kwynn();
 	}
 	
 	private function outHeader() {
@@ -45,8 +59,11 @@ CHRH;
 	
 	
 	private function init() {
-		$t = 'tail -n 100    /var/kwynn/chm.log';
-		$l = 'tail -n 100 -f /var/log/chrony/measurements.log';
+		// $t = 'tail -n 100    /var/kwynn/chm.log';
+		$l = 'tail -n '; 
+		$l .= self::linesn . ' ';
+		if (!amDebugging()) $l .= '-f ';
+		$l .= '/var/log/chrony/measurements.log';
 		$this->ohan = popen($l, 'r');		
 		$this->oi = 0;
 

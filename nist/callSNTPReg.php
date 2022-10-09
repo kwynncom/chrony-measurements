@@ -13,6 +13,8 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	const maxs  = 1200;	
 	const deleteAtDays = 100;
 	const deleteAtS    = DAY_S * self::deleteAtDays;
+	const nista = [         "129.6.15.26",         "129.6.15.27", "129.6.15.28", "129.6.15.29", "129.6.15.30", 
+					"2610:20:6f15:15::26", "2610:20:6f15:15::27" ];
 	
 	public static function getWait() {
 		$o = new self();
@@ -63,6 +65,12 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$ckr = $this->ccoll->findOne([], ['sort' => ['Uus' => -1]]);
 		$towait = $ckr['Uus'] - $failifago;
 		return $towait;
+	}
+	
+	public static function fromLog(string $hu, string $ip, float $off) {
+		if (!in_array($ip, self::nista)) return;
+		
+		
 	}
 	
 	private function doTheCall() {
