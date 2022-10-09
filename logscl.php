@@ -6,8 +6,26 @@ require_once('/opt/kwynn/kwutils.php');
 class chronylog_cli_filter {
 
 	const linesn = 100;
+	const thef   = '/var/log/chrony/measurements.log';
 
-	public function __construct() {
+	private function procIP($hu, $ip, $restl) {
+		static $o = false;
+		
+		require_once(__DIR__ . '/nist/fromLog.php');
+		
+		if (!$o) $o = new nistLogToDBCl();
+		
+		if (!nistLogToDBCl::isNIST($ip)) return;
+		
+		$offs = substr($restl, 12, 10);
+		$offfl = floatval($offs);
+		
+		$o->put($hu, $ip, $offs);
+	}
+	
+	
+	public function __construct(bool $isBatch = false) {
+		$this->isBatch = $isBatch;
 		$this->init();
 		while ($l = $this->get()) $this->do10($l);
 	}
@@ -32,19 +50,13 @@ class chronylog_cli_filter {
 		echo($ones[16]);
 		$restl = substr($ones, 19, 66);
 		echo($restl);
-		// $this->procIP($hu, $ip, $restl);
+		if ($this->isBatch) $this->procIP($hu, $ip, $restl);
 		echo("\n");
 		$this->oi++;
 		return;
 	}
 	
-	private function procIP($hu, $ip, $restl) {
-				
-		$offs = substr($restl, 12, 10);
-		$offfl = floatval($offs);
-		
-		kwynn();
-	}
+
 	
 	private function outHeader() {
 		static $o = false;
@@ -55,22 +67,30 @@ CHRH;
 		echo($o . "\n");
 	}
 	
-	
-	
-	
 	private function init() {
-		// $t = 'tail -n 100    /var/kwynn/chm.log';
-		$l = 'tail -n '; 
-		$l .= self::linesn . ' ';
-		if (!amDebugging()) $l .= '-f ';
-		$l .= '/var/log/chrony/measurements.log';
-		$this->ohan = popen($l, 'r');		
 		$this->oi = 0;
+		
+		if (!$this->isBatch) {
+			$l = 'tail -n '; 
+			$l .= self::linesn . ' ';
+			if (!amDebugging()) $l .= '-f ';
+			$l .= self::thef;
+			$this->ohan = popen($l, 'r');		
+		} else {
+			$t = trim(shell_exec('tail -n 60 ' . self::thef));
+			$this->olines = explode("\n", $t);
+		}
+
 
 	}
 	
 	private function get() { 
-		$l = trim(fgets($this->ohan));
+		if (!$this->isBatch) $l = trim(fgets($this->ohan));
+		else {
+			if (!isset($this->olgi)) $this->olgi = 0;
+			$i = $this->olgi++;
+			$l = kwifs($this->olines, $i);
+		}
 		if (!$l) return false;
 		if (!is_numeric($l[0])) return ' ';
 		return $l;
@@ -78,4 +98,4 @@ CHRH;
 	}
 }
 
-if (iscli()) new chronylog_cli_filter();
+if (didCLICallMe(__FILE__)) new chronylog_cli_filter();

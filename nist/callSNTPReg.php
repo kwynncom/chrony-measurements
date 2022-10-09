@@ -4,18 +4,17 @@ require_once('/opt/kwynn/mongodb3.php');
 require_once('/opt/kwynn/lock.php');
 require_once('callSNTP.php');
 require_once('backoff.php');
+require_once(__DIR__ . '/../logscl.php');
 
 class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 
-	const dbname = 'sntp4';
+	const dbname = callSNTPConfig::dbname;
 	const resetS = 1200;
 	const backe = 1.2;
 	const maxs  = 1200;	
 	const deleteAtDays = 100;
 	const deleteAtS    = DAY_S * self::deleteAtDays;
-	const nista = [         "129.6.15.26",         "129.6.15.27", "129.6.15.28", "129.6.15.29", "129.6.15.30", 
-					"2610:20:6f15:15::26", "2610:20:6f15:15::27" ];
-	
+
 	public static function getWait() {
 		$o = new self();
 		return $o->waitSFl();
@@ -56,6 +55,15 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	}
 	
 	public function waitSfl() {
+		$w1 = $this->waitSfl20();
+		if ($w1 > 0) return $w1;
+		unset($w1);
+		new chronylog_cli_filter(true);
+		return $this->waitSfl20();
+		
+	}
+	
+	private function waitSfl20() {
 		$boo = new backoff(self::backe, self::NISTminS, self::maxs);	
 		$n10  = $this->ccoll->count(['U' => ['$gte' => time() - self::maxs]]);
 		$ws = $boo->next($n10);
@@ -66,9 +74,18 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$towait = $ckr['Uus'] - $failifago;
 		return $towait;
 	}
-	
-	public static function fromLog(string $hu, string $ip, float $off) {
+
+	public static function fromLog($cli, int $ts, string $ip, float $offset) {
 		if (!in_array($ip, self::nista)) return;
+		$Uactual = $ts;
+		$r = date('r', $ts);
+		$Uus = $U = $ts + 1; 
+		$fromLog = true;
+		$_id = dao_generic_3::get_oids(false, $ts); unset($ts);
+		$dat = get_defined_vars();
+		unset($dat['cli']);
+		$cli->insertOne($dat, ['kwnoup' => true]);
+		kwynn();
 		
 		
 	}

@@ -7,8 +7,15 @@ require_once('validIP.php');
 class callSNTP implements callSNTPConfig {
 
 	const resnt = 4;
-	const thecmd = 'sntpw -nosleep -json -d';
+	const cmdRun   = 'sntpw -nosleep -json -d';
+	const cmdDebug = 'sntp  -nosleep -json';
 
+	private function isDebugMode() {
+		if (amDebugging()) return true;
+		if (time() < strtotime('2022-10-09 00:50')) return true;
+		return false;
+	}
+	
 	private function __construct() {
 		$this->init();
 		$this->doit();
@@ -29,7 +36,9 @@ class callSNTP implements callSNTPConfig {
 	}
 	
 	private function doit() {
-		$t = shell_exec(self::thecmd);
+		if ($this->isDebugMode()) $c = self::cmdDebug;
+		else			   $c = self::cmdRun;
+		$t = shell_exec($c);
 		$this->setValid($t);
 	}
 	
