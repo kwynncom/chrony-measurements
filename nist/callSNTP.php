@@ -17,6 +17,7 @@ class callSNTP implements callSNTPConfig {
 	}
 	
 	private function __construct() {
+		$this->debug = $this->isDebugMode();
 		$this->init();
 		$this->doit();
 		// $this->calcs();
@@ -45,8 +46,13 @@ class callSNTP implements callSNTPConfig {
 	private function setValid($t) {
 		
 		try {
-			$a = json_decode($t, true);
-			if (!$a || $a['status'] !== 'OK') return;
+			if (!$this->debug) {
+				$a = json_decode($t, true);
+				if (!$a || $a['status'] !== 'OK') return;
+			} else {
+				$a = SNTPTextToArr($t);
+				$a['t4'] = $a['Uns4'];
+			}
 			$this->ores['t4Uns'] = $a['t4'];
 			$this->ores['ip' ] = $a['ip'];
 		} catch(Exception $ex) { }

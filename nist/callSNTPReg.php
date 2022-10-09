@@ -45,6 +45,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		parent::__construct(self::dbname);
 		$this->creTabs(['c' => self::collname]);
 		$this->ccoll->createIndex(['U' => -1], ['unique' => true]);
+		$this->boo = new backoff(self::backe, self::NISTminS, self::maxs);	
 		$this->clean();
 	}
 
@@ -64,9 +65,8 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	}
 	
 	private function waitSfl20() {
-		$boo = new backoff(self::backe, self::NISTminS, self::maxs);	
 		$n10  = $this->ccoll->count(['U' => ['$gte' => time() - self::maxs]]);
-		$ws = $boo->next($n10);
+		$ws = $this->boo->next($n10);
 		if ($n10 === 0) return 0;
 		$nowus = microtime(1);
 		$failifago = $nowus - $ws;
@@ -111,7 +111,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 
 	public function getdb($limitn = 1) {
 		$o = [];
-		$o['projection'] = ['_id' => 0, 'U' => 1, 'r' => 1, 'ip' => 1, 't4Uns' => 1];
+		$o['projection'] = ['_id' => 0, 'U' => 1, 'r' => 1, 'ip' => 1, 't4Uns' => 1, 'offset' => 1];
 		$o['sort'] = ['U' => -1];
 		$o['limit'] = $limitn;
 		$res = $this->ccoll->find(['U' => ['$gte' => time() - 3600]], $o);

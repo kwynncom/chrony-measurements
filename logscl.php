@@ -1,6 +1,5 @@
-#! /usr/bin/php
 <?php
-
+// #! /usr/bin/php // can't do this on the web
 require_once('/opt/kwynn/kwutils.php');
 
 class chronylog_cli_filter {
@@ -30,6 +29,10 @@ class chronylog_cli_filter {
 		while ($l = $this->get()) $this->do10($l);
 	}
 	
+	private function oout($s) {
+		if (iscli()) echo($s);
+	}
+	
 	private function do10($l) {
 		
 		static $ipa = 15;
@@ -39,19 +42,19 @@ class chronylog_cli_filter {
 		if ($this->oi % 20 === 0) $this->outHeader();
 			
 		$hu = trim(substr($l, 0, 20));
-		echo($hu . ' ');		
+		$this->oout($hu . ' ');		
 
 		$ipb = substr($l, 20);
 		preg_match('/\S+/', $ipb, $ms);
 		$ip = $ms[0];
 		$ipl = strlen($ip);
-		echo(substr($ip, $ipl - 3) . ' ');
+		$this->oout(substr($ip, $ipl - 3) . ' ');
 		$ones = substr($l, 35 + ($ipl <= $ipa ? 0 : $ipl - $ipa));
-		echo($ones[16]);
+		$this->oout($ones[16]);
 		$restl = substr($ones, 19, 66);
-		echo($restl);
+		$this->oout($restl);
 		if ($this->isBatch) $this->procIP($hu, $ip, $restl);
-		echo("\n");
+		$this->oout("\n");
 		$this->oi++;
 		return;
 	}
@@ -64,7 +67,7 @@ class chronylog_cli_filter {
    Date (UTC) Time   IP 6 LP RP Score    Offset  Peer del.  Peer disp. Root del.  Root disp. Refid     MTxRx
 CHRH;
 		if ($o === false) $o = substr(rtrim($s), 0, 91);
-		echo($o . "\n");
+		$this->oout($o . "\n");
 	}
 	
 	private function init() {

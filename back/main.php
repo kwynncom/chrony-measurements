@@ -28,9 +28,18 @@ class chrony_analysis {
 	
 	public static function toms($ns) { return $ns / M_MILLION; }
 	
+	private function offsetOnlyCalcs($a) {
+		if (!isset($a['offset'])) return;
+		$or = $a;
+		$s = $or['ds']   = $a['offset'];
+		$or['dsms'] = $s * 1000;
+		$or['dsns'] = $s * M_BILLION;
+		return $or;
+	}
+	
 	private function SNTPcalcs($ain) {
 		if (!$ain) return;
-		if (!isset($ain['t4Uns'])) return;
+		if (!isset($ain['t4Uns'])) return $this->offsetOnlyCalcs($ain);
 		$or  =	   $ain;
 		$a   =	$or['t4Uns'];
 		$min = $or['min'] = min($a);
