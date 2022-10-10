@@ -1,7 +1,6 @@
 <?php
 
 require_once(__DIR__ . '/config.php');
-// require_once(__DIR__ . '/../logscl.php');
 require_once(__DIR__ . '/callSNTPReg.php');
 
 class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
@@ -32,8 +31,4 @@ class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 		
 	}
 	
-}
-
-if (didCLICallMe(__FILE__)) {
-	new chronylog_cli_filter(true);
 }

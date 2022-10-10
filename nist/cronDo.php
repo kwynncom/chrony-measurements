@@ -4,7 +4,10 @@ require_once(__DIR__ . '/callSNTPReg.php');
 
 if (iscli()) {
 
-	if (ispkwd() && time() > strtotime('2022-10-07 03:00')) exit(0);
+	if (ispkwd() && time() > strtotime('2022-10-09 21:59')) {
+		echo("End of test, exiting\n");
+		exit(0);
+	}
 	
 	$ws  = nist_backoff_calls::getWait();
 

@@ -11,8 +11,7 @@ class chronylog_cli_filter {
 
 	private function procIP($hu, $ip, $restl) {
 		static $o = false;
-		
-		require_once(__DIR__ . '/nist/fromLog.php');
+		static $exn = 0;
 		
 		if (!$o) $o = new nistLogToDBCl();
 		
@@ -20,12 +19,20 @@ class chronylog_cli_filter {
 		
 		$offs = substr($restl, 12, 10);
 		$offfl = floatval($offs);
-		
-		$o->put($hu, $ip, $offs);
+		try {
+			$o->put($hu, $ip, $offs);
+		} catch (Exception $ex) {
+			if (++$exn > 4) { 
+				echo('chrony logcl.php exception as follows.  Exiting: ' . $ex->getMessage());
+				exit(2122);
+			}
+			
+		}
 	}
 	
 	
 	public function __construct(bool $isBatch = false) {
+		cliOrDie();
 		$this->isBatch = $isBatch;
 		$this->init();
 		while ($l = $this->get()) $this->do10($l);

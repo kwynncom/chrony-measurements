@@ -12,7 +12,7 @@ class callSNTP implements callSNTPConfig {
 
 	private function isDebugMode() {
 		if (amDebugging()) return true;
-		if (time() < strtotime('2022-10-09 00:50')) return true;
+		if (time() < strtotime('2022-10-09 21:50')) return true;
 		return false;
 	}
 	
@@ -50,7 +50,7 @@ class callSNTP implements callSNTPConfig {
 				$a = json_decode($t, true);
 				if (!$a || $a['status'] !== 'OK') return;
 			} else {
-				$a = SNTPTextToArr($t);
+				$a = sntpSanity::ck($t);
 				$a['t4'] = $a['Uns4'];
 			}
 			$this->ores['t4Uns'] = $a['t4'];
