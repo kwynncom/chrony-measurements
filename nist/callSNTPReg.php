@@ -80,11 +80,11 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$Uactual = $ts;
 		$r = date('r', $ts);
 		$Uus = $U = $ts + 1; 
-		$fromLog = true;
 		$_id = dao_generic_3::get_oids(false, $ts); unset($ts);
 		$dat = get_defined_vars();
 		unset($dat['cli']);
 		$dat = kwam($dat, self::getpinfo(false));
+		$dat['via'] = 'log';
 		$cli->insertOne($dat, ['kwnoup' => true]);
 		kwynn();
 		
@@ -101,7 +101,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	private function adjustpinfo(&$a) {
 		$pt = kwifs($a, 'ptree');
 		if (!$pt) return;
-		if (strpos('---cron---', $pt) !== false) {
+		if (strpos($pt, '---cron---') !== false) {
 			$a['via'] = 'cron';
 			unset($a['pid']);
 			unset($a['ptree']);

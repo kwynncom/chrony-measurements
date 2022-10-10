@@ -22,7 +22,6 @@ class chrony_analysis {
 		$this->do40();
 		$this->do50();
 		$this->do60();
-		// $this->do65NISTPop();
 		$this->do70();
 	}
 	
