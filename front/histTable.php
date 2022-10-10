@@ -44,6 +44,15 @@ function kwChmNISTRowsIP($bain) {
 	return $ht;
 }
 
+function kwChmAdjVia($via) {
+	switch($via) {
+		case 'www'  : return 'w';
+	    case 'cron' : return 'r';
+		case 'log'  : return 'l';
+		default	    : return '';
+	}
+}
+
 function kwChmNISTRows($bain) {
 	$now = time();
 	$ht = '';
@@ -58,7 +67,10 @@ function kwChmNISTRows($bain) {
 		$ht .= chrony_readouts_formatting::minf($now - $a['U'], true, 1, 9.999); unset($ts);
 		$ht .= '</td>';
 		$ht .= '<td class="n40">';
-		if (isset($o)) $ht .= sprintf('%0.6f', $o);
+		if (isset($o)) $ht .= sprintf('%0.3f', $o);
+		$ht .= '</td>';
+		$ht .= '<td>';
+		$ht .= kwChmAdjVia(kwifs($a, 'via'));
 		$ht .= '</td>';
 		$ht .= '</tr>';
 		

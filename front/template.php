@@ -62,7 +62,7 @@
 <table class='mono htab10 hist' id='nisthist'>
 	<caption>NIST</caption>
 	<thead>
-		<tr><th>min</th><th class='poll'>off</th></tr>
+		<tr><th>min</th><th class='poll'>off</th><th>s</th></tr>
 	</thead>
 	<tbody id='histNIST'><?php echo(kwChmNISTRows($KW_G_TIMEA['nistall']));?></tbody>
 </table>

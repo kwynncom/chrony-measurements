@@ -53,6 +53,7 @@ class chrony_analysis {
 		$or['dsms'] = $d / M_MILLION;
 		$or['outms'] = self::toms($a[1] - $a[0]);
 		$or['inms']  = self::toms($a[3] - $a[2]);
+		$or['via' ] = kwifs($ain, 'via');
 		return $or;
 	}
 	

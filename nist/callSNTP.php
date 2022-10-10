@@ -40,10 +40,10 @@ class callSNTP implements callSNTPConfig {
 		if ($this->isDebugMode()) $c = self::cmdDebug;
 		else			   $c = self::cmdRun;
 		$t = shell_exec($c);
-		$this->setValid($t);
+		if ($t && is_string($t)) $this->setValid($t);
 	}
 	
-	private function setValid($t) {
+	private function setValid(string $t) {
 		
 		try {
 			if (!$this->debug) {
