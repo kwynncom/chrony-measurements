@@ -4,7 +4,6 @@ require_once('/opt/kwynn/mongodb3.php');
 require_once('/opt/kwynn/lock.php');
 require_once('callSNTP.php');
 require_once('backoff.php');
-require_once(__DIR__ . '/../logscl.php');
 
 class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 
@@ -61,7 +60,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 			unset($w1); 
 		}
 		
-		new chronylog_cli_filter(true);
+		// new chronylog_cli_filter(true);
 		return $this->waitSfl20();
 		
 	}
@@ -86,10 +85,17 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$_id = dao_generic_3::get_oids(false, $ts); unset($ts);
 		$dat = get_defined_vars();
 		unset($dat['cli']);
+		$dat = kwam($dat, self::getpinfo());
 		$cli->insertOne($dat, ['kwnoup' => true]);
 		kwynn();
 		
 		
+	}
+	
+	private static function getpinfo() {
+		$pid = posix_getpid();
+		$ptree = substr(trim(shell_exec("pstree -s $pid")), 0, 200);
+		return get_defined_vars();
 	}
 	
 	private function doTheCall() {
@@ -98,6 +104,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$U	= $a['U'  ] = intval(floor($us));
 		$a['r'] = date('r', $U);
 		$a['via'] = iscli() ? 'cli' : 'www';
+		$a = kwam($a, self::getpinfo());
 		$this->ccoll->insertOne($a, ['kwnoup' => true]);
 		$r = callSNTP::getNISTActual();
 		if (!$r) return;

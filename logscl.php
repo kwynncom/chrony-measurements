@@ -1,6 +1,7 @@
 <?php
 // #! /usr/bin/php // can't do this on the web
 require_once('/opt/kwynn/kwutils.php');
+require_once(__DIR__ . '/nist/fromLog.php');
 
 class chronylog_cli_filter {
 
@@ -97,19 +98,12 @@ CHRH;
 	private function daemonize() {
 		$this->h = false;
 		$this->hasLock = false;
+		
+		if (!$this->amIDaemon()) return;
+
 		$this->h = $h = fopen(self::dlockf, 'r');
-		
-		if ($amd = $this->amIDaemon()) $lockty = LOCK_EX;
-		else $lockty = LOCK_SH;
-		
-		$this->hasLock = $l = flock($h, $lockty | LOCK_NB);
-		if ($l && !$amd) {
-			$this->cleanupf();
-			kwnohup('php ' . __FILE__ . ' -d');
-			if ($this->isBatch) exit(0);
-		}
-		
-		// if (!$amd) $this->cleanupf();
+		$this->hasLock = $l = flock($h, LOCK_EX | LOCK_NB);
+		kwas($l, __FILE__ . ' did not get lock');
 	}
 	
 	private function init() {
