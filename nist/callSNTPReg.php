@@ -84,17 +84,28 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$_id = dao_generic_3::get_oids(false, $ts); unset($ts);
 		$dat = get_defined_vars();
 		unset($dat['cli']);
-		$dat = kwam($dat, self::getpinfo());
+		$dat = kwam($dat, self::getpinfo(false));
 		$cli->insertOne($dat, ['kwnoup' => true]);
 		kwynn();
 		
 		
 	}
 	
-	private static function getpinfo() {
+	private static function getpinfo($dotree = true) {
 		$pid = posix_getpid();
-		$ptree = substr(trim(shell_exec("pstree -s $pid")), 0, 200);
+		if   ($dotree) $ptree = substr(trim(shell_exec("pstree -s $pid")), 0, 200);
+		unset($dotree);
 		return get_defined_vars();
+	}
+	
+	private function adjustpinfo(&$a) {
+		$pt = kwifs($a, 'ptree');
+		if (!$pt) return;
+		if (strpos('---cron---', $pt) !== false) {
+			$a['via'] = 'cron';
+			unset($a['pid']);
+			unset($a['ptree']);
+		}
 	}
 	
 	private function doTheCall() {
@@ -102,8 +113,9 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$us = $a['Uus'] = microtime(1);
 		$U	= $a['U'  ] = intval(floor($us));
 		$a['r'] = date('r', $U);
-		$a['via'] = iscli() ? 'cli' : 'www';
-		$a = kwam($a, self::getpinfo());
+		$via = $a['via'] = iscli() ? 'cli' : 'www';
+		if ($via !== 'www') $a = kwam($a, self::getpinfo());
+		$this->adjustpinfo($a);
 		$this->ccoll->insertOne($a, ['kwnoup' => true]);
 		$r = callSNTP::getNISTActual();
 		if (!$r) return;

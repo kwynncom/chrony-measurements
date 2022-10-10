@@ -4,7 +4,7 @@ require_once(__DIR__ . '/callSNTPReg.php');
 
 if (iscli()) {
 
-	if (ispkwd() && time() > strtotime('2022-10-09 21:59')) {
+	if (ispkwd() && time() > strtotime('2022-10-09 22:20')) {
 		echo("End of test, exiting\n");
 		exit(0);
 	}
