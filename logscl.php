@@ -6,7 +6,7 @@ require_once(__DIR__ . '/nist/config.php');
 
 class chronylog_cli_filter  {
 
-	const version = '10/11 02:12 - several external corrections';
+	const version = '10/11 03:38 - nearing rc';
 	const linesnExt = 100;
 	const linesnInt =  76;
 	const chmeaf = '/var/log/chrony/measurements.log';
@@ -21,26 +21,42 @@ class chronylog_cli_filter  {
 
 	}
 	
+	public function __destruct() {
+		if (isset($this->ohan) && $this->ohan) pclose($this->ohan);
+	}
+	
 	public function get() { return array_reverse($this->ores); }
 	
 	private function do05() {
-		
-		$ba = explode("\n", trim($this->theLines));
-		
-		$this->oln = count($ba);
-		
-		foreach($ba as $l) {
+
+		while ($l = $this->getLine()) {
 			$l = trim($l); 
 			if (!$l) continue;
 			if (!is_numeric($l[0])) continue;
 			if ($this->oi === 0 && !$this->internal) $this->oout("VERSION: " . self::version . "\n");
 			if ($this->oi % 20 === 0 && !$this->internal) $this->outHeader();	
-			$ret = $this->do10($l);
+			$ret = $this->do30($l);
 			if ($ret === true) break;
 			if ($ret) $this->ores[] = $ret;
 			$this->oi++;	
 		}		
 	}
+	
+	private function setFollow($cmd) {
+		$this->ohan = popen($cmd, 'r');
+		
+	}
+	
+	private function getLine() {
+		if ($this->internal) return $this->glstatic();
+		return fgets($this->ohan);
+	}
+	
+	private function glstatic() {
+		if (!isset($this->oabsi)) $this->oabsi = 0;
+		return kwifs($this->oba, $this->oabsi++);
+	}
+	
 	
 	private function oout($s) {
 		if (iscli() && !$this->internal) echo($s);
@@ -55,7 +71,7 @@ class chronylog_cli_filter  {
 		return TRUE;
 	}
 	
-	private function do10($l) {
+	private function do30($l) {
 		
 		static $ipa = 15;
 		static $lnns = 0;
@@ -120,9 +136,16 @@ CHRH;
 		
 		$l = 'tail -n '; 
 		$l .= ($this->internal ? self::linesnInt : self::linesnExt) . ' ';
+		if (1 && iscli() && !$this->internal) $l .= '-f ';
 		$l .= self::chmeaf;
-		$l .= ' | tac';
-		$this->theLines = shell_exec($l);
+		if ($this->internal)
+			$l .= ' | tac';
+		if ($this->internal) {
+			$this->orawt = shell_exec($l);
+			$this->oba = explode("\n", trim($this->orawt));
+			$this->oln = count($this->oba);
+		} else $this->setFollow($l);
+		
 	}
 
 }
