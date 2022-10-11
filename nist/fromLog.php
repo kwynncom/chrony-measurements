@@ -54,8 +54,7 @@ class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 	private function procIP(array $a) {
 		static $exn = 0;
 		
-		extract($a);
-
+		$a['lnn'] += $this->lnnprev;
 		try {
 			unset($a['hu']);
 			return nist_backoff_calls::fromLog($this->ccoll, $a);

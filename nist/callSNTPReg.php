@@ -102,9 +102,6 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$Uactual = $U;
 		$Uus = $U = $U + 1; 
 		$via = 'log';
-		if ($dbr = $cli->findOne(['U' => $U, 'via' => $via, 'ip' => $ip])) {
-			if (isFlTSEq($dbr['offset'], $offset)) return false;
-		} unset($dbr, $d);
 		
 		$r = date('r', $Uactual);
 

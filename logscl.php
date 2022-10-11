@@ -8,7 +8,7 @@ class chronylog_cli_filter  {
 
 	const version = '10/11 02:12 - several external corrections';
 	const linesnExt = 100;
-	const linesnInt =  46;
+	const linesnInt =  76;
 	const chmeaf = '/var/log/chrony/measurements.log';
 	
 	public function __construct(bool $internal = false, array $ec = []) {
@@ -36,6 +36,7 @@ class chronylog_cli_filter  {
 			if ($this->oi === 0 && !$this->internal) $this->oout("VERSION: " . self::version . "\n");
 			if ($this->oi % 20 === 0 && !$this->internal) $this->outHeader();	
 			$ret = $this->do10($l);
+			if ($ret === true) break;
 			if ($ret) $this->ores[] = $ret;
 			$this->oi++;	
 		}		
@@ -43,6 +44,15 @@ class chronylog_cli_filter  {
 	
 	private function oout($s) {
 		if (iscli() && !$this->internal) echo($s);
+	}
+	
+	private function testEndCrit($Ui, $hui, $ipi, $offseti) {
+		if (!$this->oec) return;
+		extract($this->oec);
+		if ($Ui  !== $Uactual ) return;
+		if ($ipi !== $ip) return;
+		if (!isFlTSEq($offseti, $offset)) return;
+		return TRUE;
 	}
 	
 	private function do10($l) {
@@ -71,6 +81,8 @@ class chronylog_cli_filter  {
 		$offsets = substr($restl, 12, 10);
 		$offset = floatval($offsets);
 		
+		if ($this->testEndCrit($U, $hu, $ip, $offset)) return TRUE;
+		
 		if (!$this->internal) {
 			$this->oout($hu . ' ');	
 			$this->oout(substr($ip, $ipl - 3) . ' ');		
@@ -83,8 +95,6 @@ class chronylog_cli_filter  {
 			$lnn = $this->oln - $lnns;
 			$lnns++;
 		}
-		
-		$lnn = $lnns;
 		
 		unset($l, $ipb, $ipl, $ones, $restl, $ms, $offsets, $now);
 		$ret = get_defined_vars();
