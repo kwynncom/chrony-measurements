@@ -97,21 +97,19 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 
 	public static function fromLog($cli, array $datin) {
 		
-		static $cmp = 1 / M_BILLION;
-
 		extract($datin); unset($datin);
 		
 		$Uactual = $U;
 		$Uus = $U = $U + 1; 
 		$via = 'log';
 		if ($dbr = $cli->findOne(['U' => $U, 'via' => $via, 'ip' => $ip])) {
-			$d = abs($dbr['offset'] - $offset);
-			if ($d < $cmp) return false;
+			if (isFlTSEq($dbr['offset'], $offset)) return false;
 		} unset($dbr, $d);
 		
 		$r = date('r', $Uactual);
 
-		$_id = dao_generic_3::get_oids(false, $Uactual, 'md-Hi-s-Y'); 
+		$_id  = date('md-Hi-s-Y', $Uactual) . '-' . substr($via, 0, 3) . substr($ip, strlen($ip) - 3); 
+		$_id .= ($offset >= 0 ? '+' : '-') . sprintf('%0.6f', $offset);
 		$dat = get_defined_vars();
 		unset($dat['cli'], $dat['cmp']);
 		$dat = kwam($dat, self::getpinfo(false));

@@ -18,3 +18,8 @@ interface callSNTPConfig {
 
 }
 
+function isFlTSEq($a, $b) {
+	static $cmp = 1 / M_BILLION / 10;
+	$d = abs($a - $b);
+	return  $d < $cmp;
+}
