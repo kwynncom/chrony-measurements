@@ -5,6 +5,7 @@ require_once(__DIR__ . '/nist/fromLog.php');
 
 class chronylog_cli_filter {
 
+	const version = '10/10 00:01';
 	const linesn = 100;
 	const thef   = '/var/log/chrony/measurements.log';
 	const dlockf = '/var/kwynn/mysd/loglock';
@@ -47,6 +48,8 @@ class chronylog_cli_filter {
 		static $ipa = 15;
 		
 		if (!trim($l)) return;
+		
+		if ($this->oi === 0) echo("VERSION: " . self::version . "\n");
 		
 		if ($this->oi % 20 === 0) $this->outHeader();
 			

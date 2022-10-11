@@ -49,7 +49,7 @@ function kwChmAdjVia($via) {
 		case 'www'  : return 'w';
 	    case 'cron' : return 'r';
 		case 'log'  : return 'l';
-		default	    : return '';
+		default	    : return  '';
 	}
 }
 
