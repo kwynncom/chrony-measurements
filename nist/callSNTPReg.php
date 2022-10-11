@@ -4,6 +4,7 @@ require_once('/opt/kwynn/mongodb3.php');
 require_once('/opt/kwynn/lock.php');
 require_once('callSNTP.php');
 require_once('backoff.php');
+require_once('fromLog.php');
 
 class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 
@@ -54,11 +55,14 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	}
 	
 	public function waitSfl() {
-		if (false) {$w1 = $this->waitSfl20();
+		if (1) { 
+			$w1 = $this->waitSfl20();
 			if ($w1 > 0) return $w1;
-			unset($w1); 
+			unset($w1);  
 		}
-
+		
+		new nistLogToDBCl();
+				
 		return $this->waitSfl20();
 		
 	}
@@ -76,7 +80,6 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 
 	
 	private static function getpinfo($dotree = true) {
-		$pid = posix_getpid();
 		if   ($dotree) $ptree = substr(trim(shell_exec("pstree -s $pid")), 0, 200);
 		unset($dotree);
 		return get_defined_vars();
@@ -92,29 +95,28 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		}
 	}
 
-	public static function fromLog($cli, int $ts, string $ip, float $offset) {
+	public static function fromLog($cli, array $datin) {
 		
-		static $lock = false;
-		
-		if (!in_array($ip, self::nista)) return;
-		$Uactual = $ts;
-		$Uus = $U = $ts + 1; 
-		$via = 'log';
-		if (!$lock) $lock = new sem_lock(__FILE__);
-		$lock->lock();
-		if ($cli->findOne(['U' => $U, 'via' => $via, 'ip' => $ip])) {
-			$lock->unlock();
-			return;
-		}
-		
-		$r = date('r', $ts);
+		static $cmp = 1 / M_BILLION;
 
-		$_id = dao_generic_3::get_oids(false, $ts, 'md-Hi-s-Y'); unset($ts);
+		extract($datin); unset($datin);
+		
+		$Uactual = $U;
+		$Uus = $U = $U + 1; 
+		$via = 'log';
+		if ($dbr = $cli->findOne(['U' => $U, 'via' => $via, 'ip' => $ip])) {
+			$d = abs($dbr['offset'] - $offset);
+			if ($d < $cmp) return false;
+		} unset($dbr, $d);
+		
+		$r = date('r', $Uactual);
+
+		$_id = dao_generic_3::get_oids(false, $Uactual, 'md-Hi-s-Y'); 
 		$dat = get_defined_vars();
-		unset($dat['cli'], $dat['lock']);
+		unset($dat['cli'], $dat['cmp']);
 		$dat = kwam($dat, self::getpinfo(false));
 		$cli->insertOne($dat, ['kwnoup' => true]);
-		$lock->unlock();
+		return true;
 	}
 	
 	private function doTheCall() {

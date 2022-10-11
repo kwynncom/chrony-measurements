@@ -1,5 +1,7 @@
 <?php
 
+require_once('/opt/kwynn/kwutils.php');
+
 interface callSNTPConfig {
 	const toleranceNS = 1 * M_BILLION;
 	const dbname = 'sntp4';
@@ -7,8 +9,12 @@ interface callSNTPConfig {
 	const NISTminS  = 4;
 	const cronIntervalM = 4; // does not have to stay in sync with cron, but probably best
 	const cronIntervalS = self::cronIntervalM * 60;
-	const nista = [         "129.6.15.26",         "129.6.15.27", "129.6.15.28", "129.6.15.29", "129.6.15.30", 
-					"2610:20:6f15:15::26", "2610:20:6f15:15::27" ];
 	
+	const enterFromLogIfM = 20;
+	const enterFromLogIfS = self::enterFromLogIfM * 60;
+	
+	const NISTListA = [													  "129.6.15.26" => true,         "129.6.15.27" => true, "129.6.15.28" => true, 
+					"129.6.15.29" => true, "129.6.15.30" => true, "2610:20:6f15:15::26" => true, "2610:20:6f15:15::27" => true];
+
 }
 
