@@ -1,6 +1,6 @@
 2022/10/10
 
-There should not be an index on U.  Better _id management.  Rearrange get_oids() for seconds in order
+There should not be a (unique) index on U.  Better _id management.  Rearrange get_oids() for seconds in order
 The chrony log goes backwards in time sometimes; account for that.
 
 

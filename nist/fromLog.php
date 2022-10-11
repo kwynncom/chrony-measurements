@@ -5,17 +5,19 @@ require_once(__DIR__ . '/callSNTPReg.php');
 
 class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 	
+	const enterIfM = 20;
+	const enterIfS = self::enterIfM * 60;
+	
 	public function __construct() {
 		parent::__construct(self::dbname);
 		$this->creTabs(['c' => self::collname]);
-		$this->setMin();
+		$this->indexMgmt();
 
 	}
 	
-	private function setMin() {
-		$r = $this->ccoll->findOne([], ['sort' => ['U' => -1]]);
-		if (!$r) $this->minU = 0;
-		else $this->minU = $r['U'];
+	private function indexMgmt() {
+		try { $this->ccoll->dropIndex('U_-1'); } catch(Exception $ex) {}
+		$name = $this->ccoll->createIndex(['U' => -1]);
 		return;
 	}
 	
@@ -26,9 +28,9 @@ class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 	public function put(string $hu, string $ip, float $off) {
 		if (!self::isNIST($ip)) return;
 		$ts = strtotime($hu . ' UTC');
-		if ($ts <= $this->minU) return;
+		if ($ts + self::enterIfS < time()) return;
 		nist_backoff_calls::fromLog($this->ccoll, $ts, $ip, $off);
-		
+
 	}
 	
 }

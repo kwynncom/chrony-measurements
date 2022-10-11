@@ -5,7 +5,7 @@ require_once(__DIR__ . '/nist/fromLog.php');
 
 class chronylog_cli_filter {
 
-	const version = '10/10 00:01';
+	const version = '10/10 21:43 - public __destruct()';
 	const linesn = 100;
 	const thef   = '/var/log/chrony/measurements.log';
 	const dlockf = '/var/kwynn/mysd/loglock';
@@ -21,7 +21,7 @@ class chronylog_cli_filter {
 		$offs = substr($restl, 12, 10);
 		$offfl = floatval($offs);
 		try {
-			$o->put($hu, $ip, $offs);
+			$o->put($hu, $ip, $offfl);
 		} catch (Exception $ex) {
 			if (++$exn > 4) { 
 				echo('chrony logcl.php exception as follows.  Exiting: ' . $ex->getMessage());
@@ -65,7 +65,6 @@ class chronylog_cli_filter {
 		$this->oout($ones[16]);
 		$restl = substr($ones, 19, 66);
 		$this->oout($restl);
-		// if ($this->isBatch) 
 		$this->procIP($hu, $ip, $restl);
 		$this->oout("\n");
 		$this->oi++;
@@ -92,7 +91,7 @@ CHRH;
 		return false;
 	}
 	
-	private function __destruct() {
+	public function __destruct() {
 		$this->cleanupf();
 		
 	}
@@ -116,6 +115,12 @@ CHRH;
 		kwas($l, __FILE__ . ' did not get lock');
 	}
 	
+	private function isTest() {
+		if (amDebugging()) return true;
+		if (ispkwd()) return true;
+		return false;
+	}
+	
 	private function init() {
 		
 		$this->daemonize();
@@ -125,7 +130,7 @@ CHRH;
 		if (!$this->isBatch) {
 			$l = 'tail -n '; 
 			$l .= self::linesn . ' ';
-			if (!amDebugging()) $l .= '-f ';
+			if (!$this->isTest()) $l .= '-f ';
 			$l .= self::thef;
 			$this->ohan = popen($l, 'r');		
 		} else {

@@ -43,11 +43,10 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	private function __construct() {
 		parent::__construct(self::dbname);
 		$this->creTabs(['c' => self::collname]);
-		$this->ccoll->createIndex(['U' => -1], ['unique' => true]);
 		$this->boo = new backoff(self::backe, self::NISTminS, self::maxs);	
 		$this->clean();
 	}
-
+	
 	private function clean() {
 		$dats = self::deleteAtS;
 		$dat = time() - $dats;
@@ -75,21 +74,6 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		return $towait;
 	}
 
-	public static function fromLog($cli, int $ts, string $ip, float $offset) {
-		if (!in_array($ip, self::nista)) return;
-		$Uactual = $ts;
-		$r = date('r', $ts);
-		$Uus = $U = $ts + 1; 
-		$_id = dao_generic_3::get_oids(false, $ts); unset($ts);
-		$dat = get_defined_vars();
-		unset($dat['cli']);
-		$dat = kwam($dat, self::getpinfo(false));
-		$dat['via'] = 'log';
-		$cli->insertOne($dat, ['kwnoup' => true]);
-		kwynn();
-		
-		
-	}
 	
 	private static function getpinfo($dotree = true) {
 		$pid = posix_getpid();
@@ -106,6 +90,31 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 			unset($a['pid']);
 			unset($a['ptree']);
 		}
+	}
+
+	public static function fromLog($cli, int $ts, string $ip, float $offset) {
+		
+		static $lock = false;
+		
+		if (!in_array($ip, self::nista)) return;
+		$Uactual = $ts;
+		$Uus = $U = $ts + 1; 
+		$via = 'log';
+		if (!$lock) $lock = new sem_lock(__FILE__);
+		$lock->lock();
+		if ($cli->findOne(['U' => $U, 'via' => $via])) {
+			$lock->unlock();
+			return;
+		}
+		
+		$r = date('r', $ts);
+
+		$_id = dao_generic_3::get_oids(false, $ts, 'md-Hi-s-Y'); unset($ts);
+		$dat = get_defined_vars();
+		unset($dat['cli']);
+		$dat = kwam($dat, self::getpinfo(false));
+		$cli->insertOne($dat, ['kwnoup' => true]);
+		$lock->unlock();
 	}
 	
 	private function doTheCall() {
