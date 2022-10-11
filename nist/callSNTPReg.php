@@ -102,7 +102,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$via = 'log';
 		if (!$lock) $lock = new sem_lock(__FILE__);
 		$lock->lock();
-		if ($cli->findOne(['U' => $U, 'via' => $via])) {
+		if ($cli->findOne(['U' => $U, 'via' => $via, 'ip' => $ip])) {
 			$lock->unlock();
 			return;
 		}
@@ -111,7 +111,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 
 		$_id = dao_generic_3::get_oids(false, $ts, 'md-Hi-s-Y'); unset($ts);
 		$dat = get_defined_vars();
-		unset($dat['cli']);
+		unset($dat['cli'], $dat['lock']);
 		$dat = kwam($dat, self::getpinfo(false));
 		$cli->insertOne($dat, ['kwnoup' => true]);
 		$lock->unlock();

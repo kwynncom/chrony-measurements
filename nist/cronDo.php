@@ -6,16 +6,16 @@ class NISTCronCl {
 	public function __construct() {
 		cliOrDie();
 		self::liveOrDie();
-		$this->launchLL();
+		// $this->launchLL();
 		$this->doit();
 	}
 	
 	private function launchLL() {
-		kwnohup('php ' . __DIR__ . '/../logscl.php -d');
+		// kwnohup('php ' . __DIR__ . '/../logscl.php -d');
 	}
 	
 	private static function liveOrDie() {
-		if (ispkwd() && time() > strtotime('2022-10-10 20:59')) {
+		if (ispkwd() && time() > strtotime('2022-10-11 00:59')) {
 			self::rd("End of test, exiting\n");
 			exit(0);
 		}		

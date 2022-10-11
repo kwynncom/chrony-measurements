@@ -1,40 +1,16 @@
 <?php
 // #! /usr/bin/php // can't do this on the web
 require_once('/opt/kwynn/kwutils.php');
-require_once(__DIR__ . '/nist/fromLog.php');
 
 class chronylog_cli_filter {
 
-	const version = '10/10 21:43 - public __destruct()';
-	const linesn = 100;
+	const version = '10/11 00:08 - giving up on daemon';
+	const linesn = 40;
 	const thef   = '/var/log/chrony/measurements.log';
 	const dlockf = '/var/kwynn/mysd/loglock';
 
-	private function procIP($hu, $ip, $restl) {
-		static $o = false;
-		static $exn = 0;
-		
-		if (!$o) $o = new nistLogToDBCl();
-		
-		if (!nistLogToDBCl::isNIST($ip)) return;
-		
-		$offs = substr($restl, 12, 10);
-		$offfl = floatval($offs);
-		try {
-			$o->put($hu, $ip, $offfl);
-		} catch (Exception $ex) {
-			if (++$exn > 4) { 
-				echo('chrony logcl.php exception as follows.  Exiting: ' . $ex->getMessage());
-				exit(2122);
-			}
-			
-		}
-	}
-	
-	
-	public function __construct(bool $isBatch = false) {
+	public function __construct() {
 		cliOrDie();
-		$this->isBatch = $isBatch;
 		$this->init();
 		while ($l = $this->get()) $this->do10($l);
 	}
@@ -52,7 +28,7 @@ class chronylog_cli_filter {
 		if ($this->oi === 0) echo("VERSION: " . self::version . "\n");
 		
 		if ($this->oi % 20 === 0) $this->outHeader();
-			
+		
 		$hu = trim(substr($l, 0, 20));
 		$this->oout($hu . ' ');		
 
@@ -65,7 +41,7 @@ class chronylog_cli_filter {
 		$this->oout($ones[16]);
 		$restl = substr($ones, 19, 66);
 		$this->oout($restl);
-		$this->procIP($hu, $ip, $restl);
+
 		$this->oout("\n");
 		$this->oi++;
 		return;
@@ -84,70 +60,25 @@ CHRH;
 		$this->oout($o . "\n");
 	}
 	
-	private function amIDaemon() {
-		global $argc, $argv;
-		
-		for($i=1; $i < $argc; $i++) if ($argv[$i] === '-d') return true;
-		return false;
-	}
-	
-	public function __destruct() {
-		$this->cleanupf();
-		
-	}
-	
-	private function cleanupf() {
-		if (!$this->h) return;
-		if ($this->hasLock) flock($this->h, LOCK_UN);
-		$this->hasLock = false;
-		fclose($this->h);
-		$this->h = false;
-	}
-	
-	private function daemonize() {
-		$this->h = false;
-		$this->hasLock = false;
-		
-		if (!$this->amIDaemon()) return;
-
-		$this->h = $h = fopen(self::dlockf, 'r');
-		$this->hasLock = $l = flock($h, LOCK_EX | LOCK_NB);
-		kwas($l, __FILE__ . ' did not get lock');
-	}
-	
-	private function isTest() {
-		if (amDebugging()) return true;
-		if (ispkwd()) return true;
-		return false;
-	}
 	
 	private function init() {
-		
-		$this->daemonize();
-
+	
 		$this->oi = 0;
 		
-		if (!$this->isBatch) {
-			$l = 'tail -n '; 
-			$l .= self::linesn . ' ';
-			if (!$this->isTest()) $l .= '-f ';
-			$l .= self::thef;
-			$this->ohan = popen($l, 'r');		
-		} else {
-			$t = trim(shell_exec('tail -n 60 ' . self::thef));
-			$this->olines = explode("\n", $t);
-		}
-
-
+		$l = 'tail -n '; 
+		$l .= self::linesn . ' ';
+		$l .= self::thef;
+		$this->theLines = shell_exec($l);
 	}
 	
 	private function get() { 
-		if (!$this->isBatch) $l = trim(fgets($this->ohan));
-		else {
-			if (!isset($this->olgi)) $this->olgi = 0;
-			$i = $this->olgi++;
-			$l = kwifs($this->olines, $i);
-		}
+		
+		static $i = 0;
+		
+		if ($i++ === 0) $l = strtok($this->theLines, "\n");
+		else $l = strtok("\n");
+		
+		$l = trim($l);
 		if (!$l) return false;
 		if (!is_numeric($l[0])) return ' ';
 		return $l;
