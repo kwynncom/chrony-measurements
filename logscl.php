@@ -74,39 +74,25 @@ class chronylog_cli_filter  {
 	
 	private function do30($l) {
 		
-		static $ipa = 15;
 		static $lnns = 0;
 		static $now = false;
 		
 		if (!$now) $now = time();
 		
-		nistLogToDBCl::getLLI($l);
+		$li = nistLogToDBCl::getLLI($l, !$this->internal);
+		extract($li); unset($li);
 
-		$hu = trim(substr($l, 0, 20));
-		$U = strtotime($hu . ' UTC');
 		if ($this->internal && ($U + callSNTPConfig::enterFromLogIfS < $now)) return;
-
-		$ipb = substr($l, 20);
-		if (!preg_match('/\S+/', $ipb, $ms)) {
-			kwynn();
-		}
-		$ip = $ms[0];
-		
 		if ($this->internal && !isset(callSNTPConfig::NISTListA[$ip])) return;
-		
-		$ipl = strlen($ip);
-		$ones = substr($l, 35 + ($ipl <= $ipa ? 0 : $ipl - $ipa));
-		$restl = substr($ones, 19, 66);
-		$offsets = substr($restl, 12, 10);
-		$offset = floatval($offsets);
 		
 		if ($this->testEndCrit($U, $hu, $ip, $offset)) return TRUE;
 		
 		if (!$this->internal) {
 			$this->oout($hu . ' ');	
-			$this->oout(substr($ip, $ipl - 3) . ' ');		
-			$this->oout($ones[16]);
-			$this->oout($restl);
+			$ipl = strlen($ip);
+			$this->oout(substr($ip, $ipl - 3) . ' '); unset($ipl);	
+			$this->oout($valc); unset($valc);
+			$this->oout($restl); unset($restl);
 			$this->oout("\n");
 		}
 	
@@ -115,9 +101,9 @@ class chronylog_cli_filter  {
 			$lnns++;
 		}
 		
-		unset($l, $ipb, $ipl, $ones, $restl, $ms, $offsets, $now);
+		unset($l);
 		$ret = get_defined_vars();
-		unset($ret['ipa'], $ret['lnns']);
+		unset($ret['lnns'], $ret['now']);
 		
 		return $ret;
 	}
