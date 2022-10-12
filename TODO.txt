@@ -1,3 +1,15 @@
+10/12
+
+$ grep -ab -E '^2022-10-12 06:35:36.*:27.*1\.529e-02' /var/log/chrony/measurements.log
+18078580:2022-10-12 06:35:36 2610:20:6f15:15::27 N  1 111 111 1111   4 13 0.02  1.529e-02
+#byte pointer to the start of the row
+
+OR
+
+create a utility that keeps track of where you left off in a file and hands you the file handle opened to (seek'ed to) the place you left off
+
+
+********
 2022/10/10
 
 There should not be a (unique) index on U.  Better _id management.  Rearrange get_oids() for seconds in order
