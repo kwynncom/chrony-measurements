@@ -4,20 +4,44 @@ require_once(__DIR__ . '/config.php');
 
 class nist_insert extends dao_generic_3 {
 	
-	public function __construct(bool $mcr = false) { // manual call to callSNTPReg.php
+	public function __construct(string $via = '') { // manual call to callSNTPReg.php
 		parent::__construct  (callSNTPConfig::dbname   );
 		$this->creTabs(['c' => callSNTPConfig::collname]);
-		$this->setPI($mcr);
+		$this->setPI($via);
 	}
 	
-	private function setPI(bool $mcr) {
-		if ($mcr) { $this->via = 'hand'; return; }
+	private function setPI(string $viain = '') {
+		
+		$this->via = 'unk';
+		
+		if ($viain) {
+			$this->via = $viain; 
+			switch($viain) { case 'hand' : case 'www' : return;		}
+		}
+		
 		if (PHP_SAPI !== 'cli') { $this->via = 'www'; return; }
 		$pid = posix_getpid();
+		if ($viain === 'log') { $this->pid = $pid; return; }
 		$pt = substr(trim(shell_exec("pstree -s $pid")), 0, 200);
 		if (strpos($pt, '---cron---') !== false) { $this->via = 'cron'; return; }
-		$this->pid = $pid;
-		$this->via = 'log';
+
+	}
+	
+	public function fromLog(array $datin) {
+		
+		extract($datin); unset($datin);
+		
+		$Uactual = $U;
+		$Uus = $U = $U + 1; 
+		$via = 'log';
+		
+		$r = date('r', $Uactual);
+
+		$_id  = date('md-Hi-s-Y', $Uactual) . '-' . substr($via, 0, 3) . substr($ip, strlen($ip) - 3); 
+		$_id .= ($offset >= 0 ? '+' : '-') . sprintf('%0.6f', $offset);
+		$dat = get_defined_vars();
+		unset($dat['cli'], $dat['cmp']);
+		$this->ccoll->insertOne($dat, ['kwnoup' => true]);
 	}
 	
 	public function preCall() {

@@ -3,12 +3,14 @@
 require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/callSNTPReg.php');
 require_once(__DIR__ . '/../logscl.php');
+require_once(__DIR__ . '/insert.php');
 
 class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 	
 	public function __construct() {
 		parent::__construct(self::dbname);
 		$this->creTabs(['c' => self::collname]);
+		$this->ino = new nist_insert('log');
 		$this->indexMgmt();
 		$this->clean();
 		$this->lineCalcs();
@@ -35,9 +37,7 @@ class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 		$o = new chronylog_cli_filter(true, $this->endCrit);
 		$a = $o->get();
 		$n = count($a);
-		for ($i = 0; $i < $n; $i++) {
-			if (!$this->procIP($a[$i])) break;
-		}
+		for ($i = 0; $i < $n; $i++) $this->procIP($a[$i]);
 		return;
 	}
 	
@@ -57,7 +57,7 @@ class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 		$a['lnn'] += $this->lnnprev;
 		try {
 			unset($a['hu']);
-			return nist_backoff_calls::fromLog($this->ccoll, $a);
+			$this->ino->fromLog($a);
 		} catch (Exception $ex) {
 			if (++$exn > 4) { 
 				echo('chrony logcl.php exception as follows.  Exiting: ' . $ex->getMessage());

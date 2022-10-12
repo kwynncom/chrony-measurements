@@ -38,9 +38,9 @@ class chrony_analysis {
 	
 	private function SNTPcalcs($ain) {
 		if (!$ain) return;
-		if (!isset($ain['t4Uns'])) return $this->offsetOnlyCalcs($ain);
+		if (!isset($ain['Uns4'])) return $this->offsetOnlyCalcs($ain);
 		$or  =	   $ain;
-		$a   =	$or['t4Uns'];
+		$a   =	$or['Uns4'];
 		$min = $or['min'] = min($a);
 		for($i=0; $i < 2; $i++) $or['relmss'][$i] = self::toms($a[$i] - $min);
 		$avgns = (($a[3] + $a[0]) >> 1);

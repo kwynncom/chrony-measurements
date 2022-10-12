@@ -45,12 +45,8 @@ function kwChmNISTRowsIP($bain) {
 }
 
 function kwChmAdjVia($via) {
-	switch($via) {
-		case 'www'  : return 'w';
-	    case 'cron' : return 'r';
-		case 'log'  : return 'l';
-		default	    : return  '';
-	}
+	if ($via && is_string($via) && isset($via[0])) return $via[0];
+	return '';
 }
 
 function kwChmNISTRows($bain) {

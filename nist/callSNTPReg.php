@@ -47,7 +47,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		parent::__construct(self::dbname);
 		$this->creTabs(['c' => self::collname]);
 		$this->boo = new backoff(self::backe, self::NISTminS, self::maxs);
-		$this->inso = new nist_insert($didCallMe);
+		$this->inso = new nist_insert($didCallMe ? 'hand' : '');
 		$this->clean();
 	}
 	
@@ -81,26 +81,6 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		return $towait;
 	}
 
-
-	public static function fromLog($cli, array $datin) {
-		
-		extract($datin); unset($datin);
-		
-		$Uactual = $U;
-		$Uus = $U = $U + 1; 
-		$via = 'log';
-		
-		$r = date('r', $Uactual);
-
-		$_id  = date('md-Hi-s-Y', $Uactual) . '-' . substr($via, 0, 3) . substr($ip, strlen($ip) - 3); 
-		$_id .= ($offset >= 0 ? '+' : '-') . sprintf('%0.6f', $offset);
-		$dat = get_defined_vars();
-		unset($dat['cli'], $dat['cmp']);
-		$dat = kwam($dat, self::getpinfo(false));
-		$cli->insertOne($dat, ['kwnoup' => true]);
-		return true;
-	}
-	
 	private function doTheCall() {
 		$_id = $this->inso->preCall();
 		$r = callSNTP::getNISTActual();
@@ -117,7 +97,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 
 	public function getdb($limitn = 1) {
 		$o = [];
-		$o['projection'] = ['_id' => 0, 'U' => 1, 'r' => 1, 'ip' => 1, 't4Uns' => 1, 'offset' => 1, 'via' => 1];
+		$o['projection'] = ['_id' => 0, 'U' => 1, 'r' => 1, 'ip' => 1, 'Uns4' => 1, 'offset' => 1, 'via' => 1];
 		$o['sort'] = ['U' => -1];
 		$o['limit'] = $limitn;
 		$res = $this->ccoll->find(['U' => ['$gte' => time() - 3600]], $o);

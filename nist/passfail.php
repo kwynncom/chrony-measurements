@@ -43,7 +43,7 @@ class nist_passfail extends dao_generic_3 implements callSNTPConfig {
 		$ti = 0;
 		
 		foreach($dbr as $r) {
-			$a = $r['t4Uns'];
+			$a = $r['Uns4'];
 			try { 
 				$o = self::SNTPOffset($a); kwas($o && is_numeric($o), 'bad form of passfail NIST SNTP result');
 				$this->ores->offs[] = $o;
