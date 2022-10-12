@@ -8,7 +8,7 @@ class callSNTP implements callSNTPConfig {
 
 	const resnt = 4;
 	const cmdRun   = 'sntpw -nosleep -json -d';
-	const cmdDebug = 'sntp  -nosleep -json';
+	const cmdDebug = 'sntpr';
 
 	private function isDebugMode() {
 		if (amDebugging()) return true;
@@ -37,10 +37,11 @@ class callSNTP implements callSNTPConfig {
 	}
 	
 	private function doit() {
-		if ($this->isDebugMode()) $c = self::cmdDebug;
-		else			   $c = self::cmdRun;
+		if ($this->debug) $c = self::cmdDebug;
+		else	  $c = self::cmdRun;
 		$t = shell_exec($c);
-		if ($t && is_string($t)) $this->setValid($t);
+		if ($t) $this->setValid($t);
+
 	}
 	
 	private function setValid(string $t) {
@@ -50,10 +51,10 @@ class callSNTP implements callSNTPConfig {
 				$a = json_decode($t, true);
 				if (!$a || $a['status'] !== 'OK') return;
 			} else {
-				$a = sntpSanity::ck($t);
+				$a = sntpSanity::ck($t); kwas($a, 'no sane result');
 				$a['t4'] = $a['Uns4'];
 			}
-			$this->ores['t4Uns'] = $a['t4'];
+			$this->ores['Uns4'] = $a['t4'];
 			$this->ores['ip' ] = $a['ip'];
 		} catch(Exception $ex) { }
 		
