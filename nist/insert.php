@@ -7,7 +7,14 @@ class nist_insert extends dao_generic_3 {
 	public function __construct(string $via = '') { // manual call to callSNTPReg.php
 		parent::__construct  (callSNTPConfig::dbname   );
 		$this->creTabs(['c' => callSNTPConfig::collname]);
+		$this->dbmg();
 		$this->setPI($via);
+	}
+	
+	private function dbmg() {
+		if (time() < strtotime('2022-10-12 01:30')) $this->ccoll->drop();
+		$this->ccoll->createIndex(['U' => -1]);
+		$this->ccoll->createIndex(['Uus' => -1]);
 	}
 	
 	private function setPI(string $viain = '') {
@@ -30,15 +37,15 @@ class nist_insert extends dao_generic_3 {
 	public function fromLog(array $datin) {
 		
 		extract($datin); unset($datin);
-		
-		$Uactual = $U;
-		$Uus = $U = $U + 1; 
 		$via = 'log';
-		
 		$r = date('r', $Uactual);
 
-		$_id  = date('md-Hi-s-Y', $Uactual) . '-' . substr($via, 0, 3) . substr($ip, strlen($ip) - 3); 
-		$_id .= ($offset >= 0 ? '+' : '-') . sprintf('%0.6f', $offset);
+		$_id  = date('md-Hi-s-Y', $Uactual) . '-' . substr($via, 0, 3) . substr($ip, strlen($ip) - 3);
+		$_id .= '-line-' . $lnn;
+		$_id .= ($offset >= 0 ? '+' : '') . sprintf('%0.6f', $offset);
+		
+		$pid = $this->pid;
+		
 		$dat = get_defined_vars();
 		unset($dat['cli'], $dat['cmp']);
 		$this->ccoll->insertOne($dat, ['kwnoup' => true]);

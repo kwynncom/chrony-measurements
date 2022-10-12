@@ -15,6 +15,8 @@ interface callSNTPConfig {
 	
 	const NISTListA = [													  "129.6.15.26" => true,         "129.6.15.27" => true, "129.6.15.28" => true, 
 					"129.6.15.29" => true, "129.6.15.30" => true, "2610:20:6f15:15::26" => true, "2610:20:6f15:15::27" => true];
+	
+	const chronyLogF = '/var/log/chrony/measurements.log';
 
 }
 

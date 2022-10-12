@@ -7,7 +7,7 @@ require_once(__DIR__ . '/insert.php');
 
 class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 	
-	public function __construct() {
+	public function __construct(bool $islive = false) {
 		parent::__construct(self::dbname);
 		$this->creTabs(['c' => self::collname]);
 		$this->ino = new nist_insert('log');
@@ -15,8 +15,10 @@ class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 		$this->clean();
 		$this->lineCalcs();
 		$this->do10();
-
+		if ($islive) $this->lineCalcs();
 	}
+	
+	public function getEndCrit() { return $this->endCrit; }
 	
 	private function lineCalcs() {
 		$this->endCrit = [];
@@ -30,7 +32,7 @@ class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 	}
 	
 	private function clean() {
-		if (time() < strtotime('2022-10-11 01:30')) $this->ccoll->drop();
+		if (time() < strtotime('2022-10-11 01:00')) $this->ccoll->drop();
 	}
 		
 	private function do10() {
@@ -51,7 +53,7 @@ class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 		return in_array($ip, self::nista);
 	}
 
-	private function procIP(array $a) {
+	public function procIP(array $a) {
 		static $exn = 0;
 		
 		$a['lnn'] += $this->lnnprev;

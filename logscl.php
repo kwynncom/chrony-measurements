@@ -7,7 +7,7 @@ class chronylog_cli_filter  {
 	const version = '10/11 22:49 - abstracted log info';
 	const linesnExt = 100;
 	const linesnInt =  76;
-	const chmeaf = '/var/log/chrony/measurements.log';
+	const chmeaf = callSNTPConfig::chronyLogF;
 	
 	public function __construct(bool $internal = false, array $ec = []) {
 		// cliOrDie();
@@ -60,13 +60,26 @@ class chronylog_cli_filter  {
 		if (iscli() && !$this->internal) echo($s);
 	}
 	
-	private function testEndCrit($Ui, $hui, $ipi, $offseti) {
+	private function testEndCrit($Ui, $ipi, $offseti) {
 		if (!$this->oec) return;
 		extract($this->oec);
 		if ($Ui  !== $Uactual ) return;
 		if ($ipi !== $ip) return;
 		if (!isFlTSEq($offseti, $offset)) return;
 		return TRUE;
+	}
+	
+	public static function testEndCritAB(array $a, array $b) {
+		static $fs = ['Uactual', 'ip', 'offset'];
+		foreach($fs as $f) {
+			if (!isset($a[$f]) || !isset($b[$f])) return false;
+			if ($f === 'offset' && !isFlTSEq($a[$f], $b[$f])) return false;
+			else continue;
+			if ($a[$f] !== $b[$f]) return false;
+		}
+		
+		return TRUE;
+		
 	}
 	
 	private function do30($l) {
@@ -82,7 +95,7 @@ class chronylog_cli_filter  {
 		if ($this->internal && ($U + callSNTPConfig::enterFromLogIfS < $now)) return;
 		if ($this->internal && !isset(callSNTPConfig::NISTListA[$ip])) return;
 		
-		if ($this->testEndCrit($U, $hu, $ip, $offset)) return TRUE;
+		if ($this->testEndCrit($U, $ip, $offset)) return TRUE;
 		
 		if (!$this->internal) {
 			$this->oout($hu . ' ');	
@@ -136,7 +149,10 @@ CHRH;
 
 	public static function getLLI(string $l, bool $exv = false) {
 		$ipa = 15; // length of 255.255.255.255 ; I unset it below, so don't use static
-		if (!$l || !isset($l[76])) return; // I want at least 76 chars
+		
+		if (!$l) return;
+		if (!is_numeric($l[0])) return;
+		if (!isset($l[76])) return; // I want at least 76 chars
 		$hu = trim(substr($l, 0, 20));
 		$Uactual = strtotime($hu . ' UTC');
 		$U = $Uus = $Uactual + 1;
