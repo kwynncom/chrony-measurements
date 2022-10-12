@@ -4,7 +4,7 @@ require_once(__DIR__ . '/nist/config.php');
 
 class chronylog_cli_filter  {
 
-	const version = '10/11 03:38 - nearing rc';
+	const version = '10/11 22:49 - abstracted log info';
 	const linesnExt = 100;
 	const linesnInt =  76;
 	const chmeaf = '/var/log/chrony/measurements.log';

@@ -5,6 +5,7 @@ require_once('/opt/kwynn/lock.php');
 require_once('callSNTP.php');
 require_once('backoff.php');
 require_once('fromLog.php');
+require_once('insert.php');
 
 class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 
@@ -44,7 +45,8 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	private function __construct() {
 		parent::__construct(self::dbname);
 		$this->creTabs(['c' => self::collname]);
-		$this->boo = new backoff(self::backe, self::NISTminS, self::maxs);	
+		$this->boo = new backoff(self::backe, self::NISTminS, self::maxs);
+		$this->inso = new nist_insert();
 		$this->clean();
 	}
 	
@@ -78,22 +80,6 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		return $towait;
 	}
 
-	
-	private static function getpinfo($dotree = true) {
-		if   ($dotree) $ptree = substr(trim(shell_exec("pstree -s $pid")), 0, 200);
-		unset($dotree);
-		return get_defined_vars();
-	}
-	
-	private function adjustpinfo(&$a) {
-		$pt = kwifs($a, 'ptree');
-		if (!$pt) return;
-		if (strpos($pt, '---cron---') !== false) {
-			$a['via'] = 'cron';
-			unset($a['pid']);
-			unset($a['ptree']);
-		}
-	}
 
 	public static function fromLog($cli, array $datin) {
 		
@@ -115,17 +101,10 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	}
 	
 	private function doTheCall() {
-		$a = [];
-		$us = $a['Uus'] = microtime(1);
-		$U	= $a['U'  ] = intval(floor($us));
-		$a['r'] = date('r', $U);
-		$via = $a['via'] = iscli() ? 'cli' : 'www';
-		if ($via !== 'www') $a = kwam($a, self::getpinfo());
-		$this->adjustpinfo($a);
-		$this->ccoll->insertOne($a, ['kwnoup' => true]);
+		$_id = $this->inso->preCall();
 		$r = callSNTP::getNISTActual();
 		if (!$r) return;
-		$this->ccoll->upsert(['U' => $U], kwam($a, $r), 1, false);
+		$this->inso->postCall($_id, $r);
 		return;
 	}
 
