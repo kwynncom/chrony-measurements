@@ -60,10 +60,10 @@ class chronylog_cli_filter  {
 		if (iscli() && !$this->internal) echo($s);
 	}
 	
-	private function testEndCrit($Ui, $ipi, $offseti) {
+	private function testEndCrit($Uai, $ipi, $offseti) {
 		if (!$this->oec) return;
 		extract($this->oec);
-		if ($Ui  !== $Uactual ) return;
+		if ($Uai  !== $Uactual ) return;
 		if ($ipi !== $ip) return;
 		if (!isFlTSEq($offseti, $offset)) return;
 		return TRUE;
@@ -95,7 +95,7 @@ class chronylog_cli_filter  {
 		if ($this->internal && ($U + callSNTPConfig::enterFromLogIfS < $now)) return;
 		if ($this->internal && !isset(callSNTPConfig::NISTListA[$ip])) return;
 		
-		if ($this->testEndCrit($U, $ip, $offset)) return TRUE;
+		if ($this->testEndCrit($Uactual, $ip, $offset)) return TRUE;
 		
 		if (!$this->internal) {
 			$this->oout($hu . ' ');	

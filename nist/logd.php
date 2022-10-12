@@ -18,7 +18,7 @@ class chrony_log_daemon {
 			$this->lock();
 			$this->dbo = new nistLogToDBCl(true);
 			$this->oec = $this->dbo->getEndCrit();
-			$this->ohan = popen('tail -n ' . self::seekLnBack . $this->fornot() . callSNTPConfig::chronyLogF, 'r');
+			$this->ohan = popen('tail -n ' . self::seekLnBack . ' ' .  $this->fornot() . callSNTPConfig::chronyLogF, 'r');
 			$this->meetEndCrit();
 			$this->doit();
 		} catch (Exception $ex) { $this->ollo->out('EXCEPTION: ', $ex->getMessage()); }
