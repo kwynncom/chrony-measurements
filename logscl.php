@@ -3,6 +3,7 @@
 
 // require_once('/opt/kwynn/kwutils.php');
 require_once(__DIR__ . '/nist/config.php');
+require_once(__DIR__ . '/nist/fromLog.php');
 
 class chronylog_cli_filter  {
 
@@ -12,7 +13,7 @@ class chronylog_cli_filter  {
 	const chmeaf = '/var/log/chrony/measurements.log';
 	
 	public function __construct(bool $internal = false, array $ec = []) {
-		cliOrDie();
+		// cliOrDie();
 		$this->ores = [];
 		$this->internal = $internal;
 		$this->oec = $ec;
@@ -78,6 +79,8 @@ class chronylog_cli_filter  {
 		static $now = false;
 		
 		if (!$now) $now = time();
+		
+		nistLogToDBCl::getLLI($l);
 
 		$hu = trim(substr($l, 0, 20));
 		$U = strtotime($hu . ' UTC');
@@ -136,7 +139,7 @@ CHRH;
 		
 		$l = 'tail -n '; 
 		$l .= ($this->internal ? self::linesnInt : self::linesnExt) . ' ';
-		if (1 && iscli() && !$this->internal) $l .= '-f ';
+		if (!amDebugging() && iscli() && !$this->internal) $l .= '-f ';
 		$l .= self::chmeaf;
 		if ($this->internal)
 			$l .= ' | tac';
