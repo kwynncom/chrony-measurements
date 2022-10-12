@@ -4,13 +4,14 @@ require_once(__DIR__ . '/config.php');
 
 class nist_insert extends dao_generic_3 {
 	
-	public function __construct() {
+	public function __construct(bool $mcr = false) { // manual call to callSNTPReg.php
 		parent::__construct  (callSNTPConfig::dbname   );
 		$this->creTabs(['c' => callSNTPConfig::collname]);
-		$this->setPI();
+		$this->setPI($mcr);
 	}
 	
-	private function setPI() {
+	private function setPI(bool $mcr) {
+		if ($mcr) { $this->via = 'hand'; return; }
 		if (PHP_SAPI !== 'cli') { $this->via = 'www'; return; }
 		$pid = posix_getpid();
 		$pt = substr(trim(shell_exec("pstree -s $pid")), 0, 200);
@@ -36,7 +37,7 @@ class nist_insert extends dao_generic_3 {
 	}
 	
 	public function postCall(string $_id, array $nistr) {
-		$this->ccoll->upsert(['_id' => $_id], $nistra);
+		$this->ccoll->upsert(['_id' => $_id], $nistr, null, false);
 	}
 	
 

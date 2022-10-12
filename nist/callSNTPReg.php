@@ -21,9 +21,9 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		return $o->waitSFl();
 	}
 	
-	public static function get($lim = 1) {
+	public static function get($lim = 1, string $cf = '') {
 		try { 
-			$o = new self();
+			$o = new self($cf === __FILE__);
 			$o->doit();
 			return $o->getdb($lim);
 		} catch(Exception $ex) {}
@@ -42,11 +42,12 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$lo->unlock();		
 	}
 	
-	private function __construct() {
+	private function __construct(bool $didCallMe = false) {
+		
 		parent::__construct(self::dbname);
 		$this->creTabs(['c' => self::collname]);
 		$this->boo = new backoff(self::backe, self::NISTminS, self::maxs);
-		$this->inso = new nist_insert();
+		$this->inso = new nist_insert($didCallMe);
 		$this->clean();
 	}
 	
@@ -127,4 +128,4 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	
 }
 
-if (didCLICallMe(__FILE__)) print_r(nist_backoff_calls::get());
+if (didCLICallMe(__FILE__)) print_r(nist_backoff_calls::get(null, __FILE__));
