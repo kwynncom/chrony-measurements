@@ -34,15 +34,18 @@ class nist_insert extends dao_generic_3 {
 
 	}
 	
+	public static function flpp(float $f) { return ($f >= 0 ? '+' : '') . sprintf('%0.6f', $f);	}
+	public static function ippp(string $ip) { return substr($ip, strlen($ip) - 3); }
+	
 	public function fromLog(array $datin) {
 		
 		extract($datin); unset($datin);
 		$via = 'log';
 		$r = date('r', $Uactual);
 
-		$_id  = date('md-Hi-s-Y', $Uactual) . '-' . substr($via, 0, 3) . substr($ip, strlen($ip) - 3);
+		$_id  = date('md-Hi-s-Y', $Uactual) . '-' . substr($via, 0, 3) . self::ippp($ip);
 		$_id .= '-line-' . $lnn;
-		$_id .= ($offset >= 0 ? '+' : '') . sprintf('%0.6f', $offset);
+		$_id .= self::flpp($offset);
 		
 		$pid = $this->pid;
 		
