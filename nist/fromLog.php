@@ -67,34 +67,7 @@ class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 		
 		return true;
 	}
-	
-	public static function getLLI(string $l, bool $exv = false) {
-		
-		$ipa = 15; // length of 255.255.255.255 ; I unset it below, so don't use static
-		
-		if (!$l || !isset($l[76])) return; // I want at least 76 chars
-		$hu = trim(substr($l, 0, 20));
-		$Uactual = strtotime($hu . ' UTC');
-		$U = $Uus = $Uactual + 1;
-		$ipb = substr($l, 20);
-		preg_match('/\S+/', $ipb, $ms); unset($ipb);
-		$ip = $ms[0]; unset($ms);
 
-		$ipl = strlen($ip);
-		$r20 = substr($l, 35 + ($ipl <= $ipa ? 0 : $ipl - $ipa)); unset($ipl, $ipa, $l);
-		$restl = substr($r20, 19, 66);
-		$valc = $r20[16]; unset($r20);
-		$offsets = substr($restl, 12, 10); 
-		$offset = floatval($offsets); unset($offsets);
-		
-		if (!$exv) unset($valc, $restl); unset($exv);
-	
-		$vars = get_defined_vars();
-		
-		return $vars;
-
-	}
-	
 }
 
 if (didCLICallMe(__FILE__)) new nistLogToDBCl();
