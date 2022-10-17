@@ -4,8 +4,7 @@ require_once('/opt/kwynn/mongodb3.php');
 require_once('/opt/kwynn/lock.php');
 require_once('callSNTP.php');
 require_once('backoff.php');
-require_once('fromLog.php');
-require_once('insert.php');
+require_once('logRead.php');
 
 class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 
@@ -64,7 +63,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 			unset($w1);  
 		}
 		
-		new nistLogToDBCl();
+		new chrony_log_reader();
 				
 		return $this->waitSfl20();
 		

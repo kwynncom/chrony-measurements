@@ -1,14 +1,13 @@
 <?php
 
 require_once('config.php');
-require_once('fromLog.php');
 require_once(__DIR__ . '/../logscl.php');
 require_once('logdlog.php');
+require_once('fromLog.php');
 
-class chrony_log_daemon {
-	
-	// const maxLineLen = 161; // should be exactly right - full 39 character IPv6 and newline
-	const seekLnBack = 40;
+class chrony_log_reader implements callSNTPConfig {
+
+
 	const lockf = '/tmp/logdloglf';
 		
 	public function __construct() {
@@ -17,16 +16,9 @@ class chrony_log_daemon {
 			$this->ollo = new ch_logd_log();
 			$this->lock();
 			$this->dbo = new nistLogToDBCl(true);
-			$this->oec = $this->dbo->getEndCrit();
-			$this->ohan = popen('tail -n ' . self::seekLnBack . ' ' .  $this->fornot() . callSNTPConfig::chronyLogF, 'r');
-			$this->meetEndCrit();
+			$this->fpo = new filePtrTracker(self::chronyLogF, kwsntp_doTestClean());
 			$this->doit();
 		} catch (Exception $ex) { $this->ollo->out('EXCEPTION: ', $ex->getMessage()); }
-	}
-	
-	private function fornot() {
-		if (amDebugging()) return '';
-		return ' -f ';
 	}
 	
 	private function lock() {
@@ -38,7 +30,7 @@ class chrony_log_daemon {
 	
 	private function doit() {
 		$lnn = 1;
-		while($l = fgets($this->ohan)) {
+		while($l = $this->fpo->fgets()) {
 			$a = chronylog_cli_filter::getLLI($l);
 			if (!$a) continue;
 			if (!isset(callSNTPConfig::NISTListA[$a['ip']])) continue;
@@ -49,21 +41,7 @@ class chrony_log_daemon {
 		
 	}
 	
-	private function meetEndCrit() {
-		
-		$i = 0;
-		
-		while ($l = fgets($this->ohan)) {
-			kwas(++$i <= self::seekLnBack, 'should always meet end crit - line overrun');
-			$a = chronylog_cli_filter::getLLI($l);
-			if ($a && $this->oec && chronylog_cli_filter::testEndCritAB($a, $this->oec)) return;
-		}
-		
-		kwas(false, 'should always meet end crit - line overrun');
-	}
-	
 	public function __destruct() {
-		if ($h = kwifs($this, 'ohan')) fclose($h);
 		if ($this->lockh) {
 			flock($this->lockh, LOCK_UN);
 			fclose($this->lockh);
@@ -71,4 +49,4 @@ class chrony_log_daemon {
 	}
 }
 
-if (didCLICallMe(__FILE__)) new chrony_log_daemon();
+if (didCLICallMe(__FILE__)) new chrony_log_reader();

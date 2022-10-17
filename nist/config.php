@@ -3,6 +3,9 @@
 require_once('/opt/kwynn/kwutils.php');
 
 interface callSNTPConfig {
+	
+	const testCleanTime = '2022-10-16 22:40';
+	
 	const toleranceNS = 1 * M_BILLION;
 	const dbname = 'sntp4';
 	const collname = 'calls';
@@ -24,4 +27,8 @@ function isFlTSEq($a, $b) {
 	static $cmp = 1 / M_BILLION / 10;
 	$d = abs($a - $b);
 	return  $d < $cmp;
+}
+
+function kwsntp_doTestClean() {
+	return time() < strtotime(callSNTPConfig::testCleanTime);
 }
