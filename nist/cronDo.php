@@ -15,7 +15,7 @@ class NISTCronCl {
 	}
 	
 	private static function liveOrDie() {
-		if (ispkwd() && time() > strtotime('2022-10-11 00:59')) {
+		if (0 && (ispkwd() && time() > strtotime('2022-10-16 23:20'))) {
 			self::rd("End of test, exiting\n");
 			exit(0);
 		}		
@@ -49,7 +49,7 @@ class NISTCronCl {
 			if ($wfus > 0) usleep($wfus);
 		}
 
-		$dat = nist_backoff_calls::get();
+		$dat = nist_backoff_calls::get(1, 'cron');
 		$rf(print_r($dat, true));		
 	}
 	

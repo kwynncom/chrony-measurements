@@ -4,7 +4,7 @@ require_once('/opt/kwynn/kwutils.php');
 
 interface callSNTPConfig {
 	
-	const testCleanTime = '2022-10-16 22:40';
+	const testCleanTime = '2022-10-16 23:08';
 	
 	const toleranceNS = 1 * M_BILLION;
 	const dbname = 'sntp4';

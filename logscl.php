@@ -4,26 +4,19 @@ require_once(__DIR__ . '/nist/config.php');
 
 class chronylog_cli_filter  {
 
-	const version = '10/11 22:49 - abstracted log info';
+	const version = '10/16 22:39 - CLI / self only';
 	const linesnExt = 100;
-	const linesnInt =  76;
 	const chmeaf = callSNTPConfig::chronyLogF;
 	
-	public function __construct(bool $internal = false, array $ec = []) {
-		// cliOrDie();
-		$this->ores = [];
-		$this->internal = $internal;
-		$this->oec = $ec;
+	public function __construct() {
 		$this->init();
 		$this->do05();
-
 	}
 	
 	public function __destruct() {
 		if (isset($this->ohan) && $this->ohan) pclose($this->ohan);
 	}
 	
-	public function get() { return array_reverse($this->ores); }
 	
 	private function do05() {
 
@@ -31,86 +24,41 @@ class chronylog_cli_filter  {
 			$l = trim($l); 
 			if (!$l) continue;
 			if (!is_numeric($l[0])) continue;
-			if ($this->oi === 0 && !$this->internal) $this->oout("VERSION: " . self::version . "\n");
-			if ($this->oi % 20 === 0 && !$this->internal) $this->outHeader();	
-			$ret = $this->do30($l);
-			if ($ret === true) break;
-			if ($ret) $this->ores[] = $ret;
+			if ($this->oi === 0) $this->oout("VERSION: " . self::version . "\n");
+			if ($this->oi % 20 === 0) $this->outHeader();	
+			$this->do30($l);
 			$this->oi++;	
 		}		
 	}
 	
-	private function setFollow($cmd) {
+	private function openFile($cmd) {
 		$this->ohan = popen($cmd, 'r');
-		
 	}
 	
 	private function getLine() {
-		if ($this->internal) return $this->glstatic();
 		return fgets($this->ohan);
-	}
-	
-	private function glstatic() {
-		if (!isset($this->oabsi)) $this->oabsi = 0;
-		return kwifs($this->oba, $this->oabsi++);
 	}
 	
 	
 	private function oout($s) {
-		if (iscli() && !$this->internal) echo($s);
-	}
-	
-	private function testEndCrit($Uai, $ipi, $offseti) {
-		if (!$this->oec) return;
-		extract($this->oec);
-		if ($Uai  !== $Uactual ) return;
-		if ($ipi !== $ip) return;
-		if (!isFlTSEq($offseti, $offset)) return;
-		return TRUE;
-	}
-	
-	public static function testEndCritAB(array $a, array $b) {
-		static $fs = ['Uactual', 'ip', 'offset'];
-		foreach($fs as $f) {
-			if (!isset($a[$f]) || !isset($b[$f])) return false;
-			if ($f === 'offset' && !isFlTSEq($a[$f], $b[$f])) return false;
-			else continue;
-			if ($a[$f] !== $b[$f]) return false;
-		}
-		
-		return TRUE;
-		
+		if (iscli()) echo($s);
 	}
 	
 	private function do30($l) {
 		
-		static $lnns = 0;
-		static $now = false;
 		
-		if (!$now) $now = time();
-		
-		$li = self::getLLI($l, !$this->internal);
+		$li = self::getLLI($l, true);
 		extract($li); unset($li);
 
-		if ($this->internal && ($U + callSNTPConfig::enterFromLogIfS < $now)) return;
-		if ($this->internal && !isset(callSNTPConfig::NISTListA[$ip])) return;
-		
-		if ($this->testEndCrit($Uactual, $ip, $offset)) return TRUE;
-		
-		if (!$this->internal) {
-			$this->oout($hu . ' ');	
-			$ipl = strlen($ip);
-			$this->oout(substr($ip, $ipl - 3) . ' '); unset($ipl);	
-			$this->oout($valc); unset($valc);
-			$this->oout($restl); unset($restl);
-			$this->oout("\n");
-		}
+
+		$this->oout($hu . ' ');	
+		$ipl = strlen($ip);
+		$this->oout(substr($ip, $ipl - 3) . ' '); unset($ipl);	
+		$this->oout($valc); unset($valc);
+		$this->oout($restl); unset($restl);
+		$this->oout("\n");
+
 	
-		if ($this->internal) {
-			$lnn = $this->oln - $lnns;
-			$lnns++;
-		}
-		
 		unset($l);
 		$ret = get_defined_vars();
 		unset($ret['lnns'], $ret['now']);
@@ -134,16 +82,10 @@ CHRH;
 		$this->oi = 0;
 		
 		$l = 'tail -n '; 
-		$l .= ($this->internal ? self::linesnInt : self::linesnExt) . ' ';
-		if (!amDebugging() && iscli() && !$this->internal) $l .= '-f ';
+		$l .= self::linesnExt . ' ';
+		if (!amDebugging() && iscli()) $l .= '-f ';
 		$l .= self::chmeaf;
-		if ($this->internal)
-			$l .= ' | tac';
-		if ($this->internal) {
-			$this->orawt = shell_exec($l);
-			$this->oba = explode("\n", trim($this->orawt));
-			$this->oln = count($this->oba);
-		} else $this->setFollow($l);
+		$this->openFile($l);
 		
 	}
 

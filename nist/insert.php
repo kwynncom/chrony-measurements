@@ -12,7 +12,7 @@ class nist_insert extends dao_generic_3 {
 	}
 	
 	private function dbmg() {
-		if (time() < strtotime('2022-10-12 01:30')) $this->ccoll->drop();
+		if (kwsntp_doTestClean()) $this->ccoll->drop();
 		$this->ccoll->createIndex(['U' => -1]);
 		$this->ccoll->createIndex(['Uus' => -1]);
 	}
@@ -23,15 +23,10 @@ class nist_insert extends dao_generic_3 {
 		
 		if ($viain) {
 			$this->via = $viain; 
-			switch($viain) { case 'hand' : case 'www' : return;		}
+			switch($viain) { case 'hand' : case 'www' : case 'cron' : return;		}
 		}
 		
 		if (PHP_SAPI !== 'cli') { $this->via = 'www'; return; }
-		$pid = posix_getpid();
-		if ($viain === 'log') { $this->pid = $pid; return; }
-		$pt = substr(trim(shell_exec("pstree -s $pid")), 0, 200);
-		if (strpos($pt, '---cron---') !== false) { $this->via = 'cron'; return; }
-
 	}
 	
 	public static function flpp(float $f) { return ($f >= 0 ? '+' : '') . sprintf('%0.6f', $f);	}
@@ -47,8 +42,6 @@ class nist_insert extends dao_generic_3 {
 		$_id .= '-line-' . $lnn;
 		$_id .= self::flpp($offset);
 		
-		$pid = $this->pid;
-		
 		$dat = get_defined_vars();
 		unset($dat['cli'], $dat['cmp']);
 		$this->ccoll->insertOne($dat, ['kwnoup' => true]);
@@ -60,8 +53,6 @@ class nist_insert extends dao_generic_3 {
 		$U	= $a['U'  ] = intval(floor($us));
 		$a['r'] = date('r', $U);
 		$via = $a['via'] = $this->via;
-		if (isset(		$this->pid)) 
-			$a['pid'] = $this->pid;
 		
 		$a['_id']  = date('md-Hi-s-Y', $U) . '-' . substr($via, 0, 3) . '-' . dao_generic_3::get_oids(false, null, null, true);
 

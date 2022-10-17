@@ -20,9 +20,9 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		return $o->waitSFl();
 	}
 	
-	public static function get($lim = 1, string $cf = '') {
+	public static function get($lim = 1, string $via = '') {
 		try { 
-			$o = new self($cf === __FILE__);
+			$o = new self($via);
 			$o->doit();
 			return $o->getdb($lim);
 		} catch(Exception $ex) {}
@@ -41,12 +41,12 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$lo->unlock();		
 	}
 	
-	private function __construct(bool $didCallMe = false) {
+	private function __construct(string $via = '') {
 		
 		parent::__construct(self::dbname);
 		$this->creTabs(['c' => self::collname]);
 		$this->boo = new backoff(self::backe, self::NISTminS, self::maxs);
-		$this->inso = new nist_insert($didCallMe ? 'hand' : '');
+		$this->inso = new nist_insert($via);
 		$this->clean();
 	}
 	
@@ -57,14 +57,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	}
 	
 	public function waitSfl() {
-		if (1) { 
-			$w1 = $this->waitSfl20();
-			if ($w1 > 0) return $w1;
-			unset($w1);  
-		}
-		
 		new chrony_log_reader();
-				
 		return $this->waitSfl20();
 		
 	}
@@ -107,4 +100,4 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	
 }
 
-if (didCLICallMe(__FILE__)) print_r(nist_backoff_calls::get(null, __FILE__));
+if (didCLICallMe(__FILE__)) print_r(nist_backoff_calls::get(null, 'hand'));
