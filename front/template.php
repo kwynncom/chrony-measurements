@@ -17,8 +17,6 @@
 		echo("\t" . 'var KW_G_CHM_ORDER = ' . json_encode($KW_G_TDS_ORDER) . ';' . "\n" ); unset($KW_G_TDS_ORDER); ?>
 </script>
 
-
-
 <div> <!-- dat - tables and such -->
 <table>
 	<tr><td class='n30'></td><td></td><td>active polls</td></tr>

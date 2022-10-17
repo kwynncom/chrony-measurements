@@ -15,7 +15,7 @@ class NISTCronCl {
 	}
 	
 	private static function liveOrDie() {
-		if (0 && (ispkwd() && time() > strtotime('2022-10-16 23:20'))) {
+		if (1 && ispkwd() && time() > strtotime('2022-10-17 02:15')) {
 			self::rd("End of test, exiting\n");
 			exit(0);
 		}		
@@ -55,4 +55,4 @@ class NISTCronCl {
 	
 }
 
-new NISTCronCl();
+if (didCLICallMe(__FILE__)) new NISTCronCl();
