@@ -23,16 +23,7 @@ class nodeStuff {
 		restore_error_handler();		
 	}
 	
-	private function read() {
-		$t = file_get_contents(self::url . ':' . self::port);
-		if (0) { $h = curl_init(self::url);
-		curl_setopt($h, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($h, CURLOPT_FOLLOWLOCATION, true);
-		$t = curl_exec($h);
-		}
-		
-		return json_decode($t, true);
-	}
+	private function read() {	return json_decode(file_get_contents(self::url . ':' . self::port), true);	}
 	
 	public function null_eh() { }
 	
