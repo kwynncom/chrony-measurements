@@ -7,7 +7,6 @@ const sntpWorst = require('./sntpWorst.js');
 
 class myMongoDBServer {
   constructor() {
-    
     this.sntpWoO = new sntpWorst(); 
     this.initHTServer();
   }

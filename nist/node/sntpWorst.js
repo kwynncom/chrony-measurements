@@ -9,12 +9,14 @@ module.exports = class sntpWorst {
 		this.omclip = MongoClient.connect('mongodb://localhost/');
 	}	
 
+	async defineColl() {
+		const cli = await this.omclip;
+		this.coll = cli.db('sntp4').collection('calls');
+	}
+
 	async get() {
 
-		if (!this.coll) {
-			const cli = await this.omclip;
-			this.coll = cli.db('sntp4').collection('calls');
-		}
+		if (!this.coll) await this.defineColl();
 
         return await this.coll.aggregate(
             [
@@ -28,13 +30,11 @@ module.exports = class sntpWorst {
 }
 
 if (require.main === module) { 
-
 	(async() => {
 		const ref = module.exports;
 		const o = new ref();
 		const r = await Promise.resolve(o.get());
 		console.log(r);
-	
+		process.exit();
 	})();
-
 }
