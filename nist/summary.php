@@ -1,4 +1,4 @@
-<?php
+<?php // This is calc'ing offsets where there isn't one.  Also logging chrony start.
 
 require_once(__DIR__ . '/config.php');
 
@@ -23,8 +23,6 @@ class nist_summary extends dao_generic_3 {
 		
 		$t = shell_exec('systemctl status chrony | head -n 3');
 		if (($sp = strpos($t, $key)) === false) return;
-		//						  123456789012345678901234567
-		// active (running) since Wed 2022-10-19 06:04:13 EDT
 		$s = substr($t, $sp + $keyl, 27);
 		$U = strtotimeRecent($s);
 		$q = ['U' => $U];

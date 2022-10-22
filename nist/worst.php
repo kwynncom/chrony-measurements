@@ -21,9 +21,21 @@ class nodeStuff {
 		socket_close($h);
 		if ($res) {
 			kwnohup(self::cmd);
-			sleep(2);
+			$this->readUntilStart();
 		}
 		restore_error_handler();		
+	}
+	
+	private function readUntilStart() {
+		for ($i=0; $i < 20; $i++) {
+			$r = $this->read();
+			if (!$r) usleep(100000);
+			else break;
+		}
+		
+		if (iscli()) echo('read sleep = '. $i ."\n");
+		
+		return;
 	}
 	
 	private function read() {	return json_decode(file_get_contents(self::url . ':' . self::port), true);	}
