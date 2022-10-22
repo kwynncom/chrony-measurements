@@ -62,7 +62,10 @@ class nist_insert extends dao_generic_3 {
 	}
 	
 	public function postCall(string $_id, array $nistr) {
-		$this->ccoll->upsert(['_id' => $_id], $nistr, null, false);
+		$off = sntpSanity::SNTPOffset($nistr['Uns4']) / M_BILLION;
+		$dat = kwam($nistr, ['offset' => $off]);
+		
+		$this->ccoll->upsert(['_id' => $_id], $dat, null, false);
 	}
 	
 

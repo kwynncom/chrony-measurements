@@ -1,5 +1,5 @@
 <?php // This is calc'ing offsets where there isn't one.  Also logging chrony start.
-
+// after 2 days (or whatever the "worst" query limit is, remove the offset calc
 require_once(__DIR__ . '/config.php');
 
 class nist_summary extends dao_generic_3 {

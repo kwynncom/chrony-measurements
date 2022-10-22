@@ -2,16 +2,16 @@
 
 require_once('/opt/kwynn/kwutils.php');
 
-class nodeStuff {
+class sntpWorstQCl {
 
 	const port = 3000;
 	const addr = '127.0.0.1';
 	const url   = 'http://' . self::addr;
 	const cmd  = 'nodejs /opt/node/server.js';
 	
-	function __construct(bool $doTest = false) {
+	private function __construct(bool $doTest = false) {
 		$this->runActual();
-		if ($doTest) $this->test();
+		if ($doTest) self::get();
 	}
 	
 	private function runActual() {
@@ -28,7 +28,7 @@ class nodeStuff {
 	
 	private function readUntilStart() {
 		for ($i=0; $i < 20; $i++) {
-			$r = $this->read();
+			$r = self::get(true);
 			if (!$r) usleep(100000);
 			else break;
 		}
@@ -38,16 +38,15 @@ class nodeStuff {
 		return;
 	}
 	
-	private function read() {	return json_decode(file_get_contents(self::url . ':' . self::port), true);	}
+	public static function get(bool $internal = false) {	
+		if (!$internal) new self();
+		$r = json_decode(file_get_contents(self::url . ':' . self::port), true);	
+		return $r;
+	}
 	
 	public function null_eh() { }
-	
-	private function test() {
-		$a = $this->read();
-		return;
-	}
 
 }
 
-if (didCLICallMe(__FILE__)) new nodeStuff(true);
+if (didCLICallMe(__FILE__)) sntpWorstQCl::get();
 
