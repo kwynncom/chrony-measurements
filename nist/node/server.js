@@ -1,7 +1,5 @@
 const http = require('http');
 const url = require('url');
-const MongoClient = require('mongodb').MongoClient;
-const mongoConnURL = 'mongodb://localhost/';
 const hostname = '127.0.0.1';
 const port = 3000;
 
