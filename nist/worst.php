@@ -19,7 +19,10 @@ class nodeStuff {
 		$h = socket_create(AF_INET, SOCK_STREAM,  SOL_TCP);
 		$res = socket_bind($h, self::addr, self::port);
 		socket_close($h);
-		if ($res) kwnohup(self::cmd);
+		if ($res) {
+			kwnohup(self::cmd);
+			sleep(2);
+		}
 		restore_error_handler();		
 	}
 	
