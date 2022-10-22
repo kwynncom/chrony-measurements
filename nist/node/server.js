@@ -7,8 +7,8 @@ const sntpWorst = require('./sntpWorst.js');
 
 class myMongoDBServer {
   constructor() {
-    const self = this;
-    MongoClient.connect(mongoConnURL, function(err, client) { self.sntpWoO = new sntpWorst(client); }); 
+    
+    this.sntpWoO = new sntpWorst(); 
     this.initHTServer();
   }
 

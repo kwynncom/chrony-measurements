@@ -16,7 +16,7 @@ module.exports = class sntpWorst {
 			this.coll = cli.db('sntp4').collection('calls');
 		}
 
-        const a = await this.coll.aggregate(
+        return await this.coll.aggregate(
             [
                 {$match : {'U' : {'$gte' : ((new Date().getTime()) / 1000) - this.SBack }, offset : {$exists : true}}},
                 {$project : {absoff : {$abs : '$offset'}, _id : 0, U : 1, r : 1}},
@@ -24,8 +24,6 @@ module.exports = class sntpWorst {
                 {$limit : 20}
             ]
         ).toArray();  
-
-		return a;
     }
 }
 
