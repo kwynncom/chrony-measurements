@@ -6,7 +6,7 @@ require_once('front/histTable.php');
 
 function getTemplateINITGV() { return chrony_readouts_formatting::get(chrony_analysis::get()); }
 function sendJSON() {
-	if (!isset($_REQUEST['json'])) return;
+	if ((!isset($_REQUEST['json']))) return;
 	
 	$a = getTemplateINITGV();
 	$a['logs']['htrf'] = kwChmHistRows  ($a['logs']['logs']);

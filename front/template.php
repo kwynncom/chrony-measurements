@@ -18,6 +18,9 @@
 </script>
 
 <div> <!-- dat - tables and such -->
+	<div id='worstP'>
+		
+	</div>
 <table>
 	<tr><td class='n30'></td><td></td><td>active polls</td></tr>
 	<tr><td class='n30'></td><td>minutes</td><td>poll span</td></tr>

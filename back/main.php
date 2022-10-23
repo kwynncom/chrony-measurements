@@ -3,6 +3,7 @@
 require_once('config.php');
 require_once('logsP10.php');
 require_once(__DIR__ . '/../nist/callSNTPReg.php');
+require_once(__DIR__ . '/worstAn.php');
 
 class chrony_analysis {
 	
@@ -70,8 +71,10 @@ class chrony_analysis {
 	
 	private function do70() {
 		$nr = $this->do65NISTPop();
+		$wr = sntpWorstAn::get();
 		$this->ret['laoffnist'] = self::get1NIST($nr);
 		$this->ret['nistall']   = $nr;
+		$this->ret['worstAn'] = $wr;
 		return;
 	}
 	

@@ -1,11 +1,16 @@
 <?php // This is calc'ing offsets where there isn't one.  Also logging chrony start.
 // after 2 days (or whatever the "worst" query limit is, remove the offset calc
 require_once(__DIR__ . '/config.php');
+require_once(__DIR__ . '/worst.php');
 
 class nist_summary extends dao_generic_3 {
 	
 	public static function get() {
-		new self();
+		$o = new self();
+		$ret = [];
+		$ret['chstarts'] = $o->getCSI();
+		$ret['worst'] = sntpWorstQCl::get();
+		return $ret;
 	}
 	
 	private function __construct() {
@@ -13,6 +18,10 @@ class nist_summary extends dao_generic_3 {
 		$this->creTabs(['c' => callSNTPConfig::collname, 's' => 'start']);
 		$this->do05();
 		$this->do10();
+	}
+	
+	public function getCSI() {
+		return $this->scoll->find(['U' => ['$gte' => time() - 200000]], ['sort' => ['U' => -1]]);
 	}
 	
 	private function do05() {

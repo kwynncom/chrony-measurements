@@ -1,10 +1,13 @@
 <?php
 
+require_once('worstF.php');
+
 class chrony_readouts_formatting {
 	
 	public static function get($a) {
 		
 		$ret = $a;
+		$ret['worstHT'] = WorstF::get($a['worstAn']);
 		foreach ($a as $k => $v) {
 			if ($k === 'np')	    $ret[$k] = $v;
 			if ($k === 'np_span_s') $ret['np_span_min'] = self::minf($v);
