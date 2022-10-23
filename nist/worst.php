@@ -7,7 +7,8 @@ class sntpWorstQCl {
 	const port = 3000;
 	const addr = '127.0.0.1';
 	const url   = 'http://' . self::addr;
-	const cmd  = 'nodejs /opt/node/server.js';
+	const nfcl = '/opt/node/server.js';
+	const cmd  = 'nodejs ' . self::nfcl;
 	
 	private function __construct(bool $doTest = false) {
 		$this->runActual();
@@ -15,6 +16,7 @@ class sntpWorstQCl {
 	}
 	
 	private function runActual() {
+		if (!file_exists(self::nfcl)) return;
 		set_error_handler([$this, 'null_eh']);
 		$h = socket_create(AF_INET, SOCK_STREAM,  SOL_TCP);
 		$res = socket_bind($h, self::addr, self::port);
@@ -38,10 +40,15 @@ class sntpWorstQCl {
 		return;
 	}
 	
-	public static function get(bool $internal = false) {	
+	public static function get(bool $internal = false) {
+		if (!file_exists(self::nfcl)) return [];
 		if (!$internal) new self();
+		$r = [];
+		set_error_handler('kwynn');
 		$r = json_decode(file_get_contents(self::url . ':' . self::port), true);	
-		return $r;
+		restore_error_handler();
+		if (isset($r) && $r) return $r; // I do need to do the condition - comment out nohup and then this is necessary
+		return [];
 	}
 	
 	public function null_eh() { }

@@ -1,6 +1,9 @@
 <?php
 
 class WorstF {
+	
+	const cln = 3;
+	
 	public static function get($a) {
 		$o = new self($a);
 		return $o->getI();
@@ -17,7 +20,7 @@ class WorstF {
 	
 	private function do10() {
 		$t = $this->odin;
-		$a = array_slice($t['worst'], 0, 3);
+		$a = array_slice($t['worst'], 0, self::cln);
 		ob_start();
 		foreach($a as $r) $this->pop($r);
 		$ht = ob_get_clean();
@@ -34,7 +37,7 @@ class WorstF {
 		$hr  = sprintf('%0.3f', $sago / 3600);
 		
 		$ms = sprintf('%0.1f', $msr);
-		$ht = $ms .  ' @ ' . $hr;
+		// $ht = $ms .  '@' . $hr;
 		
 		require(__DIR__ . '/worstT.php');		
 	}

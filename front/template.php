@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>chrony readings</title>
 <link rel="stylesheet" href="front/chinfo.css">
-<script src='front/js/utils.js'></script>
+<script src='/opt/kwynn/js/utils.js'></script>
 <script src='front/js/load.js'></script>
 <script src='front/js/win_onload.js'></script>
 </head>
@@ -49,7 +49,7 @@
 	<tr><td class='n30'><td>ppm</td><td>residual frequency</td></tr>
 </table>
 	
-	<div class='asofP'>at <span id='asof' /></div>
+	<div class='asofP'>at <span id='asof' ></span></div>
 
 <div class='histP'> <!-- hist tables -->
 <table class='mono htab10 hist'>
@@ -66,14 +66,6 @@
 		<tr><th>min</th><th class='poll'>off</th><th>s</th></tr>
 	</thead>
 	<tbody id='histNIST'><?php echo(kwChmNISTRows($KW_G_TIMEA['nistall']));?></tbody>
-</table>
-	
-<table class='mono htab10 hist' id='nistipt'>
-	<caption>NIST IP</caption>
-	<thead>
-		<tr><th>off</th><th class='poll'>ip</th></tr>
-	</thead>
-	<tbody id='NISTIPb'><?php echo(kwChmNISTRowsIP($KW_G_TIMEA['nistall']));?></tbody>
 </table>
 	
 </div> <!-- hist tables -->

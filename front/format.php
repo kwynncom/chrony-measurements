@@ -16,7 +16,7 @@ class chrony_readouts_formatting {
 			if ($k === 'rde')		$ret[$k]       = self::ifabovems($v);
 			if ($k === 'estoffa') 	$ret['estoff'] = self::msf10($v['float']);
 			if ($k === 'laoffnist') $ret[$k]	   = self::msf10($v, 1); 
-			if ($k === 'maxe')      $ret[$k]  = self::ifabovems($v);
+			if ($k === 'maxe')      $ret[$k]  = self::maxef($v);
 			if ($k === 'rfr')       $ret[$k]  = sprintf('%0.3f', $v);		
 		}
 		
@@ -34,6 +34,12 @@ class chrony_readouts_formatting {
 				   $ret['logs']['logs'] = [];
 		
 		return $ret;
+	}
+	
+	public static function maxef($maxein) {
+		if ($maxein < 1000) return self::ifabovems($maxein);
+		else return '?';
+		
 	}
 	
 	public static function msf10($v, $mby = 1000) {

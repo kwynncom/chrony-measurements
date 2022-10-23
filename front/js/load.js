@@ -8,7 +8,8 @@ function kw_chm_reload(a, o) {
 		continue;
 	}
 	
-	byid('asof').innerHTML = a['asof'];
+	inht('asof', a['asof']);
+	inht('worstP', a.worstHT);
 	
 	return;
 }
@@ -22,8 +23,8 @@ function reload_btn_onclick() {
 		const lht = rj.logs.htrf;
 		const e = byid('histb10');
 		e.innerHTML = lht;
-		byid('histNIST').innerHTML = rj.nistallHT;
-		byid('NISTIPb' ).innerHTML = rj.nistHTIP;
+		inht('histNIST', rj.nistallHT);
+		inht('NISTIPb' , rj.nistHTIP);
 	}
 	xm.send();
 	
