@@ -50,6 +50,7 @@ class WorstF {
 	private function pop($din) {
 	
 		static $max = -1;
+		static $maxd = '';
 		static $now = false;
 		if (!$now) $now = time();
 		
@@ -60,6 +61,8 @@ class WorstF {
 		$hrr = $sago / 3600;
 
 		$ms = sprintf('%0.1f', $msr);
+		if ($ms === $maxd) return '';
+		$maxd = $ms;
 		
 		$ht = '';
 		$ht .= '<tr>';
