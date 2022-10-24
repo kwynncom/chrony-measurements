@@ -7,8 +7,6 @@ class chrony_readouts_formatting {
 	public static function get($a) {
 		
 		$ret = $a;
-		$ret['worstHT']  = WorstF::get($a['worstRe'], $a['worstAn']['worst']);
-		// $ret['worstHT'] .= WorstF::get($a['worstAn']['worst']);
 		foreach ($a as $k => $v) {
 			if ($k === 'np')	    $ret[$k] = $v;
 			if ($k === 'np_span_s') $ret['np_span_min'] = self::minf($v);
@@ -34,6 +32,8 @@ class chrony_readouts_formatting {
 		if (!isset($ret['logs']['logs']))
 				   $ret['logs']['logs'] = [];
 		
+		$ret['worstHT']  = WorstF::get($a['worstRe'], $a['worstAn']['worst']);
+
 		return $ret;
 	}
 	

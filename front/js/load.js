@@ -1,6 +1,8 @@
+var KWCHMOTDS = false;
+
 function kw_chm_reload(a, o) {
 	const cols = 3;
-	let tds = qsa('td');
+	let tds = KWCHMOTDS;
 	for (let i=0; i < o.length; i++) {
 		let e = tds.item(i * cols);
 		let v = a[o[i]];
@@ -29,3 +31,8 @@ function reload_btn_onclick() {
 	xm.send();
 	
 }
+
+onDOMLoad(function() {
+	KWCHMOTDS = byid('ordp').querySelectorAll('td');
+	kw_chm_reload(KW_G_CHM_INIT, KW_G_CHM_ORDER);
+});
