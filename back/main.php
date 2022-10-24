@@ -7,7 +7,8 @@ require_once(__DIR__ . '/worstAn.php');
 
 class chrony_analysis {
 	
-	const nistnlim = 9;
+	const nistnDisplay = 9;
+	const nistn = 100;
 	
 	public static function get() {
 		$o = new self();
@@ -62,10 +63,31 @@ class chrony_analysis {
 		return ((($T[1] - $T[0]) + ($T[2] - $T[3]))) >> 1;
 	}
 	
+	private function popWorstRe(array $a) {
+		$this->worstRe = [];
+		if (!$a) return;
+		
+		$max = -1;
+		foreach($a as $r) {
+			$or = kwifs($r, 'offset');
+			if ($or === false) continue;
+			$o = abs($or);
+			if ($o > $max) {
+				$max = $o;
+				$r['absoff'] = $o;
+				$this->worstRe[] = $r;
+			}
+		}
+		
+		return;
+	}
+	
 	private function do65NISTPop() {
 		$nr = [];
-		$raw = nist_backoff_calls::get(self::nistnlim);
-		foreach($raw as $r) $nr[] = $this->SNTPcalcs($r);
+		$raw = nist_backoff_calls::get(self::nistn);
+		$this->popWorstRe($raw);
+		$rawd = array_slice($raw, 0, self::nistnDisplay);
+		foreach($rawd as $r) $nr[] = $this->SNTPcalcs($r);
 		return $nr;
 	}
 	
@@ -75,6 +97,7 @@ class chrony_analysis {
 		$this->ret['laoffnist'] = self::get1NIST($nr);
 		$this->ret['nistall']   = $nr;
 		$this->ret['worstAn'] = $wr;
+		$this->ret['worstRe'] = $this->worstRe;
 		return;
 	}
 	

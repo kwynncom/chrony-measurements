@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>chrony readings</title>
-<link rel="stylesheet" href="front/chinfo.css">
+<link rel="stylesheet" href="front/chinfo.css?v240140=1">
 <script src='/opt/kwynn/js/utils.js'></script>
 <script src='front/js/load.js'></script>
 <script src='front/js/win_onload.js'></script>

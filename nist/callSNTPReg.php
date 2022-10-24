@@ -92,7 +92,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		$o['projection'] = ['_id' => 0, 'U' => 1, 'r' => 1, 'ip' => 1, 'Uns4' => 1, 'offset' => 1, 'via' => 1];
 		$o['sort'] = ['U' => -1];
 		$o['limit'] = $limitn;
-		$res = $this->ccoll->find(['U' => ['$gte' => time() - 3600]], $o);
+		$res = $this->ccoll->find([/* 'U' => ['$gte' => time() - 3600] */], $o);
 		if (!$res) return $res;
 		if ($limitn === 1) return $res[0];
 		return $res;

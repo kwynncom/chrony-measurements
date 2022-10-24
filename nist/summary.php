@@ -1,5 +1,4 @@
-<?php // This is calc'ing offsets where there isn't one.  Also logging chrony start.
-// after 2 days (or whatever the "worst" query limit is, remove the offset calc
+<?php // this both does the "worst" fetch and has the code to log chrony starts, but I'm not using those now.
 require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/worst.php');
 
@@ -8,7 +7,7 @@ class nist_summary extends dao_generic_3 {
 	public static function get() {
 		$o = new self();
 		$ret = [];
-		$ret['chstarts'] = $o->getCSI();
+		// $ret['chstarts'] = $o->getCSI();
 		$ret['worst'] = sntpWorstQCl::get();
 		return $ret;
 	}
@@ -17,7 +16,6 @@ class nist_summary extends dao_generic_3 {
 		parent::__construct(callSNTPConfig::dbname);
 		$this->creTabs(['c' => callSNTPConfig::collname, 's' => 'start']);
 		$this->do05();
-		$this->do10();
 	}
 	
 	public function getCSI() {
@@ -42,18 +40,6 @@ class nist_summary extends dao_generic_3 {
 		$this->scoll->insertOne($dat, ['kwnoup' => true]);
 		return;
 	}
-	
-	private function do10() {
-		$q = ['U' => ['$gte' => time() - DAY_S * 2], 'Uns4' => ['$exists' => true]];
-		$q['offset'] = ['$exists' => false];
-		$a = $this->ccoll->find($q);
-		foreach($a as $r) {
-			$off = sntpSanity::SNTPOffset($r['Uns4']) / M_BILLION;
-			$this->ccoll->upsert(['_id' => $r['_id']], ['offset' => $off]);
-		}
-		return;
-	}
-	
 }
 
 if (didCLICallMe(__FILE__)) nist_summary::get();
