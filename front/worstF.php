@@ -4,47 +4,75 @@ require_once('/opt/kwynn/kwutils.php');
 
 class WorstF {
 	
-	const cln = 4;
+	// const cldn = 9;
+	const clwn = 4;
+	const clrn = 10;
 	
-	public static function get($a, $n = self::cln) {
-		$o = new self($a, $n);
+	public static function get($recent, $worst) {
+		$o = new self($recent, $worst);
 		return $o->getI();
 	}
 	
 	public function getI() { return $this->oht; } 
 	
-	private function __construct($a, $n) {
-		$this->on = $n;
-		$this->odin = $a;
+	private function __construct($r, $w) {
+		$this->oht = '';
+		$this->do05($r, $w);
 		$this->do10();
 		return;
 		
 	}
 	
+	private function sort($a, $b) {
+		return $b['U'] - $a['U'];
+	}
+	
+	private function do05($r, $w) {
+		$r = array_slice($r, 0, self::clwn);
+		$w = array_slice($w, 0, self::clrn);
+		$a = kwam($r, $w);
+		usort($a, [$this, 'sort']);
+		$this->oa = $a;
+		return;
+		
+		
+	}
+	
 	private function do10() {
-		$a = $this->odin;
-		$a = array_slice($a, 0, $this->on);
 		ob_start();
-		foreach($a as $r) $this->pop($r);
-		$ht  = '<div class="worp">';
-		$ht .= ob_get_clean();
-		$ht .= '</div>';
+		require_once(__DIR__ . '/worstT.php');
+		$ht = ob_get_clean();
+		foreach($this->oa as $r) $ht .= $this->pop($r);
+		$ht .= '</tbody></table>';
 		$this->oht = $ht;
 	}
 	
 	private function pop($din) {
-		
+	
+		static $max = -1;
 		static $now = false;
 		if (!$now) $now = time();
 		
 		$msr = $din['absoff'] * 1000;
+		if ($msr < $max) return '';
+		$max = $msr;
 		$sago = $now - $din['U'];
 		$hrr = $sago / 3600;
 
-		$hr = $this->hrf($hrr);
 		$ms = sprintf('%0.1f', $msr);
 		
-		require(__DIR__ . '/worstT.php');		
+		$ht = '';
+		$ht .= '<tr>';
+		$ht .= '<td class="worhr">';
+		$ht .= sprintf('%0.1f', $hrr);
+		$ht .= '</td>';	
+		$ht .= '<td class="woroff">';
+		$ht .= $ms;
+		$ht .= '</td>';	
+		$ht .= '</tr>';
+		return $ht;
+		
+	
 	}
 	
 	private function hrf($h) {
