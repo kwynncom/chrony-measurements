@@ -20,10 +20,15 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 		return $o->waitSFl();
 	}
 	
+	private static function testMode() {
+		if (ispkwd() && time() < strtotime('2022-10-25 00:40')) return true;
+		return false;
+	}
+	
 	public static function get($lim = 1, string $via = '') {
 		try { 
 			$o = new self($via);
-			$o->doit();
+			if (!self::testMode()) $o->doit();
 			return $o->getdb($lim);
 		} catch(Exception $ex) {}
 		
