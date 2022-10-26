@@ -4,7 +4,7 @@ require_once(__DIR__ . '/nist/config.php');
 
 class chronylog_cli_filter  {
 
-	const version = '10/26 01:17 flexible -n n in CLI mode';
+	const version = '10/26 17:54 corrected default lines';
 	const linesnExt = 100;
 	const chmeaf = callSNTPConfig::chronyLogF;
 	
@@ -82,7 +82,7 @@ CHRH;
 		global $argc;
 		
 		for ($i=0; $i < $argc; $i++) if (is_numeric($argv[$i])) return $argv[$i];
-		return self::chmeaf;
+		return self::linesnExt;
 	}
 	
 	private function init() {
