@@ -7,7 +7,7 @@ class nist_summary extends dao_generic_3 {
 	public static function get() {
 		$o = new self();
 		$ret = [];
-		// $ret['chstarts'] = $o->getCSI();
+		$ret['chstarts'] = $o->getCSI();
 		$ret['worst'] = sntpWorstQCl::get();
 		return $ret;
 	}

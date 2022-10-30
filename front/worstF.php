@@ -27,10 +27,24 @@ class WorstF {
 		return $b['U'] - $a['U'];
 	}
 	
-	private function do05($r, $w) {
+	private function filterForStarts(&$a, $big) {
+		$ss = kwifs($big, 'chstarts');
+		if (!$ss) return;
+		$rm = [];
+		foreach($a as $i => $r) foreach($ss as $s) 
+			if (abs($r['U'] - $s['U']) < 30) $rm[] = $i;
+		
+		foreach($rm as $i) unset($a[$i]);
+		$a = array_values($a);
+		return;
+	}
+	
+	private function do05($r, $win) {
+		$w = $win['worst'];
 		$r = array_slice($r, 0, self::clrn);
 		$w = array_slice($w, 0, self::clwn);
 		$a = kwam($r, $w);
+		$this->filterForStarts($a, $win);
 		usort($a, [$this, 'sort']);
 		$this->oa = $a;
 		return;

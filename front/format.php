@@ -32,7 +32,7 @@ class chrony_readouts_formatting {
 		if (!isset($ret['logs']['logs']))
 				   $ret['logs']['logs'] = [];
 		
-		$ret['worstHT']  = WorstF::get($a['worstRe'], $a['worstAn']['worst']);
+		$ret['worstHT']  = WorstF::get($a['worstRe'], $a['worstAn']);
 
 		return $ret;
 	}
