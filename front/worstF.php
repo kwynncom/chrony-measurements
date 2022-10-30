@@ -4,8 +4,6 @@ require_once('/opt/kwynn/kwutils.php');
 
 class WorstF {
 	
-	// const cldn = 9;
-	const clwn = 4;
 	const clrn = 100;
 	
 	public static function get($recent, $worst) {
@@ -42,7 +40,7 @@ class WorstF {
 	private function do05($r, $win) {
 		$w = $win['worst'];
 		$r = array_slice($r, 0, self::clrn);
-		$w = array_slice($w, 0, self::clwn);
+		// $w = array_slice($w, 0, self::clwn);
 		$a = kwam($r, $w);
 		$this->filterForStarts($a, $win);
 		usort($a, [$this, 'sort']);
