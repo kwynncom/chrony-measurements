@@ -6,12 +6,13 @@ require_once('sourcestats.php');
 class chrony_log_parse {
     
     const tailn = 8;
-	const path  = '/var/log/chrony/';
+	const path  = '/var/kwynn/chrony/'; // see note in nist/config - unify these at some point
 	const files = ['tracking.log', /* 'statistics.log', */ 'measurements.log'];
+	const defaultSpanS = 1800;
     
     public $an10 = [];
     
-    protected function __construct($npss) {
+    protected function __construct($npss = self::defaultSpanS) {
 		$this->npss = $npss;
 		$this->linea = false;		
 		$this->load10();
@@ -21,7 +22,7 @@ class chrony_log_parse {
 		$this->an10['maxe'] = $this->maxe;
     }
     
-    public static function get($npss) {
+    public static function get($npss = self::defaultSpanS) {
 		$o = new self($npss);
 		return $o->linea;
     }
