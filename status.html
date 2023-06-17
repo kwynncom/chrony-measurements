@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'    />
+<meta name='viewport' content='width=device-width, initial-scale=1.0' />
+
+<title>chrony status</title>
+
+<style>
+    body { font-family: sans-serif; }
+</style>
+</head>
+<body>
+	<div>
+		<p><a href='/'>home</a></p>
+		<p><a href='/t/21/10/chm/'>chrony / NIST readings</a></p>
+		<p><a href='/t/9/12/sync/'>clock</a></p>
+	</div>
+	<section>
+		<h2>more status info</h2>
+		
+		<p>On June 16, 2023, between 17:00 - 17:30 US Eastern Daylight Time, the Maryland NIST servers seem to have gone offline.
+			I set chrony to include IPv6 servers in both Fort Collins and Boulder, Colorado.  I also set my cron job that checks 
+			time to only point at the 4 IPv6 Colorado servers.  
+			
+		</p>
+		
+		<p>When the Maryland servers are working, I expect 90% of polls to show lower than 0.4 ms offset.  The offset to Colorado 
+			seems to be 1.0 - 1.1.  So, I've set my alarm tolerence from 1ms to 1.4ms.  
+			
+		</p>
+	</section>
+</body>
+</html>
