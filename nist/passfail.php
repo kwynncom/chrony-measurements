@@ -9,7 +9,7 @@ class nist_passfail extends dao_generic_3 implements callSNTPConfig {
 	const withinM = 30;
 	const withinS = self::withinM * 60;
 	const mustn   = 3;
-	const tolerancens = M_MILLION;
+	const tolerancens = M_MILLION * 1.4;
 	const tolerancensTestS = 0.005;
 	const tolerancensTest  = self::tolerancensTestS * M_BILLION;
 	
