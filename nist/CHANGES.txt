@@ -1,0 +1,32 @@
+2023/06/22
+
+SUMMARY - I'm going to start using the Ubuntu / Debian package that contains the Python script "sntp".  The man page lists authors
+    Johannes Maximilian Kuehn, Harlan Stenn, [and] Dave Hart.  See the background below.
+
+DETAILS
+
+grep -R callSNTP[^C\.R]
+
+Searching my whole site.  This lets me know where to start changes.  I can't do the 4 timestamp format, so I'll have to make downstream 
+changes.
+
+Upon further thought, I'll just make the first change and see what it breaks.
+
+grep -Ri sntpsanity
+t/21/10/chm/nist/insert.php:		$off = sntpSanity::SNTPOffset($nistr['Uns4']) / M_BILLION;
+t/21/10/chm/nist/callSNTP.php:			$a = sntpSanity::ck($t); kwas($a, 'no sane result');
+
+
+BACKGROUND
+
+For perhaps I year I have been running my own SNTP client written in C.  I didn't know that "sntp" as above existed.  
+
+The major point of my own script was to hard-code everything such that I could get very fast, presumably more accurate polls of NIST.  
+
+The problem comes when various NIST servers either go down or become slow to respond.  I have reworked the hard-coding of IP addresses a handful 
+of times (at least twice).  I'm still having problems, though.  
+
+As I reevaluate my intent, I've decided that the most important goal is to use the generic time.nist.gov address so that I am more likely to get 
+the best-working servers.  I have found that even the Colorado servers respond well enough to kwynn.com in northern Virginia.  
+
+Rather than muck around with DNS / IP lookups in C, for now I'm just going to use the existing "sntp."  

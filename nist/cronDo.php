@@ -15,7 +15,7 @@ class NISTCronCl {
 	}
 	
 	private static function liveOrDie() {
-		if (1 && ispkwd() && time() > strtotime('2022-10-17 02:15')) {
+		if (1 && ispkwd() && time() > strtotime('2023-06-22 22:15')) {
 			self::rd("End of test, exiting\n");
 			exit(0);
 		}		

@@ -6,39 +6,25 @@ require_once('validIP.php');
 
 class callSNTP implements callSNTPConfig {
 
-	const resnt = 4;
-	const cmdRun   = 'sntpw -nosleep -json -d';
-	const cmdDebug = 'sntpr';
-
-	private function isDebugMode() {
-		if (amDebugging()) return true;
-		if (time() < strtotime('2022-10-09 21:50')) return true;
-		return false;
-	}
+	const ipv6Percent = 70;
+	const cmdpre = 'sntp --json ';
+	const cmdhost = 'time.nist.gov';
+	
 	
 	private function __construct() {
-		$this->debug = $this->isDebugMode();
 		$this->init();
 		$this->doit();
-		// $this->calcs();
 	}
 
-
-	
-	public static function d($T) { 
-		$t = ((($T[1] - $T[0]) + ($T[2] - $T[3]))) >> 1;
-		return $t;
-	}
-	
-	public static function toms($ns) { return $ns / M_MILLION; }
+	public static function toms($ns) { return $ns * 1000; /* Kwynn 2023/06 ??? */ }
 	
 	private function init() {
-		$this->ores = []; // Kwynn 2022/07
+		$this->ores = [];
 	}
 	
 	private function doit() {
-		if ($this->debug) $c = self::cmdDebug;
-		else	  $c = self::cmdRun;
+		$do6 = random_int(1, 100) <= self::ipv6Percent;
+		$c = self::cmdpre . ' -' . ($do6 ? '6' : '4') . ' ' . self::cmdhost;
 		$t = shell_exec($c);
 		if ($t) $this->setValid($t);
 
@@ -47,15 +33,8 @@ class callSNTP implements callSNTPConfig {
 	private function setValid(string $t) {
 		
 		try {
-			if (!$this->debug) {
-				$a = json_decode($t, true);
-				if (!$a || $a['status'] !== 'OK') return;
-			} else {
-				$a = sntpSanity::ck($t); kwas($a, 'no sane result');
-				$a['t4'] = $a['Uns4'];
-			}
-			$this->ores['Uns4'] = $a['t4'];
-			$this->ores['ip' ] = $a['ip'];
+			$a = sntpSanity::ck($t); kwas($a, 'no sane result');
+			$this->ores = $a;
 		} catch(Exception $ex) { }
 		
 		return;
@@ -63,12 +42,13 @@ class callSNTP implements callSNTPConfig {
 	
 	public function getRes() { return $this->ores; }
 	
-	public static function getNISTActual() {
+	public static function getNISTActual(bool $direct = false) {
 		$o = new self();
 		$res = $o->getRes();
+		if ($direct) print_r($res);
 		return $res;
 	}
 
 }
 
-if (didCLICallMe(__FILE__)) callSNTP::getNISTActual();
+if (didCLICallMe(__FILE__)) callSNTP::getNISTActual(true);
