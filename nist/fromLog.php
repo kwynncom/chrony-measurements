@@ -34,9 +34,10 @@ class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 		return;
 	}
 	
+	/* not called and nista doesn't exist
 	public static function isNIST($ip) {
 		return in_array($ip, self::nista);
-	}
+	}*/
 
 	public function procIP(array $a) {
 		static $exn = 0;

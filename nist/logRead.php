@@ -19,7 +19,7 @@ class chrony_log_reader implements callSNTPConfig {
 		while($l = $this->fpo->fgets()) {
 			$a = chronylog_cli_filter::getLLI($l);
 			if (!$a) continue;
-			if (!isset(callSNTPConfig::NISTListA[$a['ip']])) continue;
+			if (!isNIST($a['ip'])) continue;
 			$a['lnn'] = $lnn++;
 			$this->dbo->procIP($a);
 		}
