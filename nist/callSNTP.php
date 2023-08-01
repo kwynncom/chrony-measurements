@@ -7,7 +7,7 @@ require_once('validIP.php');
 class callSNTP implements callSNTPConfig {
 
 	const ipv6Percent = 70;
-	const cmdpre = 'sntp --json ';
+	const cmdpre = 'sntp --timeout 1 --json ';
 	const cmdhost = 'time.nist.gov';
 	
 	
