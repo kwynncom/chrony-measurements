@@ -1,0 +1,3 @@
+passfail needs some (more) testing
+it passes based on time elapsed on my test system when it probably should not
+note that it can be tested in CLI with didCallMe
