@@ -3,6 +3,9 @@
 require_once(__DIR__ . '/../nist/summary.php');
 
 class sntpWorstAn {
+
+    private readonly mixed $oret; // probably an array
+
 	private function __construct() {
 		$this->do10();
 		return;

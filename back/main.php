@@ -13,6 +13,7 @@ class chrony_analysis {
 	private array $ret;
 	private array $cha;
 	private array $ssa;
+	private array $worstRe;
 	
 	public static function get() {
 		$o = new self();

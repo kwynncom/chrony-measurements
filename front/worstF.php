@@ -5,6 +5,9 @@ require_once('/opt/kwynn/kwutils.php');
 class WorstF {
 	
 	const clrn = 100;
+
+	private string $oht;
+	private readonly array $oa;
 	
 	public static function get($recent, $worst) {
 		$o = new self($recent, $worst);
