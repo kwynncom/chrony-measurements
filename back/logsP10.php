@@ -3,6 +3,9 @@
 require_once('logsRaw.php');
 
 class chrony_log_parse_p10 extends chrony_log_parse {
+
+	private array $p10a;
+
 	private function __construct($npss = self::defaultSpanS) {
 		parent::__construct($npss);
 		$this->p10();

@@ -43,6 +43,13 @@ class usebo {
 
 
 class backoff {
+
+    // mixed is too broad, but a kludge until I trace this back and enforce types in the constructor args
+    private readonly mixed $powv;
+    private readonly mixed $mind;
+    private readonly mixed $maxd;
+    private int $cav;
+    private int $cari;
 	
 	public function __construct($pow, $mind, $maxd = PHP_INT_MAX) {
 		$this->powv = $pow;

@@ -9,6 +9,10 @@ class chrony_analysis {
 	
 	const nistnDisplay = 9;
 	const nistn = 100;
+
+	private array $ret;
+	private array $cha;
+	private array $ssa;
 	
 	public static function get() {
 		$o = new self();

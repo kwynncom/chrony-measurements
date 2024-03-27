@@ -5,6 +5,9 @@ require_once(__DIR__ . '/../logscl.php');
 require_once('fromLog.php');
 
 class chrony_log_reader implements callSNTPConfig {
+
+    private readonly object $dbo;
+    private readonly object $fpo;
 		
 	public function __construct() {
 	

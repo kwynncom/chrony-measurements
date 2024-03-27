@@ -11,6 +11,10 @@ class chrony_log_parse {
 	const defaultSpanS = 1800;
     
     public $an10 = [];
+    private readonly mixed $npss;
+    protected $linea;
+    private readonly mixed $maxe;
+    private readonly array $lpa10;
     
     protected function __construct($npss = self::defaultSpanS) {
 		$this->npss = $npss;
@@ -135,7 +139,7 @@ class chrony_log_parse {
 	
 	private function setHuA($ain) { /* This turns $thea[0]['2021...']['t'] into $rea['2021']['t'].  Off hand, I can't think of a way to do it directly and still use 
 									   usort.  I need  indexes for usort. */	
-		usort($ain, ['self', 'sort']);
+		usort($ain, ['chrony_log_parse', 'sort']);
 		foreach($ain as $iIgnore => $hudia) // human date indexed array
 		foreach($hudia as $hud => $ltya) // human date => log type array ['t'] or ['m'] 
 		foreach($ltya as $lty  => $fvsa) // log type => final values array
