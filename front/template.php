@@ -28,7 +28,7 @@
 </table>
 <table>
 	<tr><td class='n30'></td><td>ms</td><td>offset - last poll</td></tr>
-	<tr><td class='n30'></td><td>ms</td><td>offset - NIST</td></tr>
+	<tr><td class='n30'></td><td>ms</td><td>offset - ext</td></tr>
 	<tr><td class='n30'></td><td>ms</td><td>offset - current est</td></tr>
 </table>
 
@@ -62,7 +62,7 @@
 </table>
 
 <table class='mono htab10 hist' id='nisthist'>
-	<caption>NIST</caption>
+	<caption>ext</caption>
 	<thead>
 		<tr><th>min</th><th class='poll'>off</th><th>s</th></tr>
 	</thead>

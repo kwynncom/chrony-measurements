@@ -33,9 +33,16 @@ function kwsntp_doTestClean() {
 	return time() < strtotime(callSNTPConfig::testCleanTime);
 }
 
-function isNIST(string $ip) : bool {
-	static $a = [];
-	if (!$a) $a = json_decode(file_get_contents(callSNTPConfig::NISTjfile), true);
-	return in_array($ip, $a);
+function isNIST(string $ip) : bool { // Now this is actually "is it NOT the AWS server"?
+
+	if ($ip !== '169.254.169.123') return true;
+	else return false;
+
+	
+	if (false) {
+	    static $a = [];
+	    if (!$a) $a = json_decode(file_get_contents(callSNTPConfig::NISTjfile), true);
+	    return in_array($ip, $a);
+	}
 	
 }

@@ -1,5 +1,5 @@
 <table class='mono htab10 hist'>
-	<caption style='padding-left: 1.5ex; '>NIST</caption>
+	<caption style='padding-left: 1.5ex; '>ext</caption>
 	<thead>
 		<tr>
 			<th class='tal'>hrs</th>
