@@ -40,8 +40,8 @@ class callSNTP implements callSNTPConfig {
 	private function setValid(string $t) {
 		
 		try {
-			$a = sntpSanity::ck($t); kwas($a, 'no sane result');
-			if (ispkwd() && (time() < strtotime('2026-04-10 02:00'))) {
+			$a = sntpSanity::ck($t, false, true); kwas($a, 'false array err # 002841');
+			if (ispkwd() && (time() < strtotime('2026-01-10 02:00'))) {
 			    throw new Exception('Kwex233745TEST');
 			}
 			$a['statusKWSN'] = 'OK';
