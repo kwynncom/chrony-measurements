@@ -143,7 +143,7 @@ class chrony_analysis {
 		
 	private function do30() { 
 		$this->ssa = [];
-		try { $this->ssa = parse_sourcestats::get();  } catch(Exception $ex) { }
+		try { $this->ssa = parse_sourcestats::get();  } catch(Throwable $ex) { }
 	}
 	
 	private function do20() {
@@ -165,7 +165,7 @@ class chrony_analysis {
 		$this->cha = [];
 		try {
 		$this->cha = chrony_parse::get();
-		} catch(Exception $ex) { }
+		} catch(Throwable $ex) { }
 	}
 }
 

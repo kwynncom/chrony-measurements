@@ -15,7 +15,7 @@ class NISTCronCl {
 	}
 	
 	private static function liveOrDie() {
-		if (1 && ispkwd() && time() > strtotime('2023-06-22 22:15')) {
+		if (1 && ispkwd() && time() > strtotime('2026-04-10 01:15')) {
 			self::rd("End of test, exiting\n");
 			exit(0);
 		}		
@@ -44,9 +44,15 @@ class NISTCronCl {
 			$wmin = max($ws, 0);
 
 			$wfus  = random_int(roint($wmin * M_MILLION), $maxws * M_MILLION);
+
+			if (ispkwd()) {
+			    $rf('reducing sleep time for kwd');
+			    $wfus /= 15;
+			}
+
 			$rf('min / max (S) = ', $wmin, $maxws);
 			$rf('sleeping for x s = ', $wfus / M_MILLION);
-			if ($wfus > 0) usleep($wfus);
+			if ($wfus > 0) usleep(roint($wfus));
 		}
 
 		$dat = nist_backoff_calls::get(1, 'cron');

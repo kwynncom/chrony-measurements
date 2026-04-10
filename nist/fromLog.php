@@ -29,7 +29,7 @@ class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 		return;
 	}	
 	private function indexMgmt() {
-		try { $this->ccoll->dropIndex('U_-1'); } catch(Exception $ex) {}
+		try { $this->ccoll->dropIndex('U_-1'); } catch(Throwable $ex) {}
 		$name = $this->ccoll->createIndex(['U' => -1]);
 		return;
 	}
@@ -46,7 +46,7 @@ class nistLogToDBCl extends dao_generic_3 implements callSNTPConfig {
 		try {
 			unset($a['hu']);
 			$this->ino->fromLog($a);
-		} catch (Exception $ex) {
+		} catch (Throwable $ex) {
 			if (++$exn > 4) { 
 				echo('chrony logcl.php exception as follows.  Exiting: ' . $ex->getMessage());
 				exit(2122);

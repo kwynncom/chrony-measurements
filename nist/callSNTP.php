@@ -26,6 +26,11 @@ class callSNTP implements callSNTPConfig {
 	
 	private function doit() {
 		$do6 = random_int(1, 100) <= self::ipv6Percent;
+
+		if (ispkwd()) {
+		    $do6 = false;
+		}
+
 		$c = self::cmdpre . ' -' . ($do6 ? '6' : '4') . ' ' . self::cmdhost;
 		$t = shell_exec($c);
 		if ($t) $this->setValid($t);
@@ -36,13 +41,25 @@ class callSNTP implements callSNTPConfig {
 		
 		try {
 			$a = sntpSanity::ck($t); kwas($a, 'no sane result');
+			if (ispkwd() && (time() < strtotime('2026-01-10 02:00'))) {
+			    throw new Exception('Kwex233745TEST');
+			}
+			$a['statusKWSN'] = 'OK';
 			$this->ores = $a;
-		} catch(Exception $ex) { }
+		} catch(Throwable $ex) { 
+		    $a = ['statusKWSN' => 'error', 'shellRes' => $t];
+		    $this->ores = $a;
+		    // throw $ex;
+		}
 		
 		return;
 	}
 	
-	public function getRes() { return $this->ores; }
+	public function getRes() { 
+	    $ret = $this->ores; 
+	    return $ret;
+
+	}
 	
 	public static function getNISTActual(bool $direct = false) {
 		$o = new self();

@@ -21,7 +21,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 	}
 	
 	private static function testMode() {
-		if (ispkwd() && time() < strtotime('2022-10-25 00:40')) return true;
+		if (ispkwd() && time() < strtotime('2019-04-10 02:40')) return true;
 		return false;
 	}
 	
@@ -30,7 +30,9 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 			$o = new self($via);
 			if (!self::testMode()) $o->doit();
 			return $o->getdb($lim);
-		} catch(Exception $ex) {}
+		} catch(Throwable $ex) {
+		    throw $ex;
+		}
 		
 		return [];
 	}
@@ -41,7 +43,7 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 			$lo->lock();
 			$this->quotaOrDie();
 			$this->doTheCall();
-		} catch(Exception $ex) { }
+		} catch(Throwable $ex) { }
 		
 		$lo->unlock();		
 	}
@@ -94,7 +96,8 @@ class nist_backoff_calls extends dao_generic_3 implements callSNTPConfig {
 
 	public function getdb($limitn = 1) {
 		$o = [];
-		$o['projection'] = ['_id' => 0, 'U' => 1, 'r' => 1, 'ip' => 1, 'Uns4' => 1, 'offset' => 1, 'via' => 1];
+		$o['projection'] = ['_id' => 0, 'U' => 1, 'r' => 1, 'ip' => 1, 'Uns4' => 1, 'offset' => 1, 'via' => 1, 
+				    'shellRes' => 1, 'statusKWSN' => 1];
 		$o['sort'] = ['U' => -1];
 		$o['limit'] = $limitn;
 		$res = $this->ccoll->find([/* 'U' => ['$gte' => time() - 3600] */], $o);

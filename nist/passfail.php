@@ -18,7 +18,7 @@ class nist_passfail extends dao_generic_3 implements callSNTPConfig {
 		parent::__construct(self::dbname);
 		$this->creTabs(self::collname);
 		$this->init();
-		try { $this->do10(); } catch (Exception $ex) { 
+		try { $this->do10(); } catch (Throwable $ex) { 
 			return; 
 			
 		}
@@ -79,7 +79,7 @@ class nist_passfail extends dao_generic_3 implements callSNTPConfig {
 			try { 
 				kwas($this->offpf($r), 'pass fail failed SNTP offset');
 				$ti++;
-			} catch (Exception $ex) {}
+			} catch (Throwable $ex) {}
 		}
 		
 		kwas($ti >= self::mustn, 'not enough pass tolerance SNTP passfail');
@@ -111,7 +111,7 @@ class nist_passfail extends dao_generic_3 implements callSNTPConfig {
 		try {
 			new self();
 			return true;
-		} catch(Exception $ex) { 
+		} catch(Throwable $ex) { 
 			return false; 
 		}
 	}
